@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+/* VAR'S */
+:root {
+    --background-dark: #000;
+    --link-color: #f00;
+    --text-color: #fff;
+    --border-color: #000;
+}
+
+/* BODY CONFIG */
+body {
+    background-color: var(--background-dark);
+    font-family: 'VT323', monospace;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* RESPONSIVE CODE */
+@media (max-width: 768px) {
+    #index-navbar, #links-navbar {
+        flex-direction: column;
+    }
+
+    #index-navbar, #links-navbar a {
+        margin: 5px 0;
+        margin-right: 10px;
+    }
+}
+
+/* FOOTER */
+#footer-text {
+    text-align: center;
+    color: #fff;
+    padding: 10px;
+}

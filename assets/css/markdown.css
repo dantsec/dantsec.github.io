@@ -1,0 +1,11 @@
+@import "./base.css";
+
+body {
+    text-align: left;
+}
+
+github-md {
+    padding: 10px;
+    height: auto;
+    width: 90%;
+}
