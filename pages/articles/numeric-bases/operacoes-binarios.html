@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Numeric Bases</title>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<github-md>
+
+# Aula 05 - Bases Numéricas - Operações aritméticas com binários
+
+- Multiplicações e Divisões em binários são similares as que fazemos em decimais
+
+### Adição
+
+- Regras:
+```c
+    0 + 0 = 0
+    
+    0 + 1 = 1
+    
+    1 + 0 = 1
+    
+    1 + 1 => 2 (10) == 10 (2) .:. 1 + 1 = 10
+    
+    1 + 1 + 1 => 3 (10) == 11 (2) .:. 1 + 1 + 1 = 11
+```
+
+- exemplo:
+```c
+    1101 (2) + 1111 (2) = 11100 (2)
+    
+    +1+1+1+1 
+        1101
+    + 1111
+    -------
+    11100
+```
+
+### Subtração
+
+- Regras:
+```c
+    1 - 0 = 1
+    1 - 1 = 0
+    0 - 0 = 0
+    0 - 1 = ("pegar 1 emprestado da casa do lado")
+```
+
+- exemplo:
+```c
+    1110 (2) - 1011 (2) = 11 (2)
+    
+    -1               -1 +1
+    1110             110(10) => 2
+    - 1011      =>   - 1011
+    -------          -------
+                        0011
+```
+
+#### Sinal Módulo
+
+- O 1° dígito (esq. p/ dir.) representa o sinal do número `(0 => pos., 1 => negat.)`
+- Igualar o número de dígitos
+- Representar todos os números em quantidades iguais (ex.: 8, 16, 32 bits)
+    - Primeiro se converte o número para binário e depois igualamos ele ao número de bits sendo que o 1° número irá representar o sinal (pos. ou negat.)
+- exemplo:
+```c
+    -> Representar o 21 (10) positivo e negativo
+    
+    21 (10) = 10101 (2) = 00010101 (2)
+                            |----> Desses 3 primeiros 0's, o 1° representa o sinal e o resto complementa o binário para ter 8 bits
+    
+    21 (10) = 10101 (2) = 10010101 (@)
+```
+
+#### Complemento de 1
+
+- O complemento de 1 de um número binário é a inversão dos dígitos: `0 => 1; 1 => 0`
+- exemplo:
+```c
+    Complemento de 1 do número 10001110 (2)
+    
+    10001110
+    
+    -> 01110001 (2)
+```
+
+#### Complemento de 2
+
+- Consiste na utilização do complemento de 1, somando mais 1 a este complemento
+- exemplo:
+```c
+    Complemento de 2 do número 10001110
+    
+    1°) Complemento de 1
+    
+    10001110
+    -> 01110001
+    
+    2°) Complemento de 2
+    
+    01110001
+    +      1
+    ----------
+    01110010
+```
+
+#### Subtração com o Complemento de 2
+
+- Resultado de uma subtração através da adição
+- Igualar os números (ex.: usar o sinal-módulo de 8 bits)
+- Somar o 1° número com o complemento de 2 do 2°
+- exemplo:
+```c
+    Representar em sinal-módulo de 8 bits a operação 21 (10) - 14 (10)
+    
+    1°) Transformar em Binário + Sinal Módulo de 8 bits
+    
+    21 (10) = 10101 (2) -> 00010101 (2)
+    14 (10) =  1110 (2) -> 00001110 (2)
+    
+    2°) Complemento no 2° número
+        2.1) Complemento de 1 do 2° número [14 (10)]
+        
+        00001110
+        -> 11110001
+        
+        2.2) Complemento de 2 do 2° número [14 (10)]
+        
+        11110001
+        +      1
+        ----------
+        11110010
+        
+    3°) Soma do 1° número com o complemento de 2 do 2°
+    
+        00010101
+    + 11110010
+    ------------
+        100000111
+    
+    Agora basta retirar esse 1° "1" da frente (pois são apenas 8 bits).
+```    
+
+</github-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
+
+</body>
+</html>

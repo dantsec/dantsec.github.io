@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<github-md>
+
+# Aula 06 - Linguagem C - Operadores Aritméticos
+
+### Operadores:
+```c
+    /*
+    * = atribuicao (não é um operador aritmético)
+    * + - unarios
+    * + - binarios (adicao e subtracao)
+    * * / (multiplicacao e divisao)
+    * % (resto da divisao)
+    * ++ (incremento)
+    * -- (decremento)
+
+    * ++a -> pre incremento
+    * a++ -> pos incremento
+        - A operação é feita "de verdade" apenas no término na função onde o pos-incremento foi colocado
+
+    * Ordem de precedência
+    * 1) () [] -> .
+    * 2) ++ -- ! & * ~ (_type_) sizeof
+    * 3) * / %
+    * 4) + -
+    * 5) << >>
+    * 6) < <= >= >
+    * 7) == !=
+    * 8) &
+    * 9) ^
+    * 10) |
+    * 11) &&
+    * 12) ||
+    * 13) ? :
+    * 14) =  _op_=
+    * 15) ,
+
+exemplos:
+    expressão    interpretação
+    &x[i]        &(x[i])
+    *p.dia       *(p.dia)
+    a[i].b[j]    ((a[i]).b)[j]
+    h->e->d      (h->e)->d
+    &h->e        &(h->e)
+    *x++         *(x++)
+    */
+```
+- Observações:
+    - PS1: O operador aritmético __%__ NÃO pode ser usado com floats.
+    - PS2: Existem expressões que são categorizadas como "comportamento indefinido".
+        - Para ter certeza que não está usando expressões que podem ser "indefinidas" use a opção __-Wall__ na linha de comando do GCC. Exemplo:
+```c
+// OPERAÇÃO
+//Evite incrementos/decrementos em var's que irá atribuir na mesma expressão!
+a = ++a;
+
+/*
+    a = a + 1;
+    
+    mesmo que:
+    
+    a += 1;
+*/
+
+// curiosidade:
+/*
+    a = 1 + 10
+    
+    mesmo que fazer:
+
+    a = +1 + +10
+        = +1+ +10
+*/
+```
+```sh
+$ gcc -Wall -o op op.c
+# function `main`:
+# test.c:7:5: warning: operation on `a` may be undefined [-Wsequence-point]
+```
+
+- Uma coisa interessante sobre operadores binários: 
+    - Você viu que eles podem ser usados em sequência, como em `a = a + 1;`. Aqui o operador "=" e o operador "+" são usados na expressão. Isso significa que algo assim TAMBÉM pode ser usado:
+```c
+// O operador '=' resolve, primeiro, o que está à direita e depois à esquerda.
+a = b = 10;
+// same:
+b = 10;
+a = b;
+```    
+
+</github-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
+
+</body>
+</html>

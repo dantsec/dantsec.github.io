@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<github-md>
+
+# Aula 04 - Linguagem C - Var's do tipo Float
+- Embora ponto flutuante seja mais PRECISO que valores inteiros (já que podemos ter valores fracionários), isso **NÃO significa que sejam EXATOS**. Assim como na base decimal, alguns valores NÃO podem ser expressos corretamente em binário... Em decimal, 1/3 causa uma dizima periódica (0.3333...) - Quando certos valores são convertidos de decimal para binário isso também acontece. É o caso de 0.1, 0.2, 0.3, 0.4, ... (nenhum deles é exato). Para mostrar isso, basta fazer:
+```c
+# Notação Científica em C:
+float x = 3e2;   // 3 * 10^2
+printf("%f", x); // 300
+
+# Mantissa
+float f = 0.1;
+printf("%.30f\n", f);
+// output: 0.100000001490116119384765625000
+```
+    - Isso, porque, 0.1, em binário, é 0b0.0001100110011001100...
+    Assim, ponto flutuante quase sempre te dará a oportunidade de lidar com valores **APROXIMADOS**.
+- A coisa fica pior quando você percebe que temos apenas 24 bits significativos (1, implícito e 23 bits da "mantissa") no valor armazenado. Isso significa que, em base 10, a PRECISÃO é de apenas 8 algarismos. Assim, o valor 43674.43783 NÃO pode ser armazenado exatamente num float (note que falei algarismos e não "casas" depois da vírgula!).
+    - Isso pode parecer contraditório, mas o que printf() faz, quando converte o tipo para uma string em decimal é arredondar o valor... assim, **PARECE** que 0.1 é 0.1 (ao usar %f sem a "precisão"), mas não é.
+    - Então **CUIDADO com ponto flutuante**. Se você quer EXATIDÃO nos cálculos, prefira sempre lidar com valores inteiros, mesmo que tenha que escaloná-los.
+
+### Debugando
+![alt](https://media.discordapp.net/attachments/787823095170990081/832594748573351976/unknown.png)
+
+- Passos:
+```shell
+gdb -q BINARY_NAME
+
+(gdb) > disas
+
+# pegou o endereço de memória no qual ficava a variável int
+# pediu sua representação em hexadecimal:
+#  p/x *0x400618 -> 0x3f800000
+# pediu sua representação binária com o software bc
+#  echo 'obase=2; ibase=16; 3F800000' | bc
+# verificou a quantidade de bits
+# 	echo -n 1111111000000000000000000000000000 | wc - c -> 30 bits
+# para complementar em 32 bits
+#  001111111000000000000000000000000000
+# 1o bit: SINAL (+, -)
+# 8 bits seguidos: EXPOENTE
+# outros 23: MANTISSA
+
+```
+
+## Referências:
+
+    - https://en.wikipedia.org/wiki/Extended_precision
+    - https://en.wikipedia.org/wiki/Double-precision_floating-point_format
+    - https://en.wikipedia.org/wiki/Single-precision_floating-point_format
+    - https://bitismyth.wordpress.com/2017/03/16/mais-alguns-detalhes-sobre-ponto-flutuante/
+
+</github-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
+
+</body>
+</html>

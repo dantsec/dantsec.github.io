@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Algorithms</title>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<github-md>
+
+# EXTRA - Outros Operadores Lógicos
+
+- Além dos principais operadores lógicos apresentados (AND, OR, NOT), temos outros um pouco mais "específicos", são eles:
+    - NAND (NOT - AND)
+    - NOR (NOT - OR)
+    - XOR (EXCLUSIVE OR)
+    - XNOR (EXCLUSIVE - NOT - OR)
+
+I. **AND** (&)
+        - VERDADEIRO somente se as duas sentenças forem verdadeiras
+```
+p  q  p^q
+
+V  V  V
+V  F  F
+F  V  F
+F  F  F
+```
+
+II. **OR** (|)
+    - VERDADEIRO se uma das sentenças forem verdadeiras
+```
+p  q  p\/q
+
+V  V  V
+V  F  V
+F  V  V
+F  F  F 
+```
+
+III. **NOT** (!)
+    - COMPLEMENTO do valor recebido
+```
+p  ~p
+
+V  F
+F  V
+```
+
+IV. **NOT - AND (NAND)** (!&)
+    - VERDADEIRO apenas se as duas sentenças forem falsas
+```
+p  q  ~(p^q)
+
+V  V  F
+V  F  V
+F  V  V
+F  F  V
+```
+
+V. **NOT - OR (NOR)** (!|)
+    - Resulta um valor VERDADEIRO somente se os dois valores forem falsos
+```
+p  q  ~(p\/q)
+
+V  V  F
+V  F  F
+F  V  F
+F  F  V 
+```
+
+VI. **X - OR (XOR)** (^)
+    - VERDADEIRO apenas se uma das sentenças for complemento da outra
+```
+p  q  ~(p <-> q)
+
+V  V  F
+V  F  V
+F  V  V
+F  F  F
+```
+
+VII. **X - NOT - OR (XNOR)** (!|)
+    - VERDADEIRO apenas se as duas sentenças forem iguais
+```
+p  q  p<->q
+
+V  V  V
+V  F  F
+F  V  F
+F  F  V
+```
+
+</github-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
+
+</body>
+</html>

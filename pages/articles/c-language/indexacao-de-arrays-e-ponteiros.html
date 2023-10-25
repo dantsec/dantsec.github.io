@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<github-md>
+
+# Aula 12 - Linguagem C - Indexação de arrays e ponteiros
+
+
+- Acessando uma matriz com o operador dos ponteiros:
+```c
+// example
+int ex[2][2] = { 0 };
+
+printf("%d", ex[x][y]);
+
+// same
+printf("%d", *( *(ex + x) + y );
+```
+
+- Função enum():
+    - Enumera itens de um array pré-definido:
+```c
+// enum NAME { items } surname;
+enum pedras { CAVALO, BISPO, TORRE, RAINHA };
+
+/*
+    CAVALO == 0;
+    BISPO  == 1;
+    ...
+    RAINHA == 3;
+*/
+
+// também pode-se fazer:
+
+enum pedras { CAVALO=1, BISPO, TORRE=4, RAINHA };
+
+/*
+
+    CAVALO == 1;
+    BISPO  == 2;
+    TORRE  == 4;
+    RAINHA == 5;
+
+*/
+
+// o próximo número sempre dependerá do número setado anteriormente
+```
+
+- Strings e Indexação:
+```c
+// Strings ("") são um atalho para arrays de char com o último char sendo '\0'. 
+
+// Mas, se fizermos:
+
+char s[X] = "abc";
+
+// !!Itens não informados em arrays literais são preenchidos por zeros!!
+
+// É a mesma coisa que:
+
+// com X > 3
+char s[X] = { 'a', 'b', 'c', 0, 0, 0, ... };
+
+// com X == 3:
+char s[X] = { 'a', 'b', 'c' };
+```
+
+- Zerando Arrays:
+```c
+// para zerar arrays pode-se fazer:
+
+int ex[X][Y] = { };
+
+// ou
+
+int tabu[X][Y] = { 0 };
+```
+
+- Índices Negativos:
+```c
+// exemplo:
+
+char s[] = "fernando";
+
+// *p = r
+char *p  = s + 2;
+
+// imprime o 'f'.
+printf("%c\n", p[-2]);
+```
+
+- Inicializações Parciais:
+```c
+//                 0      1      2       3   
+enum pedras { CAVALO, BISPO, TORRE, RAINHA };
+
+//                    0x0      0x1       1x0     1x1
+int tabu[2][2] = { { CAVALO, BISPO }, { TORRE, RAINHA} };
+
+// Se fizermos:
+int tabu[2][2] = { { [1]=BISPO }, { TORRE } };
+// 0x0 && 1x1 são zeradas automaticamente.
+
+// NÃO é possível fazer:
+
+int tabu[2][2] = { { , BISPO}, { TORRE } };
+
+// Sendo assim necesária a indicação do sub-array: [1]=BISPO.
+```    
+
+</github-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
+
+</body>
+</html>

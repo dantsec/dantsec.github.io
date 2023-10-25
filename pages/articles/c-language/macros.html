@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<github-md>
+
+# Aula 16 - Linguagem C - Macros
+
+- Inicialização:
+```c
+#define name(var) (return)
+
+/*
+    !! BOAS PRÁTICA!!
+        1 - colocar () "em tudo"
+        2 - nome de macros sempre em maiúsculo
+*/
+
+// exemplo 0x01
+
+// retorna x^2
+// sem o uso de boas práticas
+#define QUAD(x) (x * x)
+// com o uso de boas práticas
+#define QUAD(x) ((x) * (x))
+
+/*
+    caso nao usarmos boas práticas nesse caso, teremos um problema:
+    ex.:
+        QUAD(8 + 3) -> Queremos que retorne 121, certo? Porém:
+        
+        QUAD(8 + 3) == (8 + 3 * 8 + 3) == (8 + 24 + 3) == 35
+        
+        35 != 121
+*/
+
+// exemplo 0x02
+// retorna o maior valor dentre alguns valores
+#define MAIOR(x, y) (x > y ? x : y)
+#define MAIOR3(x, y, z) (MAX(MAX(x,y), MAX(y, z)))
+
+// para continuar uma macro, usa-se o caracter "\"
+// exemplo 0x03
+#define IGUAL(x, y) \
+    if(x == y) printf("iguais"); \
+    else printf("nao sao iguais");
+
+// OUTRAS MACROS
+
+// exemplo 0x04
+#define DEBUG 1
+
+// exemplo 0x05
+// !!CONSULTANDO UM VALOR DE UMA VARIAVEL PARA DEBUG!!
+#define VAR(x) printf("A variavel "#x" tem valor: %d\n", x);
+
+int main(void) {
+    // exemplo 0x04
+    /*
+        #ifndef
+        #ifdef
+    
+        #if
+        #elif
+        #elif
+        ...
+        #else
+        #endif
+    */
+    #ifdef DEBUG
+        printf("macro DEBUG definido\n");
+    #else
+        printf("macro DEBUG nao definido ainda\n");
+    #endif
+    
+    #undef DEBUG
+        printf("macro DEBUG 'des' definido\n");
+    
+    // exemplo 0x05
+    int consult 10;
+    
+    VAR(consult);
+
+    // exemplo 0x06
+    // outras macros (estas incluidas em stdio.h):
+    printf("A hora atual eh: %s", __TIME__);
+    printf("A data atual eh: %s", __DATE__);
+    printf("A linha de codigo atual eh: %d", __LINE__);
+    /* 
+        __FILE__, __STDC__, __cplusplus, __STDC_HOSTED__, 
+        __STDC_NO_ATOMICS__, __STDC_NO_THREADS__, __STDC_NO_VLA__,
+        __STDC_VERSION__, __STDCPP_THREADS__, ...
+    */
+    
+    return 0;
+}
+```
+
+- Compilação && Pré-processamento
+    - As macros não são resolvidas em tempo de compilação! Na verdade, o pré-processador resolve o código antes que a compilaçãode fato aconteça.
+
+    - Etapas de compilação:
+        i.    Preprocessing
+        ii.   Compilation
+        iii.  Assembly
+        iiii. Linking
+
+### Diretiva PRAGMA
+
+- Inicialização:
+```c
+/*
+    Serve para ativar / desativar algumas features
+*/
+
+// 1. startup and exit
+#include <stdio.h>
+
+void func1();
+void func2();
+
+// #pragma startup func1
+// #pragma exit    func2
+void __attribute__((constructor)) func1();
+void __attribute__((destructor)) func2();
+
+
+void func1(){ printf("Inside func1()\n"); }
+void func2(){ printf("Inside func2()\n"); }
+
+int main(){ printf("Inside main()\n"); return 0; }
+
+/*
+    output:
+        Inside func1()
+        Inside main()
+        Inside func2()
+*/
+
+/* ----------------------------------------- */
+
+// 2. warn +, -, .
+/*
+    +xxx -> show warning
+    -xxx -> hide warning
+    .xxx -> toggle between hide and show
+
+    -rvl:
+        função não suporta o valor de retorno requisitado não retornando o valor
+
+    -par:
+        função não usa os parametrôs requisitados
+
+    -rch:
+        código é inacessível; exemplo:
+            qualquer código após o return é inacessível
+*/
+#include<stdio.h>
+
+#pragma warn -rvl
+#pragma warn -par
+#pragma warn -rch
+
+int show(int x) { printf("ola"); }
+
+int main() {
+    show(10);
+    return 0;
+}
+// output: ola
+
+/* ----------------------------------------- */
+
+// 3. GCC poison
+// remove um identificador por completo
+
+#include <stdio.h>
+
+#pragma GCC poison printf
+
+int main() {
+    int a = 10;
+
+    if(a == 10)
+        printf("yes");
+    else
+        printf("no");
+        
+    return 0;
+}
+/*
+    output:
+        prog.c: In function 'main':
+        prog.c:9:3: error: attempt to use poisoned "printf"
+                printf("GEEKSFORGEEKS");
+                ^
+        prog.c:11:3: error: attempt to use poisoned "printf"
+                printf("bye");
+                ^
+*/
+
+/* ----------------------------------------- */
+
+// 4. dependency
+// permite checar dados relativos do arquivo atual para outro
+
+// #pragma GCC dependency "parse.y"
+
+/* ----------------------------------------- */
+
+// 5. system_header
+// nao requer argumentos; faz com que o resto do código do arquivo atual seja 
+// tratado como um cabeçalho do sistema
+
+// #pragma GCC system_header
+
+/* ----------------------------------------- */
+
+// 6. once
+// similar ao #include; O uso de salva o programa da otimização de inclusão múltipla
+
+// #pragma once
+
+/* ----------------------------------------- */
+```
+
+## Referências:
+        - http://codingfreak.blogspot.com/2008/02/compilation-process-in-gcc.html
+        - http://cs-fundamentals.com/c-programming/how-to-compile-c-program-using-gcc.php
+
+</github-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
+
+</body>
+</html>

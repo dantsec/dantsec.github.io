@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<github-md>
+
+# Aula 0x20 - Linguagem C - Algoritmos Importantes
+
+
+## Sorting
+
+- Principais algoritmos de ordenação
+    - **Select Sort**
+    - **Insert Sort**
+    - **Bubble Sort**
+    - Shell Sort
+    - Quick Sort
+    - Merge Sort
+    - Heap Sort
+    - Counting Sort
+
+#### Implementação do Select Sort
+```c
+#include <stdio.h>
+
+void select_sort(int vetor[], int tam) {
+    int menor, troca;
+    
+    for(int i = 0; i < (tam - 1); i++) {
+        menor = i;
+        for(int j = (i + 1); j < tam; j++) {
+            if(vetor[j] < vetor[menor]) {
+                menor = j;
+            }
+        }
+        if (i != menor) {
+            troca = vetor[i];
+            vetor[i] = vetor[menor];
+            vetor[menor] = troca;
+        }
+    }
+}
+
+int main(void) {
+    // vetor desordenado
+    int vetor[6] = {8, 3, 1, 42, 12, 5};
+    
+    // vetor ordenado
+    select_sort(vetor, 6);
+    
+    // displaying vector
+    for(int i = 0; i < 6; i++)
+        printf("%d\n", vetor[i]);
+    
+    return 0;
+}
+```
+
+#### Implementação do Insert Sort
+```c
+#include <stdio.h>
+
+void insert_sort(int vetor[], int tam) {
+    int troca;
+    
+    for(int i = 1; i < tam; i++) {
+        int proximo = i;
+        
+        while((proximo != 0) && (vetor[proximo] < vetor[proximo - 1])) {
+            troca = vetor[proximo];
+            vetor[proximo] = vetor[proximo - 1];
+            vetor[proximo - 1] = troca;
+            proximo--;
+        }
+    }
+}
+
+int main(void) {
+    // vetor desordenado
+    int vetor[6] = {8, 3, 1, 42, 12, 5};
+    
+    // vetor ordenado
+    insert_sort(vetor, 6);
+    
+    // displaying vector
+    for(int i = 0; i < 6; i++)
+        printf("%d\n", vetor[i]);
+    
+    return 0;
+}
+```
+
+#### Implementação do Bubble Sort
+```c
+#include <stdio.h>
+
+void bubble_sort(int vetor[], int tam) {
+    int proximo = 0;
+    
+    for(int i = 0; i < tam; i++) {
+        for(int j = 0; j < (tam - 1); j++) {
+            if(vetor[j] > vetor[j + 1]) {
+                proximo = vetor[j];
+                vetor[j] = vetor[j + 1];
+                vetor[j + 1] = proximo;
+            }
+        }
+    }
+}
+
+int main(void) {
+    // vetor desordenado
+    int vetor[6] = {8, 3, 1, 42, 12, 5};
+    
+    // vetor ordenado
+    bubble_sort(vetor, 6);
+    
+    // displaying vector
+    for(int i = 0; i < 6; i++)
+        printf("%d\n", vetor[i]);
+    
+    return 0;
+}
+```
+
+#### Implementação do Shell Sort
+```c
+#include <stdio.h>
+
+void shell_sort(int vetor[], int tam) {
+    int grupo = 1;
+    
+    // gerar o tamanho do grupo de acordo com o vetor
+    while(grupo < tam)
+        grupo = 3 * grupo + 1;
+    
+    // varrer o vetor enquanto houver grupos para ordenar
+    while(grupo > 1) {
+        grupo = grupo / 3;
+        
+        for(int i = grupo; i < tam; i++) {
+            int troca = vetor[i];
+            int j = i - grupo;
+            // realiza a troca
+            while(j >= 0 && troca < vetor[j]) {
+                vetor[j + grupo] = vetor[j];
+                j = j - grupo;
+            }
+            vetor[j + grupo] = troca;
+        }
+    }
+}
+
+int main(void) {
+    // vetor desordenado
+    int vetor[6] = {8, 3, 1, 42, 12, 5};
+    
+    // vetor ordenado
+    shell_sort(vetor, 6);
+    
+    // displaying vector
+    for(int i = 0; i < 6; i++)
+        printf("%d\n", vetor[i]);
+    
+    return 0;
+}
+```
+
+#### Implementação do Quick Sort
+```c
+#include <stdio.h>
+
+void quick_sort(int vetor[], int tam) {
+    int i, j, grupo, troca;
+    
+    // criterio de parada da recursividade
+    if(tam < 2)
+        return;
+    else
+        grupo = vetor[tam / 2];
+    
+    // fazendo um loop unico se comportar como dois
+    for(i = 0, j = tam - 1 ;; i++, j--) {
+        // fazermos a movimentacao dos elementos no vetor
+        while(vetor[i] < grupo)
+            i++;
+        
+        while(grupo < vetor[j])
+            j--;
+        
+        // criterio de parada do loop
+        if(i >= j) {
+            break;
+        } else {
+            troca = vetor[i];
+            vetor[i] = vetor[j];
+            vetor[j] = troca;
+        }
+    }
+    
+    quick_sort(vetor, i);
+    quick_sort(vetor + i, tam - i);
+}
+
+int main(void) {
+    // vetor desordenado
+    int vetor[6] = {8, 3, 1, 42, 12, 5};
+    
+    // vetor ordenado
+    quick_sort(vetor, 6);
+    
+    // displaying vector
+    for(int i = 0; i < 6; i++)
+        printf("%d\n", vetor[i]);
+    
+    return 0;
+}
+```
+
+#### Implementação do Merge Sort
+```c
+// dividir e conquistar
+
+#include <stdio.h>
+
+void merge(int vetor[], int inicio1, int fim1, int inicio2, int fim2){
+    //vetor temporário utilizado para merge
+    int temp[50];
+    //variáveis auxiliares
+    int i, j, k;
+    //início do primeiro grupo
+    i = inicio1;
+    //início do segundo grupo
+    j = inicio2;
+    k = 0;
+
+    //Enquanto tiver elementos em ambos as os grupos...
+    while(i <= fim1 && j <= fim2){
+        //faz a ordenação de acordo com cada grupo
+        if(vetor[i] < vetor[j]){
+            temp[k++] = vetor[i++];
+        }else{
+            temp[k++] = vetor[j++];
+        }
+    }
+
+    //Copia os elementos restantes do primeiro grupo
+    while(i <= fim1){
+        temp[k++] = vetor[i++];
+    }
+
+    //Copia os elementos restantes do segundo grupo
+    while(j <= fim2){
+        temp[k++] = vetor[j++];
+    }
+
+    //Transfere os elementos do vetor temporário para o original
+    for(i = inicio1, j = 0; i <= fim2; i++, j++){
+        vetor[i] = temp[j];
+    }
+}
+
+void merge_sort(int vetor[], int inicio, int tam){
+
+    if(inicio < tam){
+        //calcula o meio do vetor
+        int meio = (inicio + tam) / 2;
+
+        //recursão esquerda
+        merge_sort(vetor, inicio, meio);
+
+        //recursão direita
+        merge_sort(vetor, meio + 1, tam);
+
+        //Faz o merge (junta) os dois grupos de vetores ordenados
+        merge(vetor, inicio, meio, meio + 1, tam);
+    }
+}
+
+int main() {
+    int vetor[6] = {8, 3, 1, 42, 12, 5};
+
+    //Aplicando a ordenação;
+    //vetor, inicio, tamanho - 1
+    merge_sort(vetor, 0, 6 - 1);
+
+    //Apresentando o vetor ordenado
+    for(int i = 0; i < 6; i++)
+        printf("%d\n", vetor[i]);
+
+    return 0;
+}
+```
+
+#### Implementação do Heap Sort
+```c
+// utiliza o recurso de arvore binaria
+#include <stdio.h>
+
+void cria_heap(int vetor[], int inicio, int fim) {
+    int pai = vetor[inicio];
+    int filho = inicio * 2 + 1;
+    
+    // verifica se o pai tem 2 filhos e quem e o maior deles
+    while(filho <= fim) {
+        if(filho < fim) {
+            if(vetor[filho] < vetor[filho + 1]) {
+                filho = filho + 1;
+            }
+        }
+        // filho > pai?? filho vira pai
+        if (pai < vetor[filho]) {
+            vetor[inicio] = vetor[filho];
+            inicio = filho;
+            filho = 2 * inicio + 1;
+        } else {
+            filho = fim + 1;
+        }
+    }
+    // o antigo pai ocupa o lugar do ultimo filho analisado
+    vetor[inicio] = pai;
+}
+
+void heap_sort(int vetor[], int tam){
+    int troca;
+    int meio = (tam - 1) / 2;
+    
+    for(int i = meio; i >= 0; i--)
+        cria_heap(vetor, i, tam - 1);
+    
+    for(int i = tam - 1; i >= 1; i--) {
+        troca = vetor[0];
+        vetor[0] = vetor[i];
+        vetor[i] = troca;
+    
+        cria_heap(vetor, 0, i - 1);
+    }
+}
+
+int main() {
+    int vetor[6] = {8, 3, 1, 42, 12, 5};
+
+    //Aplicando a ordenação;
+    //vetor, inicio, tamanho - 1
+    heap_sort(vetor, 6);
+
+    //Apresentando o vetor ordenado
+    for(int i = 0; i < 6; i++)
+        printf("%d\n", vetor[i]);
+
+    return 0;
+}
+```
+
+#### Implementação do Counting Sort
+```c
+#include <stdio.h>
+
+void counting_sort(int array[], int size) {
+    // vetor auxiliar de saida
+    int output[10];
+    // vetor auxiliar (contadores)
+    int count[10];
+    // define o maior valor como o 1o elemento
+    int max = array[0];
+
+    // encontra o maior elemento do array
+    for(int i = 0; i < size; i++)
+        if(array[i] > max)
+            max = array[i];
+
+    // inicializa os contadores com o valor 0
+    for(int i = 0; i <= max; i++)
+        count[i] = 0;
+
+    // conta as ocorrências de cada elemento
+    for(int i = 0; i < size; i++)
+        count[array[i]]++;
+
+    // ordena os elementos
+    for(int i = 0, j = 0; i <= max; i++)
+        while(count[i] > 0) {
+            output[j] = i;
+            count[i]--;
+            j++;
+        }
+
+    // copia os elementos ordenados para o array de entrada
+    for(int i = 0; i < size; i++)
+        array[i] = output[i];
+}
+
+int main() {
+    int array[] = {4, 2, 2, 8, 3, 3, 1};
+    int size = sizeof(array) / sizeof(array[0]);
+
+    counting_sort(array, size);
+
+    for(int i = 0; i < size; i++)
+        printf("%d\n", array[i]);
+
+    return 0;
+}
+
+```
+
+## Searching
+
+#### Implementação da Busca Binária
+```c
+// funciona apenas para vetores ja ordenados
+#include <stdio.h>
+
+int busca_binaria(int vetor[], int chave, int tam) {
+    int inicio = 0;
+    int fim = tam - 1;
+    
+    while(inicio <= fim) {
+        // encontra o meio do vetor
+        int meio = (inicio + fim) / 2;
+        
+        if(chave == vetor[meio])
+            return meio;
+        
+        if(chave < vetor[meio])
+            fim = meio - 1;
+        else
+            inicio = meio + 1;
+    }
+    return -1;
+}
+
+int main(void) {
+    // vetor pre-ordenado
+    int vetor[6] = {1, 3, 5, 8, 12, 42};
+    // valor a ser procurado
+    int chave = 12;
+    // retorna a posicao do elemento
+    int ret = busca_binaria(vetor, chave, 6);
+    
+    printf("O elemento %d esta na posicao %d\n", chave, ret);
+    
+    return 0;
+}
+```
+
+#### Implementando Busca Linear
+```c
+#include <stdio.h>
+
+int busca_linear(int vetor[], int chave, int tam) {
+    for(int i = 0; i < tam; i++)
+        if(chave == vetor[i])
+            return i;
+    return -1;
+}
+
+int main(void) {
+    int vetor[6] = {1, 3, 5, 8, 12, 42};
+    
+    int chave = 12;
+    
+    int ret = busca_linear(vetor, chave, 6);
+    
+    printf("O elemento %d esta na posicao %d\n", chave, ret);
+}
+```
+
+## Basics
+
+#### Algoritmo de Euclides (MDC)
+```c
+#include <stdio.h>
+
+int mdc(int a, int b) {
+    int temp;
+    while(b != 0) {
+        temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+int mdc_recursivo(int a, int b) {
+    if(b == 0)
+        return a;
+    return mdc_recursivo(b, a % b);
+}
+
+int main() {
+    printf("(NORMAL)\nMDC(50, 120) == %d\n", mdc(50, 120));
+    printf("(RECURSIVO)\nMDC(50, 120) == %d\n", mdc(50, 120));
+    return 0;
+}
+/*
+    output:
+    (NORMAL)
+    MDC(50, 120) == 10
+    (RECURSIVO)
+    MDC(50, 120) == 10
+*/
+```    
+
+</github-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
+
+</body>
+</html>
