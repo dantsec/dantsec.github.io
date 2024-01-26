@@ -30,6 +30,7 @@
 }
 
 #profile img {
+    margin-top: 20px;
     border-radius: 50%;
     max-width: 35%;
 }
