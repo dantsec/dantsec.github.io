@@ -22,5 +22,33 @@
         <footer>
             <p id="footer-text">0xDant &copy; 2023</p>
         </footer>
+
+        <script>
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+
+                if (target.id !== 'footer-text') return;
+
+                if (target.colorChanger) {
+                    clearInterval(target.colorChanger);
+                    delete target.colorChanger;
+                    return;
+                }
+
+                const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'violet'];
+                let index = 0;
+                let direction = 1;
+
+                target.colorChanger = setInterval(() => {
+                    target.style.color = colors[index];
+
+                    index += direction;
+                    
+                    if (index === colors.length - 1 || index === 0) {
+                        direction *= -1;
+                    }
+                }, 100);
+            });
+        </script>
     </body>
 </html>
