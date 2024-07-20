@@ -16,7 +16,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 #index-image, #papers-image {
@@ -32,7 +32,7 @@
 #profile img {
     margin-top: 20px;
     border-radius: 50%;
-    max-width: 35%;
+    max-width: 40%;
 }
 
 #mid-text {
@@ -88,7 +88,6 @@
 }
 
 /* ------------------------------- PAPERS ------------------------------------ */
-
 #paper-topics {
     color: #fff;
 }
@@ -122,7 +121,7 @@ ul ul > li::before {
     color: red;
     font-weight: bold;
     display: inline-block;
-    width: 20px;
+    width: 5px;
     text-align: center;
     margin-right: 10px;
 }

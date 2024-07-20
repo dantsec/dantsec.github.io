@@ -4,8 +4,10 @@ body {
     text-align: left;
 }
 
-github-md {
+zero-md {
     padding: 10px;
     height: auto;
     width: 90%;
+    background-color: #0d1117;
+    border-radius: 10px;
 }
