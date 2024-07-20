@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="../../../assets/css/markdown.css">
     <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
     <title>Void | C Language</title>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
 </head>
 <body>
 
@@ -16,7 +18,8 @@
 </header>
 
 <!-- ARTICLE BEGIN -->
-<github-md>
+<zero-md>
+<script type="text/markdown">
 
 # Aula 04 - Linguagem C - Var's do tipo Float
 - Embora ponto flutuante seja mais PRECISO que valores inteiros (já que podemos ter valores fracionários), isso **NÃO significa que sejam EXATOS**. Assim como na base decimal, alguns valores NÃO podem ser expressos corretamente em binário... Em decimal, 1/3 causa uma dizima periódica (0.3333...) - Quando certos valores são convertidos de decimal para binário isso também acontece. É o caso de 0.1, 0.2, 0.3, 0.4, ... (nenhum deles é exato). Para mostrar isso, basta fazer:
@@ -67,7 +70,8 @@ gdb -q BINARY_NAME
     - https://en.wikipedia.org/wiki/Single-precision_floating-point_format
     - https://bitismyth.wordpress.com/2017/03/16/mais-alguns-detalhes-sobre-ponto-flutuante/
 
-</github-md>
+</script>
+</zero-md>
 <!-- ARTICLE END -->
 
 <footer>
@@ -75,8 +79,6 @@ gdb -q BINARY_NAME
         <p id="footer-text">0xDant &copy; 2023</p>
     </a>
 </footer>
-
-<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
 
 </body>
 </html>

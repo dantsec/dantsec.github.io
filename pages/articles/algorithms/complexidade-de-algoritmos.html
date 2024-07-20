@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="../../../assets/css/markdown.css">
     <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
     <title>Void | Algorithms</title>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
 </head>
 <body>
 
@@ -16,7 +18,8 @@
 </header>
 
 <!-- ARTICLE BEGIN -->
-<github-md>
+<zero-md>
+<script type="text/markdown">
 
 # Aula 06 - Algoritmos - Complexidade de Algoritmos
 
@@ -191,17 +194,18 @@ bool example7(set<int> s, vector<int> v) {
 
 ### Notação Big-Ω
 
-- Quando uma função _f(n)_ é limitada inferiormente por outra função _g(n)_, dizemos que a **complexidade de tempo / espaço** de _f(n)_ é _Ω_( _g(n)_ ).
-    - Significa que a função _f(n)_ nunca será mais rápida (menor) do que a função _g(n)._
+- Quando uma função _f(n)_ é limitada inferiormente por outra função _g(n)_, dizemos que a **complexidade de tempo / espaço** de _f(n)_ é _Ω_( _g(n)_ ).
+    - Significa que a função _f(n)_ nunca será mais rápida (menor) do que a função _g(n)._
         - Descrito como o "melhor caso"
-        - Esta é a interpretação da **Notação** **Ω**.
+        - Esta é a interpretação da **Notação** **Ω**.
 
 ### Notação Big-Θ
 
 - Descreve o comportamento assintótico de funções definindo ao mesmo tempo um limite superior e um inferior para a execução de determinado algoritmo.
-    - **Θ( g(n) )** é a **interseção** entre **O( g(n) )** e **Ω( g(n) )**.
+    - **Θ( g(n) )** é a **interseção** entre **O( g(n) )** e **Ω( g(n) )**.
 
-</github-md>
+</script>
+</zero-md>
 <!-- ARTICLE END -->
 
 <footer>
@@ -209,8 +213,6 @@ bool example7(set<int> s, vector<int> v) {
         <p id="footer-text">0xDant &copy; 2023</p>
     </a>
 </footer>
-
-<script src="../../../assets/js/markdown-tag-GitHub.js"></script> 
 
 </body>
 </html>
