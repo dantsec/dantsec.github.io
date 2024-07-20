@@ -21,265 +21,361 @@
 <zero-md>
 <script type="text/markdown">
 
-# ALL ABOUT GIT!
+# Your GIT Guide!
 
-## Let's Start?
+---
+
+# Let's Start?
 
 - Downloads (Mac / Linux / Win):
-    - `https://git-scm.com/downloads`
+	- `https://git-scm.com/downloads`
 
 ---
 
-## Introduction
+# Introduction
 
-- Diferencas entre **GIT** e **GITHUB**
-    - _GIT_
-        - sistema de controle de versao (SCV / VCS) distribuido (p2p)
-        - operacoes atomicas (sucesso ou falha)
-        - repositorio (inventario, colecao) para seus codigos
-        - com ele voce pode consultar todas as modificacoes passadas atraves dos **commits**
-    - _GITHUB_
-        - repositorio em **nuvem**
+- Diferencas entre **GIT** e **GITHUB**:
+	- _GIT_:
+		- Sistema de controle de versao (SCV / VCS) distribuido (p2p);
+		- Operacoes atomicas (sucesso ou falha);
+		- Repositorio (inventario, colecao) para seus codigos;
+		- Com ele voce pode consultar todas as modificacoes passadas atraves dos **commits**.
+	- _GITHUB_:
+		- Servico de repositorio em **nuvem**.
 
-- Fluxo do GIT
+- Fluxo de trabalho do _Git_:
 
-![alt](https://images-ext-2.discordapp.net/external/yu0JwlaKo1XffgpXUWprbmYV5u262mTG7B8S05vTkB4/https/i.imgur.com/mWlqNxG.png)
+![git-flow](https://i.imgur.com/mWlqNxG.png)
 
-- **working tree/directory**: pasta / diretorio atual
-- **index (staging area)**: sala de espera do GIT; para onde os commits vao antes do push
-- **HEAD**: por padrao, aponta para o ultimo commit recebido dentro do repositorio
+- **Working tree / Directory**: pasta / diretorio atual;
+- **Index (Staging Area)**: sala de espera, lugar para onde os commits vao antes do push;
+- **HEAD**: por padrao, aponta para o ultimo commit recebido dentro do repositorio;
 
-### Architecture
+## Architecture
 
-![alt](https://images-ext-1.discordapp.net/external/X0Sy88CX-eaQ6JRG5nNXu8QV9jTUcrIDKCUEtoWr26k/https/i.imgur.com/xCCZnTt.png)
+![git-structure](https://i.imgur.com/xCCZnTt.png)
 
-- Vamos nos concentrar nos principais
-    - `.git/objects`
-        - no GIT, tudo e persistido nessa estrutura atraves de funcoes hash; e o **banco de dados de objetos do GIT**, sendo ele do tipo chave-valor (no-sql)
-            - uma funcao hash mapeia dados de tamanho arbitrario e dinamico em valores de tamanho fixo; valor final sempre tera o mesmo tamanho
-                - uma ma implementacao dessas funcoes pode ocasionar colisoes (dados tem o mesmo hash)
-                - o GIT armazena dados e acompanha tudo apenas comparando hashes!
-                - na pratica, podemos observar pelos seguintes comandos:
-                    - plumbing -- hash-object
-                    `% echo "hello" | git hash-object --stdin`
-                    - porcelain
-                    `% echo -e "hello" | sha1sum`
-                    - porem, o GIT adiciona uma palavra especifica seguida pelo tamanho do conteudo e o delimitador `\0`
-                        - essa palavra e o que o GIT chama de **tipo de objeto**
-                            - vamos ver o objeto __blob__:
-                                - o GIT adiciona o seguinte padrao:
-                                    - `{tipo_objeto} {tamanho_conteudo}\0`
-                                    - `blob 6\0hello`
-                                    - `% echo -e "blob 6\0hello" | sha1sum`
-                    - mas, por padrao, o comando hash-object nao persiste no diretorio, portanto utilizamos a opcao `-w`
-                        - ``% echo "hello" | git hash-object --stdin -w`
-                    - como ler arquivos blob?
-                        - o GIT usa a hash como uma chave que aponta para um valor, compactando o conteudo e armazenando-o
-                        - o comando plumbing `cat-file` faz com que, com uma chave, ele descomprime e obtem o conteudo original
-                            - `git cat-file -p [hash]`
-                    - adicionando arquivos blob ao indice
-                        - o comando plumbing `update-index` adiciona um blob ao stage area e dar um nome a ele
-                            - `git update-index --add --cacheinfo 100644 [hash] [name_to_blob]`
-                - **objeto tree**
-                    - usando o comando plumbing `write-tree`, o GIT agrupa todos os blobs que foram adicionados ao indice
-                - **objeto commit**
-                    - apos a promocao do _objeto tree_, o comando plumbing `commit-tree` recebe a arvore, uma mensagem de commit e cria outro objeto na pasta
-                        - onde guarda a arvore referenciada, autor/confirmador, mensagem
-                - **Log for the rescue**
-                    - o comando porcelain `git log` percorre todos os commits, seus parent e arvores, nos dando uma perspectiva de uma timeline do nosso trabalho
-    - `.git/refs`
-        - usar `sha1` no comando `git log` pode ser trabalhoso, como resolver?
-            - dando nomes aos hashes! ai que entram as referencias!
-                - `echo [hash] > .git/refs/heads/[reference]`
-                - `git update-ref refs/heads/[reference] [hash]`
-            - e isso sao as famosas **branches**!
-    - `HEAD`
-        - o comando `git log` percorre o commit raiz, que e referenciado pela branch atual (HEAD)!
-        - um unico arquivo que aponta para uma _referencia de cabeca_ (branch)
-            - plumbing: `% cat .git/HEAD`
-            - porcelain: `git branch`
-        - e para manipular qual branch a HEAD aponta, usamos o seguinte comando
-            - `git symbolic-ref HEAD refs/head/[branch_name]`
+- Vamos nos concentrar nos principais:
+	- `.git/objects`:
+		- No git, tudo e persistido nessa estrutura atraves de funcoes hash e no **banco de dados de objetos do GIT**, sendo ele do tipo chave-valor (no-sql);
+			- Uma funcao hash mapeia dados de tamanho arbitrario e dinamico em valores de tamanho fixo, assim, o valor final sempre tera o mesmo tamanho;
+				- Uma ma implementacao dessas funcoes pode ocasionar colisoes (dados tem o mesmo hash);
+				- O git armazena dados e acompanha tudo apenas comparando hashes;
+				- Na pratica, podemos observar pelos seguintes comandos:
+					- Plumbing (hash-object):
+    					- `% echo "hello" | git hash-object --stdin`.
+					- Porcelain:
+    					- `% echo -e "hello" | sha1sum`
+					- Porem, o GIT adiciona uma palavra especifica seguida pelo tamanho do conteudo, o delimitador `\0`;
+						- Essa palavra e o que o GIT chama de **tipo de objeto**;
+							- Vamos ver o objeto __blob__:
+								- O GIT adiciona o seguinte padrao:
+									- `{tipo_objeto} {tamanho_conteudo}\0`;
+									- `blob 6\0hello`;
+									- `% echo -e "blob 6\0hello" | sha1sum`;
+					- Mas, por padrao, o comando hash-object nao persiste no diretorio, portanto utilizamos a opcao `-w`:
+						- `% echo "hello" | git hash-object --stdin -w`
+					- Legal, mas... como ler arquivos blob?
+						- O GIT usa a hash como uma chave que aponta para um valor, compactando o conteudo e armazenando-o;
+						- O comando plumbing `cat-file` faz com que, com uma chave, ele descomprime e obtem o conteudo original:
+							- `git cat-file -p [hash]`.
+					- Adicionando arquivos blob ao indice:
+						- O comando plumbing `update-index` adiciona um blob ao _stage area_ e da um nome a ele:
+							- `git update-index --add --cacheinfo 100644 [hash] [name_to_blob]`.
+				- **Objeto tree**:
+					- Usando o comando plumbing `write-tree`, o GIT agrupa todos os blobs que foram adicionados ao indice.
+				- **Objeto commit**:
+					- Apos a promocao do _objeto tree_, o comando plumbing `commit-tree` recebe a arvore, uma mensagem de commit e cria outro objeto na pasta,  onde guarda a arvore referenciada, autor / confirmador e a mensagem.
+				- **Log for the Rescue**
+					- O comando porcelain `git log` percorre todos os commits, seus parents e arvores, nos dando uma perspectiva de uma timeline do nosso trabalho.
+	- `.git/refs`:
+		- Usar `sha1` no comando `git log` pode ser trabalhoso... como resolver?
+			- Dando nomes aos hashes! Ai que entram as referencias!
+				- `echo [hash] > .git/refs/heads/[reference]`;
+				- `git update-ref refs/heads/[reference] [hash]`;
+			- E isso sao as famosas **branches**!
+	- `HEAD`:
+		- O comando `git log` percorre o **commit raiz**, que e **referenciado pela branch atual (HEAD)**;
+		- Um unico arquivo que aponta para uma _referencia de cabeca_ (branch);
+			- plumbing: `% cat .git/HEAD`;
+			- porcelain: `git branch`.
+		- E para manipular qual branch a HEAD aponta, usamos o seguinte comando
+			- `git symbolic-ref HEAD refs/head/[branch_name]`.
 
-### Nomenclature
+## Nomenclature
 
-- Tipos de Comandos (CLI)
-    - **PLUMBING**: comandos de baixo nivel usados internamente pelo GIT quando os usuarios digitam comandos de alto nivel
-    - **PORCELAIN**: comandos de alto nivel comumente usados pelos usuarios
-- **BRANCH**
-    - referencias (mutaveis) que apontam para um commit especifico
-    - forma de desenvolver funcionalidades de forma indepentente
-- **FORK**
-    - copia de um repositorio para seu perfil, mas que mantem um apontamento para o repositorio no qual se originou
-- **TAG**
-    - branches sao referencias mutaves, porem, com a _tag_, podemos mudar essa historia
-        - nao podem ter seus ponteiros alterados (a menos que haja a exclusao das branches e a re-criacao delas)
-- `git merge` (fast-forward, snapshot, three-way)
-    - `https://chat.openai.com/share/0e69690c-b1ea-4b57-b828-79dddf6ba5ae`
+- Tipos de Comandos (CLI):
+	- **PLUMBING**: comandos de baixo nivel usados internamente pelo GIT quando os usuarios digitam comandos de alto nivel;
+	- **PORCELAIN**: comandos de alto nivel comumente usados pelos usuarios.
+- **BRANCH**:
+	- Referencias (mutaveis) que apontam para um commit especifico;
+	- Forma de desenvolver funcionalidades de forma indepentente.
+- **FORK**:
+	- Copia de um repositorio para seu perfil, mas que mantem um apontamento para o repositorio no qual se originou.
+- **TAG**:
+	- Branches sao referencias mutaveis, porem, com a _tag_, podemos mudar essa historia:
+		- Nao podem ter seus ponteiros alterados (a menos que haja a exclusao das branches e a re-criacao delas).
+- **Merge** (fast-forward, snapshot, three-way):
+	- `https://chat.openai.com/share/0e69690c-b1ea-4b57-b828-79dddf6ba5ae`
 
 ---
+
+# Git in Practice
+
+## Semantic Commits / Conventional Commits / Commit Patterns
+
+- Convencao simples para ser utilizada nas mensagens de commit;
+- Define um conjunto de regras para criar um historico de commit explicito, facilitando na criacao de ferramentas automatizadas;
+- Tambem auxiliam voce e a sua equipe a entenderem, de forma facilitada, quais alteracoes foram realizadas no trecho de codigo commitado;
+- Essas identificacoes ocorrem por meio de uma palavra e / ou emoji que representa uma acao.
+
+### Tipos e Descricoes
+
+- `feat`: indicam que seu trecho de codigo esta **incluindo um novo recurso**;
+- `fix` / `hotfix`: indicam que seu trecho de codigo esta **solucionando um problema (bugfix)**;
+- `docs`: indicam que suas alteracoes implicaram em **mudancas na documentacao (nao inclui alteracoes em codigo)**;
+- `test`: indicam que suas alteracoes **alteraram arquivos de testes (nao inclui alteracoes em codigo)**, seja criando / alterando / excluindo;
+- `build`: indicam **modificacoes** em **arquivos de build e dependencias**;
+- `perf`: indicam **alteracoes de codigo** que estejam relacionadas a **performance**;
+- `style`: indicam que houveram alteracoes referentes a **formatacao de codigo (nao inclui alteracoes em codigo)**, seja elas semicolos, trailing spaces, ... e que nao alteram o funcionamento da aplicacao;
+- `refactor`: indicam mudancas devido a **refatoracoes que nao alteraram a funcionalidade do codigo**;
+- `chore`: indicam **atualizacoes de tarefas (nao inclui alteracoes em codigo)** de build, configuracoes de administrador, pacotes, e que **nao influenciam nosso sistema nem algum dos nossos testes**... um exemplo seria adicionar um pacote no _.gitignore_;
+- `ci`: indicam mudancas relacionadas a **integracao continua (continuous integration)**;
+- `raw`: indicam mudancas relacionadas a arquivos de **configuracao, dados, features e parametros**;
+- `cleanup`: utilizados quando **removemos** codigo comentado, trechos desnecessarios ou qualquer outra forma de limpeza / legibilidade e manutenibilidade;
+- `remove`: indicam a **exclusao de arquivos / diretorios / funcionalidades obsoletas ou nao utilizadas**;
+- `revert`: implicam em **reverter commits**.
+
+### Construcao
+
+- Deve ser estruturado da seguinte forma:
+
+```sh
+# :emoji: e (scope) sao opcionais!
+
+:emoji: <type>(scope): description
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Tips
+
+- A primeira linha deve ter, no maximo, 4 palavras;
+- Seu commit deve responder a 3 perguntas:
+    - Porque essa mudanca e necessaria?
+    - Como ela resolve o problema?
+    - Quais os efeitos essas mudancas tem?
+- Use o imperativo junto do presente simples, pense que na hora de escrever voce vai respondar a pergunta "O que esse commit faz?" ou melhor dizendo: "spoken or written as if giving a command or instruction".
+
+## Git Flow @ Aplicado
+
+![git-flow](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKD2bDmVYzWDpJb2lOyVa_2onAbF9XPWStZg&s)
+
+> Happy Path:
+
+```sh
+# @@ CRIANDO A DEVELOP @@
+
+# Certificando-se que existe uma branch _develop_.
+git branch -a
+# Caso nao exista (sincroniza, cria local e cria remoto):
+git fetch origin && git checkout -b develop && git push origin develop
+# Para desencargo de consciencia, entra na develop.
+git checkout develop
+
+# @@ CRIANDO UMA FEATURE @@
+
+# !! Partindo da _develop_ !!
+git checkout -b feature/novo-componente
+# Cria remotamente.
+git push origin feature/novo-componente
+# Depois de tudo feito na branch, hora de mergear (entra na dev, mergea e envia pro remoto).
+git checkout develop && git merge feature/novo-componente && git push origin develop
+
+# @@ CRIANDO UMA RELEASE @@
+
+# Se for identificado algum bug durante o processo, deve-se tratar o bug na branch de release, enviar para a master & develop!
+# Lembrando que essa branch vai de projeto para projeto, entao caso nao tenha pulamos direto para o processo de merge da dev com a master!
+
+# Caso nao tenha nenhum conflito, vamos partir da develop (cria a branch e envia para o remoto):
+git checkout -b release/v1.0.1 && git push origin release/v1.0.1
+# Crie uma tag (os dois jeitos sao validos).
+git tag -a v1.0.1 -m "Release do novo componente"
+git tag v1.0.1
+# Confere se a tag foi criada e envia para o remoto (no outro apenas envia).
+git show v1.0.1 && git push origin v1.0.1
+git push --tags
+# Com tudo feito, hora de mergear.
+git checkout master && git merge release/v1.0.1
+```
 
 ## Commands
 
-- Basicos:
+- **Basicos**:
+```c
+- COPIANDO / CLONANDO UM REPOSITORIO:
+	// REPOSITORIO VIA HTTP
+	% git clone [project_link]
+	// REPOSITORIO REMOTO (VIA SSH)
+	% git clone user.server@:/path/to/repo
+
+- ATUALIZANDO REPOSITORIO LOCAL (PEGA AS MODIFICOES FEITAS NO REPO REMOTO):
+	// git pull == git fetch + git merge
+	% git pull
+
+- CRIAR REPOSITORIO LOCAL:
+	% git init
+
+- VER ESTADO DO GIT:
+	% git status
+
+- ADICIONANDO SEUS ARQUIVOS AO GIT:
+	// inclusoes interativas
+	% git add -i
+	// 1 de cada vez
+	% git add [file_name]
+	// todos de uma vez
+	% git add *
+
+- CRIANDO MODIFICACOES (COMMIT):
+	// arquivos nao comentados previamente
+	% git commit -m 'comments'
+	// arquivos comentados previamente
+	% git commit -am 'comments'
+
+- DESFAZENDO MODIFICACOES (COMMITS):
+	// pegar a commit-key
+	% git log --pretty=oneline --color
+	// desfazendo commit
+	% git revert [commit_key]
+    % git reset HEAD~[number_of_commits]
+
+- CONECTANDO / DESCONECTANDO SEU REPOSITORIO LOCAL (GIT) A NUVEM (GITHUB):
+	// ON
+	% git remote add origin [project_link]
+	// OFF
+	% git remote remove origin [project_link]
+
+- ENVIANDO SUAS ALTERACOES:
+	// apenas na primeira vez
+	// default branch_name == master
+	// o '-u' define a branch local atual p/ rastrear o branch remoto
+	// caso use s/ '-u', o GIT sempre sabera o branch remoto p/ push
+	% git push -u origin [branch_name]
+	// outras vezes
+	% git push origin [branch_name]
+
+- CRIANDO BRANCHES LOCAIS:
+	% git checkout -b [branch_name]
+
+- EXCLUINDO BRANCHES LOCAIS & REMOTOS:
+	// locais
+	% git branch [-d / -D] [branch_name]
+	// remotos
+	% git push origin --delete [remote_branch_name]
+
+- RENOMEANDO BRANCHES:
+	% git branch [-m / -M] [old_name] [new_name]
+
+- NAVEGAR ENTRE BRANCHES:
+	% git switch [branch_name]
+	% git checkout [branch_name]
+
+- UNINDO / MESCLANDO BRANCHES:
+	% git merge [branch_name]
 ```
-- COPIANDO / CLONANDO UM REPOSITORIO
-    // REPOSITORIO VIA HTTP
-    % git clone [project_link]
-    // REPOSITORIO REMOTO (VIA SSH)
-    % git clone user.server@:/path/to/repo
 
-- ATUALIZANDO REPOSITORIO LOCAL (PEGA AS MODIFICOES FEITAS NO REPO REMOTO)
-    // git pull == git fetch + git merge
-    % git pull
+- **Intermediarios**:
+```c
+- VER ALTERACOES ENTRE ARQUIVOS OU BRANCHES:
+	// [origin_branch_name] [target_branch_name]
+	// commit-A commit-B
+	% git diff
 
-- CRIAR REPOSITORIO LOCAL
-    % git init
+- VER TODAS AS ALTERACOES QUE FORAM FEITAS NO REPO LOCAL:
+	% git reflog
 
-- VER ESTADO DO GIT
-    % git status
+- TAGGING:
+	% git tag [tag] [commit_key]
 
-- ADICIONANDO SEUS ARQUIVOS AO GIT
-    // inclusoes interativas
-    % git add -i
-    // 1 de cada vez
-    % git add [file_name]
-    // todos de uma vez
-    % git add *
+- REVERTENDO ALTERACOES LOCAIS:
+	% git checkout -- [file_name]
 
-- CRIANDO MODIFICACOES (COMMIT)
-    // arquivos nao comentados previamente
-    % git commit -m 'comments'
-    // arquivos comentados previamente
-    % git commit -am 'comments'
+- REMOCAO DE TODAS AS ALTERACOES/COMMIT LOCAIS:
+	% git fetch origin && git reset --hard origin/master
 
-- DESFAZENDO MODIFICACOES (COMMITS)
-    // pegar a commit-key
-    % git log --pretty=oneline --color
-    // desfazendo commit
-    % git revert [commit_key]
+- SOFT / HARD RESET:
+	// soft - os commits posteriores continuam na staging area
+	% git reset [commit_key]
+	// hard - commits posteriores + quaisquer alteracoes
+	// serao permanentemente deletadas
+	// use com cautela!
+	% git reset --hard
 
-- CONECTANDO / DESCONECTANDO SEU REPOSITORIO LOCAL (GIT) A NUVEM (GITHUB)
-    // ON
-    % git remote add origin [project_link]
-    // OFF
-    % git remote remove origin [project_link]
+- MANIPULAR HISTORICO DE COMMITS:
+	// reordena / combina / edita / descarta commits
+	// alteracoes vao direto para a main
+	// va ata a branch desejada e:
+	% git rebase -i [commit_key]
+	
+	// rebase simples
+	// commits serao reorganizados na ponta da main
+	// similar ao `merge`, mas pode reescrever o historico
+	// use com cautela!
+	// va ate a branch desejada e:
+	% git rebase main
 
-- ENVIANDO SUAS ALTERACOES
-    // apenas na primeira vez
-    // default branch_name == master
-    // o '-u' define a branch local atual p/ rastrear o branch remoto
-    // caso use s/ '-u', o GIT sempre sabera o branch remoto p/ push
-    % git push -u origin [branch_name]
-    // outras vezes
-    % git push origin [branch_name]
-
-- CRIANDO BRANCHES LOCAIS
-    % git checkout -b [branch_name]
-
-- EXCLUINDO BRANCHES LOCAIS & REMOTOS
-    // locais
-    % git branch [-d / -D] [branch_name]
-    // remotos
-    % git push origin --delete [remote_branch_name]
-
-- RENOMEANDO BRANCHES
-    % git branch [-m / -M] [old_name] [new_name]
-
-- NAVEGAR ENTRE BRANCHES
-    % git switch [branch_name]
-    % git checkout [branch_name]
-
-- UNINDO / MESCLANDO BRANCHES
-    % git merge [branch_name]
-```
-
-- Intermediarios:
-```
-- VER ALTERACOES ENTRE ARQUIVOS OU BRANCHES
-    // [origin_branch_name] [target_branch_name]
-    // commit-A commit-B
-    % git diff
-
-- VER TODAS AS ALTERACOES QUE FORAM FEITAS NO REPO LOCAL
-    % git reflog
-
-- TAGGING
-    % git tag [tag] [commit_key]
-
-- REVERTENDO ALTERACOES LOCAIS
-    % git checkout -- [file_name]
-
-- REMOCAO DE TODAS AS ALTERACOES/COMMIT LOCAIS
-    % git fetch origin && git reset --hard origin/master
-
-- SOFT / HARD RESET
-    // soft - os commits posteriores continuam na staging area
-    % git reset [commit_key]
-    // hard - commits posteriores + quaisquer alteracoes
-    // serao permanentemente deletadas
-    // use com cautela!
-    % git reset --hard
-
-- MANIPULAR HISTORICO DE COMMITS
-    // reordena / combina / edita / descarta commits
-    // alteracoes vao direto para a main
-    // va ata a branch desejada e:
-    % git rebase -i [commit_key]
-    
-    // rebase simples
-    // commits serao reorganizados na ponta da main
-    // similar ao `merge`, mas pode reescrever o historico
-    // use com cautela!
-    // va ate a branch desejada e:
-    % git rebase main
-
-- APLICAR COMMIT ESPECIFICO DE UMA BRANCH PARA OUTRA
-    // traz alteracao especifica de um branch p/ outro sem mesclar/rebase o
-    // branch inteiro
-    // va ate a branch desejada e:
-    % git cherry-pick [commit_hash_incoming_branch]
+- APLICAR COMMIT ESPECIFICO DE UMA BRANCH PARA OUTRA:
+	// traz alteracao especifica de um branch p/ outro sem mesclar/rebase o
+	// branch inteiro
+	// va ate a branch desejada e:
+	% git cherry-pick [commit_hash_incoming_branch]
 ```
 
 ---
 
-## Tips
+# Fast Tips
 
-- CheatSheet: `https://training.github.com/downloads/pt_BR/github-git-cheat-sheet.pdf`
-
+- CheatSheet: `https://training.github.com/downloads/pt_BR/github-git-cheat-sheet.pdf`;
 - Para acesso rapido, quando quiser fazer alguma contribuicao:
 ```
 1. fazer um fork do projeto p/ seu github
 
 2. clonar o repositorio forkado
-    git clone [repo_link]
+	git clone [repo_link]
 
 3. criar uma branch onde ficara suas modificacoes
-    git checkout -b [branch_name]
+	git checkout -b [branch_name]
 
 4. fazer suas alteracoes
 
 5. commitar mudancas
-    git add [file_name]
-    git commit -m [comment]
+	git add [file_name]
+	git commit -m [comment]
 
 6. enviar alteracoes
-    git push origin [branch_name]
+	git push origin [branch_name]
 
 7. criar um pull request no github
-    - compare & pull request
+	- compare & pull request
 ```
 
 ---
-## References
 
-- !`https://dev.to/leandronsp/pt-br-fundamentos-do-git-um-guia-completo-2djh`
-- `https://rogerdudler.github.io/git-guide/index.pt_BR.html`
-- `https://dev.to/womakerscode/git-e-github-guia-rapido-e-comandos-basicos-para-iniciantes-4ile`
-- `https://www.hostinger.com.br/tutoriais/tutorial-do-git-basics-introducao`
-- `https://www.devmedia.com.br/guia/git-e-github/37585`
-- `https://tecnoblog.net/responde/como-usar-o-github-guia-para-iniciantes/`
-- `https://github.com/mmaryx/GitStudy`
+# References
+
+- !`https://dev.to/leandronsp/pt-br-fundamentos-do-git-um-guia-completo-2djh`;
+- `https://rogerdudler.github.io/git-guide/index.pt_BR.html`;
+- `https://dev.to/womakerscode/git-e-github-guia-rapido-e-comandos-basicos-para-iniciantes-4ile`;
+- `https://www.hostinger.com.br/tutoriais/tutorial-do-git-basics-introducao`;
+- `https://www.devmedia.com.br/guia/git-e-github/37585`;
+- `https://tecnoblog.net/responde/como-usar-o-github-guia-para-iniciantes/`;
+- `https://github.com/mmaryx/GitStudy`;
+- `https://www.atlassian.com/br/git/tutorials/comparing-workflows/gitflow-workflow`;
+- `https://medium.com/trainingcenter/utilizando-o-fluxo-git-flow-e63d5e0d5e04`;
+- `https://www.conventionalcommits.org/en`;
 
 </script>
 </zero-md>

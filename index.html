@@ -30,8 +30,11 @@
                 if (target.id !== 'footer-text') return;
 
                 if (target.colorChanger) {
+                    target.style.color = 'white';
+
                     clearInterval(target.colorChanger);
                     delete target.colorChanger;
+                    
                     return;
                 }
 
