@@ -1,0 +1,103 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Numeric Bases</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 03 - Bases Numericas - Numeros Octais e Hexadecimais
+
+- Sistema decimal: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9;
+- Sistema binario: 0, 1;
+- Sistema octal  : 0, 1, 2, 3, 4, 5, 6, 7;
+- Sistema hexadecimal : 0 ao 9 e A ao F.
+
+## Conversao Octal (8) para Decimal (10)
+
+```c
+# Notation
+S = 8^n + ... + 8^3 + 8^2 + 8^1 + 8^0
+
+# Example
+371 (8) = 3 * 8^2 + 7 * 8^1 + 1 * 8^0 = 249 (10)
+```
+
+## Conversao Decimal (10) para Octal (8)
+
+1. Divida o numero decimal por 8 ate que nao seja mais possivel.
+
+```c
+177 =>
+	177 / 8 = 22; 1
+	22  / 8 = 2;  6
+	2   / 8 = 0;  2
+
+Pegar a ordem inversa dos restos:
+	177 (10) = 261 (8)
+```
+
+## Conversao Hexadecimal (16) para Decimal (10)
+
+```c
+# Notation
+S = 16^n + ... + 16^3 + 16^2 + 16^1 + 16^0
+
+# Example
+1FA (16) = 1 * 16^2 + 15 * 16^1 + 10 * 16^0 = 506 (10)
+```
+
+## Conversao Decimal (10) para Hexadecimal (16)
+
+1. Divida o numero decimal por 16 ate que nao seja mais possivel,
+
+```c
+685 =>
+	685 / 16 = 42; 13 = D
+	42  / 16 = 2;  10 = A
+	2   / 16 = 0;  2
+
+1. Pegar a ordem inversa dos restos
+2. Para os acima de 10, substitui-los por letras
+
+=> 685 (16) = 2AD (16)
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

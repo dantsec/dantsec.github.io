@@ -12,20 +12,21 @@ Instructions:
 3. Create directory int `pages/articles/TOPIC_NAME_IN_KEBAB_CASE/`.
 4. Run the script.
 5. Edit pages/papers.html file with new content.
+6. Clean folder `input`.
 """
 # PATHS
 TEMPLATE_PATH = '../../pages/articles/template.txt'
 INPUT_FILES_PATH = 'input/'
-OUTPUT_FILES_PATH = '../../pages/articles/guides/'
+OUTPUT_FILES_PATH = '../../pages/articles/numeric-bases/'
 ZIP_OUTPUT_PATH = '../../pages/backups/'
-PAPER_HTML_PATH = '../pages/articles/guides/'
+PAPER_HTML_PATH = '../pages/articles/numeric-bases/'
 # PAPER
 PAPER_AUTHOR = '0xDant'
 PAPER_INDEX = '0x01'
 PAPER_LANGUAGE = 'pt-BR'
-PAPER_TOPIC = 'Guides'
+PAPER_TOPIC = 'Numeric Bases'
 # OUTPUT
-ZIP_FILE_NAME = 'guides'
+ZIP_FILE_NAME = 'numeric-bases'
 
 
 def get_text_from_file(file_path: str = '') -> str:
