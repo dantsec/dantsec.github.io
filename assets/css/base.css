@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-/* VAR'S */
 :root {
     --background-dark: #000;
     --link-color: #f00;
@@ -8,7 +7,6 @@
     --border-color: #000;
 }
 
-/* BODY CONFIG */
 body {
     background-color: var(--background-dark);
     font-family: 'VT323', monospace;
@@ -22,11 +20,6 @@ body {
     min-height: 100vh;
 }
 
-a {
-    text-decoration: none;
-}
-
-/* RESPONSIVE CODE */
 @media (max-width: 768px) {
     #index-navbar, #links-navbar {
         flex-direction: column;
@@ -38,9 +31,12 @@ a {
     }
 }
 
-/* FOOTER */
 #footer-text {
     text-align: center;
     color: #fff;
     padding: 10px;
+}
+
+a {
+    text-decoration: none;
 }
