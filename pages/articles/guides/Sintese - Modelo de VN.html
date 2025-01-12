@@ -1,0 +1,282 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Guides</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Evolucao dos Computadores
+
+## Computadores Analogicos X Digitais
+
+- Computadores **analogicos** nao trabalham com numeros nem com simbolos que representam os numeros; eles procuram fazer analogia entre quantidades:
+	- Abaco;
+	- Regua de Calculo.
+- Computadores **digitais** realizam operacoes diretamente com numeros. Basicamente, eh uma maquina projetada para armazenar e manipular informacoes representadas apenas por algarismos ou digitos, que so podem assumir dois valores distintos (0 e 1).
+
+## Geracoes de Computadores
+
+- Geracao 0: **Computadores Mecanicos**;
+- Geracao 1: **Valvulas, Reles e Capacitores**;
+	- Reles sao interruptores acionados eletricamente;
+	- Capacitores sao dispositivos capazes de armazenar / descarregar cargas eletricas na forma de um campo eletrostatico.
+- Geracao 2: **Transistores**;
+	- Quando desenhamos circuitos, usamos a corrente convencional (positivo para o negativo) mas, como ja provado cientificamente, ocorre o inverso, onde o fluxo de eletrons vai do negativo para o positivo;
+	- O silicio puro nao possui quase nenhum eletron livre, por isso engenheiros fazem o "**dopping**", modificando suas propriedades eletricas, podendo ser do tipo _P_ (adicao de fosforo) ou do tipo _N_ (adicao de aluminio);
+	- Transistores tem funcao basica em circuitos de **interruptor** eletronico para executar operacoes logicas e tambem de **amplificadores** de sinais. Existem 2 tipos:
+		- Efeito Bipolar: protegidos por uma caixa de resina;
+			- 2 tipos principais:
+				- **NPN (C -> E)**: Correntes se combinam;
+				- **PNP (E -> C)**: Correntes de Dividem.
+			- Efeito de Campo: caixa parcialmente metalica e normalmente presos a um dissipador de calor;
+		- Composicao e Uso:
+			- Possui 3 pinos:
+				- E: emissor;
+				- B: base;
+				- C: coletor.
+			- Fornecendo _0.6V ~ 0.7V_ para o pino B, o transistor permite fluxo de corrente ao circuito principal.
+- Geracao 3: **Circuitos Integrados (CI)**;
+- Geracao 4: **Microprocessadores / Processadores**;
+	- Classificam-se como _LSI_ (Large Scale Integration - de 100 a 100.000 transistores);
+	- Nao inclui memoria nem perifericos built-in (diferentemente dos microcontroladores).
+
+# Instrucoes & Arquiteturas CISC e RISC
+
+### Ciclo de Instrucao
+
+- Quanto menor e mais simples o conjunto de **instrucoes**, mais rapido e o ciclo de tempo do processador (clock);
+	- Eh formada por dois campos: **OPCODE** e **Operando**;
+	- Ciclo de Instrucao:
+		- Buscar proxima instrucao:
+			- UCP busca o _OPCODE_ na memoria principal, o qual esta localizado no endereco contido no CI e armazena-o no registrador de instrucao (RI) (_RI <- CI_).
+		- Interpretar a instrucao (decodificar):
+			- O decodificador de instrucao decodifica (interpreta) o _OPCODE_ contido no _RI_;
+			- _CI -> CI + N_, onde N eh o numero de celulas que a proxima instrucao ocupa.
+		- Buscar os dados:
+			- UC busca (se houver) o(s) dado(s) (Operandos): _RI <- OP_;
+			- Esta fase se repete ate que sejam trazidos para dentro da UCP todos os operandos necessarios para a execucao da instrucao.
+		- Executar a instrucao:
+			- UC comanda a execucao da instrucao.
+		- Se o programa tiver terminado, para, senao, volta a fase 1.
+
+### CISC (Complex Instruction Set Computers)
+
+- Realiza tarefas complexas com poucas instrucoes;
+- Maior numero de registradores;
+- Suportam modos de enderecamento mais complexos pois nao ha restricao no acesso da memoria.
+
+### RISC (Reduced Instruction Set Computers)
+
+- Conjunto reduzido e simples de instrucoes (maior velocidade de execucao);
+- Menor numero de registradores;
+- Suportam modos de enderecamento mais simples pois o acesso a memoria se da apenas por instrucoes especiais;
+- Eh associado a uma tecnica de implementacao de sistemas computacionais chamada de _pipeline_, onde o processador consegue paralelizar a execucao de instrucoes de modo a maximizar a vazao de instrucoes processadas (+complexidade e +eficiencia). Diferentemente do _multithreading_ (execucao concorrente de threads / multiplas sequencias de instrucoes), o pipeline se concentra na execucao eficiente de instrucoes individuais.
+
+---
+
+# Modelo de Von Neumann
+
+- Para **Neumann**, uma maquina precisa de 4 elementos:
+	- **CPU** / **UCP**;
+	- **Memoria**;
+	- **I/O**;
+	- **Data Bus**.
+
+## CPU (Central Processing Unit)
+
+- Responsavel por executar programas armazenados na memoria principal buscando instrucoes, examinando-as e executando umas apos a outra;
+- Pode ser dividida em duas categorias funcionais:
+	- **UFC**: Unidade Funcional de Controle;
+		- **RDM** (Registrador de Dados de Memoria):
+			- Tambem chamado de _MBR_ (Memory Buffer Register), eh um registrador que armazena temporariamente dados que estao sendo transferidos da memoria principal para a UCP (em uma operacao de leitura) ou vice-versa (em uma operacao de escrita).
+		- **REM** (Registrador de Enderecos de Memoria):
+			- Tambem chamado de _MAR_ (Memory Address Register), eh um registrador que armazena temporariamente o endereco de acesso a uma posicao da memoria.
+		- **CI**, **RI**, Decodificador de Instrucoes (**CISC**), **UC** e **Clock**:
+			- **Clock**: gerador de pulsos, onde sua duracao eh chamada de ciclo e eh medido em hertz (ciclo por segundo).
+	- **UFP**: Unidade Funcional de Processamento;
+		- Formada pela **ULA**, **ACC** (armazena dados e serve de "ponte" entre a ULA e os demais dispositivos da UCP) e os **Registradores**;
+- Possui 3 entidades:
+	- **ULA** / **ALU**  (Unidade Logico-Aritmetica):
+		- Responsavel por executar instrucoes providas da memoria principal e por realizar operacoes logicas e aritmeticas.
+	- **UC** (Unidade de Controle):
+		- Responsavel pela busca de instrucoes na memoria e armazena-las em um registrador.
+	- **Conjunto de Registradores**:
+		- Mais rapidos que a memoria principal;
+		- Possui alguns registradores especiais, sao eles:
+			- **CP / CI**: Contador de Programa / Instrucoes;
+				- Armazena o endereco da memoria principal que contem a proxima instrucao a ser buscada.
+			- **RI**: Registrador de Instrucao;
+				- Armazena e Codifica instrucoes do **CP**.
+
+## Memoria
+
+- Permite o computador armazenar dados de forma temporaria (**volatil**) ou permanente (**nao volatil**);
+- Possui 5 tipos (chamado de subsistema de memoria), sao eles (ordem **decrescente** de velocidade / custo e **crescente** de armazenamento):
+	- **Registradores**;
+	- **Memoria Cache**:
+		- Criado para diminuir o delay de busca (transferencia de dados) entre registradores e memoria principal;
+		- Podem ter ate 3 niveis (_L1_, _L2_ e _L3_);
+		- **SRAM** (Static Random Access Memory):
+			- Armazenam os dados usando flip-flops, portanto guardam os dados como _estados solidos_ (0 ou 1);
+			- Nao ha necessidade de _refresh_ (realimentacao) constante para que os dados armazenados nao sejam perdidos.
+	- **Memoria Principal (RAM e ROM)**:
+		- **RAM**:
+			- SRAM;
+			- SDRAM: Evolucao das memorias DIMM. Deixou o padrao DRAM para tras;
+			- **DRAM** (Dynamic Random Access Memory):
+				- Armazenam os dados como _cargas eletricas em capacitores_, que perdem energia com o tempo, portanto os dados precisam de _refresh_ para evitar perda de informacoes;
+				- Formadas por celulas de memoria, que sao compostas de transistores e capacitores;
+				- Possui alguns padroes, sao eles:
+					- **DDR** (2^1) (Double Data Rate):
+						- Duplicam o desempenho da memoria, possibilitando a transferencia de dois lotes de dados por ciclo de clock (tempo que o processador executa uma operacao).
+					- **DDR2** (2^2):
+						- Transferem quatro lotes de dados por ciclo de clock.
+					- **DDR3** (2^3):
+						- Transferem oito lotes de dados por ciclo de clock.
+				- Possui modelos de modulos de memoria, sao eles:
+					- **SIMM** (Single In Line Memory Module);
+					- **DIMM** (Dynamic In Line Memory Module):
+						- Utilizados atualmente em memorias _DDR, DDR2 e DDR3_.
+		- **ROM**:
+			- Os dados sao nao volateis (nao sao perdidos por perda de corrente);
+			- Podem ser classificadas como:
+				- **PROM** (Programmable Read-Only Memory):
+					- Gravacao de dados ocorre por meio de aparelhos que trabalham atraves de uma reacao fisica com elementos eletricos;
+					- Dados nao podem ser apagados / alterados.
+				- **EPROM** (Erasable Programmable Read-Only Memory):
+					- Permitem que dados sejam regravados no dispositivo;
+					- Para isso ser possivel, todos os dados devem ser removidos previamente;
+					- Feito com o auxilio de um componente que emite luz ultravioleta.
+				- **EEPROM** (Electrically-Erasable Programmable Read-Only Memory):
+					- Tambem permite a regravacao de dados, mas, contrario as memorias _EPROM_, os processos de apagar / gravar dados sao feitos eletricamente, fazendo com que nao seja necessario mover o dispositivo do seu lugar para um aparelho.
+				- **EAROM** (Electrically-Alterable Programmable Read-Only Memory):
+					- Dados podem ser alterados aos poucos, razao pela qual esse tipo eh geralmente utilizado em aplicacoes que exigem apenas reescrita parcial das informacoes.
+				- **Flash**:
+					- Processo de gravacao / regravacao e muito mais rapido;
+					- Podem guardar um maior volume de dados;
+					- Utilizada em pen-drives e ssd's.
+				- **CD / DVD**:
+					- Pode-se comparar ao tipo _EEPROM_.
+			- Armazenam os seguintes programas principais:
+				- **BIOS** (Basic Input Output System):
+					- Ensina ao processador a operar com os dispositivos basicos de entrada e saida.
+				- **POST** (Power On Self Test) (Auto Teste):
+					- Programa de verificacao e teste que se executa apos ligar o computador, realizando diversas acoes sobre o hardware.
+				- **SETUP** (ou SETUP BIOS)
+					- Programa que altera os parametros armazenados na memoria de configuracao (**CMOS** - circuito de memoria volatil alimentada por bateria que grava as configuracoes de setup na placa-mae).
+			- Rodam os **Firmwares**:
+				- Tipo de software que esta armazenado em hardware e eh responsavel por controlar o funcionamento de dispositivos ou sistemas embarcados;
+				- Fornece instrucoes de baixo nivel para o hardware, permitindo que ele execute tarefas especificas e interaja com outros componentes do sistema.
+	- **Memoria Virtual (SWAP / Paginacao)**;
+	- **Memoria Secundaria / de Massa**:
+		- Encontrada em HD / SSD / PenDrive / CD & DVD;
+		- Memoria persistente (nao volatil).
+
+## I/O
+
+- Dispositivos / Perifericos que permitem a **entrada** e / ou **saida** de dados;
+- Cada dispositivo tem um endereco unico no sistema onde se encontra;
+- Pode comunicar-se com o nucleo de computador de 2 formas:
+	- Comunicacao **Serial**: informacao transferida bit a bit de forma sequencial;
+	- Comunicacao **Paralela**: informacao transferida em grupo de bits.
+- Alem disso, eh possivel destacar 3 metodos para gerenciamento de E/S, sao eles:
+	- E/S Programada / **Pooling**:
+		- UCP fica responsavel por verificar continuamente se cada um dos dispositivos necessita de atendimento;
+		- Como a UCP e subutilizada esse metodo caiu em desuso.
+	- E/S Controlada por **Interrupcao**:
+		- Quando o dispositivo estiver pronto para operacao de transferencia, a UCP recebe uma interrupcao, fazendo com que nao fique presa em espera ocupada ate que um dispositivo fique pronto;
+		- Este metodo sofreu melhorias mas nao eh mais utilizado.
+	- Acesso direto a memoria (**DMA**):
+		- UCP se limita a solicitar a transferência para um dispositivo denominado controlador de acesso direto a memoria principal (DMA Controller), o qual se responsabiliza totalmente pela transferencia.
+
+## Data Bus
+
+- Canais pelos quais os dados sao transmitidos que representam uma fiacao na placa-mae;
+- Para o controle de regras entre os barramentos existe um mecanismo denominado de **protocolo** (barramentos agora passam a ser fios condutores + protocolo), sendo alguns deles (apenas para barramentos de expansao):
+	- **ISA**: caiu em desuso;
+	- **PCI**: Peripheral Component Interconnect;
+	- **USB**: Universal Serial Bus;
+	- **AGP**: Accelerated Graphic Port (Rapido);
+	- **PCI Express**:
+		- Substituiu o PCI e o AGP;
+		- Neste barramento a conexao entre dois dispositivos ocorre de modo p2p, comunicacao serial (por isso nao eh considerado um barramento propriamente dito);
+		- Atualmente eh o meio de comunicacao entre 2 dispositivos mais rapido do mercado.
+- Possui 3 tipos, sao eles:
+	- **Barramento Local**:
+		- Maior velocidade de transferencia de dados;
+		- Normalmente funciona na mesma frequencia do clock do processador;
+		- Costuma interligar o processador aos dispositivos de maior velocidade.
+	- **Barramento do Sistema**:
+		- Opcional da parte do fabricante;
+		- Faz com que o barramento local faca a ligacao entre o processador e a memoria cache e esta se interligue com os modulos da memoria principal (RAM), de modo a nao permitir acesso direto do processador a memoria principal;
+		- Eh usado um circuito integrado denominado ponte (**chipset** - conjunto de CI para funcionar junto da placa-mae) que sincroniza o acesso entre as memorias.
+	- **Barramento de Expansao - E/S**:
+		- Interligar os dispositivos de E/S aos demais componentes do computador;
+		- Tambem utiliza uma ponte para se conectar ao barramento do sistema;
+		- E separado em duas partes:
+			- **Alta velocidade**: dispositivos de rede, placas graficas, etc;
+			- **Menor velocidade**: teclado, mouse, etc.
+- Eh composto por tres vias:
+	- **Barramento de dados**:
+		- Interliga o RDM (localizado na UCP) a memoria principal, para a transferencia de instrucoes ou dados a serem executados;
+		- Bidirecional;
+		- Quanto maior a sua largura maior o numero de bits transferidos de uma vez, logo, mais rapidamente chegarao ao seu destino (memoria ou UCP).
+	- **Barramento de Enderecos**:
+		- Interliga o REM (localizado na UCP) a memoria principal, para a transferencia dos bits que representam um determinado endereco de memoria onde se localiza uma instrucao ou dado a ser executado;
+		- Unidirecional pois apenas a UCP pode acionar a memoria principal;
+		- O tamanho de linhas desse barramento determina a capacidade de armazenamento da memoria RAM.
+	- **Barramento de Controle**:
+		- Interliga a UC aos demais componentes do sistema para passagem de sinais de controle gerados pelo sistema;
+		- Bidirecional.
+
+## Esquema de Funcionamento
+
+1. Dados sao disponibilizados pelos perifericos (entrada);
+2. Dados sao carregados para a memoria principal sob coordenacao da CPU;
+3. CPU interpreta e processa os dados conforme instrucoes;
+4. Se necessario, dados sao salvos em memoria persistente;
+5. Os resultados sao mostrados na saida.
+
+```
+Entrada (I) ---> MEMORIA <---> UC <---> ULA ---> SAIDA (O)
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

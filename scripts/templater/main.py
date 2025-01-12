@@ -16,16 +16,16 @@ Instructions:
 # PATHS
 TEMPLATE_PATH = '../../pages/articles/template.txt'
 INPUT_FILES_PATH = 'input/'
-OUTPUT_FILES_PATH = ''
+OUTPUT_FILES_PATH = '../../pages/articles/guides/'
 ZIP_OUTPUT_PATH = '../../pages/backups/'
-PAPER_HTML_PATH = ''
+PAPER_HTML_PATH = '../pages/articles/guides/'
 # PAPER
 PAPER_AUTHOR = '0xDant'
-PAPER_INDEX = ''
+PAPER_INDEX = '0x01'
 PAPER_LANGUAGE = 'pt-BR'
-PAPER_TOPIC = ''
+PAPER_TOPIC = 'Guides'
 # OUTPUT
-ZIP_FILE_NAME = ''
+ZIP_FILE_NAME = 'guides'
 
 
 def get_text_from_file(file_path: str = '') -> str:

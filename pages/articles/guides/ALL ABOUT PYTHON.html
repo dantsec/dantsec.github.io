@@ -1,0 +1,1549 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Guides</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Python @ Masterclass
+
+## Introduction
+
+- Foi criado por _Guido van Rossum_ no inicio dos anos 90;
+- Atualmente eh uma das linguagens mais populares existentes;
+- Eh basicamente _pseudocodigo_ executavel.
+
+## Comments
+
+```py
+# Single line comments start with a number symbol.
+
+"""
+Multiline strings can be written
+using three "s, and are often used
+as documentation.
+"""
+```
+
+## Primitive Datatypes and Operators
+
+- **Numericos**: _Inteiros_ e de _Ponto Flutuante_;
+    - Operadores Aritmeticos: `+`, `-`, `*`, `/`, `//`, `%` e `**`.
+- **Booleanos**: `True`, `False`;
+    - Operadores Logicos: `and`, `or`, `not` e `is`;
+        - **Tip** (`is` vs. `==`): `is` checa se duas variaveis fazem referencia ao mesmo objeto, enquanto `==` checa se os objetos apontados possuem o mesmo valor / conteudo.
+    - Operadores Relacionais: `==`, `!=`, `<`, `<=`, `>` e `>=`;
+        - **Tip**: `None`, `0`, e `empty` strings / lists / dicts / tuples / sets sao avaliados como _False_. Todos os outros valores sao avaliados como _True_.
+- **Literais**: `''`, `""`, `len()`, `f"{}"`.
+
+### Numericos
+
+```py
+# Basic Math
+3        # => 3
+1 + 1    # => 2
+8 - 1    # => 7
+10 * 2   # => 20
+35 / 5   # => 7.0
+10.0 / 3 # => 3.3333333333333335
+
+# Floor division rounds towards negative infinity
+5    // 3   # => 1
+-5   // 3   # => -2
+5.0  // 3.0 # => 1.0  # works on floats too
+-5.0 // 3.0 # => -2.0
+
+# Mod operation
+7  % 3 # => 1
+-7 % 3 # => 2, where i % j have the same sign as j, unlike C
+
+# Exponentiation
+2 ** 3 # => 2^3 = 8
+```
+
+### Booleanos
+
+```py
+# Note: the capitalization is crucial
+True == (not False) # => True
+False == (not True) # => True
+
+True and False # => False
+True or False  # => True
+
+# True and False are actually 1 and 0 but with different keywords
+True + True # => 2
+True * 8    # => 8
+False - 5   # => -5
+
+0 == False  # => True
+2 > True    # => True
+2 == True   # => False
+-5 != False # => True
+
+# None, 0, and empty strings/lists/dicts/tuples/sets all evaluate to False.
+# All other values are True
+bool(0)     # => False
+bool("")    # => False
+bool([])    # => False
+bool({})    # => False
+bool(())    # => False
+bool(set()) # => False
+bool(4)     # => True
+bool(-6)    # => True
+
+# Seeing if a value is in a range
+1 < 2 and 2 < 3 # => True
+2 < 3 and 3 < 2 # => False
+# We can **chain** them to make it cleaner
+1 < 2 < 3 # => True
+2 < 3 < 2 # => False
+
+# is vs. ==
+a = [1, 2, 3, 4] # Point _a_ at a new list, [1, 2, 3, 4]
+b = a            # Point _b_ at what _a_ is pointing to
+b is a           # => True, _a_ and _b_ refer to the same object
+b == a           # => True, _a_ and _b_ objects are equal
+
+b = [1, 2, 3, 4] # Point _b_ at a new list, [1, 2, 3, 4]
+b is a           # => False, _a_ and _b_ don't refer to the same object
+b == a           # => True, _a_ and _b_ objects are equal
+
+# None is an object.
+# So, don't use the equality '==' symbol to compare objects to None.
+# Use 'is' instead; this checks for equality of object identity.
+"etc" is None  # => False
+None is None   # => True
+```
+
+### Literais / Strings e JSON
+
+#### Strings
+
+```py
+# Strings are created with " or '
+"This is a string."
+'This is also a string.'
+
+# Strings can be added too
+# String literals (but not variables) can be concatenated without using '+' operator
+"Hello " + "world!" # => "Hello world!"
+"Hello " "world!"   # => "Hello world!"
+
+# A string can be treated like a list of characters
+"Hello world!"[0] # => 'H'
+
+# You can find the length of a string
+len("This is a string") # => 16
+
+# Since Python 3.6, you can use f-strings or formatted string literals.
+name = "Reiko"
+f"{name} is {len(name)} characters long." # => "Reiko is 5 characters long."
+```
+
+#### JSON
+
+- A biblioteca `json` pode fazer o _parse de JSON de arquivos ou strings;
+- Alem disso, tambem pode converter listas / dicionarios Python em strings no formato JSON.
+
+A biblioteca JSON do Python é usada para trabalhar com dados no formato JSON (JavaScript Object Notation), que é amplamente utilizado para armazenamento e troca de informações.  
+
+##### Principais Recursos  
+
+- **dump**:
+    - Serializa um objeto Python para JSON e escreve diretamente em um arquivo;  
+    - Parâmetros:  
+        - `obj`: Objeto Python a ser convertido;
+        - `file`: Objeto de arquivo onde o JSON sera escrito;
+        - `indent`: (opcional) Formata o JSON com indentacao.
+
+```py
+from json import dump
+
+json.dump(obj, file, indent=N)
+```  
+
+- **dumps**: Serializa um objeto Python para uma string JSON.
+
+```py
+from json import dumps
+
+json.dumps(obj, indent=N)
+```
+
+- **load**:
+   - Le um arquivo JSON e o converte em um objeto Python.
+
+```py
+json.load(file)
+```
+
+- **loads**:
+   - Converte uma string JSON em um objeto Python.
+
+```py
+json.loads(json_string)
+```  
+
+## Variables and Collections
+
+### Data I/O
+
+```py
+# Python has a print function
+# By default the print function also prints out a newline at the end
+# Use the optional argument end to change the end string
+print("Hello, World", end="!") # => Hello, World!
+
+# Python has a input function
+# A simple way to get input data from console
+input_string_var = input("Enter some data: ") # Returns the data as a str
+```
+
+### Variables
+
+```py
+# Convention in naming variables is snake_case style
+some_var = 5
+print(some_var) # => 5
+print(some_unknown_var) # Raises a _NameError_
+
+# Get type of variable
+type(1) # => <class 'int'>
+```
+
+### Arrays / Lists, Tuples, Dictionaries and Sets
+
+- Para o **unpacking** de variaveis, usamos os operadores `*` para _listas_ e _tuplas_ e `**` para _dicionarios_.
+
+#### zip()
+
+- Antes de dar inicio ao conteudo da secao, vamos dar uma breve olhadinha na funcao _built-in_ `zip()`;
+- A funcao `zip()` eh usada para juntar duas ou mais listas em **uma unica lista de tuplas**, onde cada tupla contem um elemento de cada uma das listas fornecidas;
+- A funcao `zip()` eh muito util quando precisamos percorrer duas ou mais listas simultaneamente, pois elimina a necessidade de usar loops aninhados;
+- Sintaxe: `zip(*iterables)`.
+
+```py
+# Uso simples
+# Itens extras sao ignorados
+print(list(zip(
+    ['Alice', 'Bob', 'Charlie'],
+    [88, 94]
+))) # [('Alice', 88), ('Bob', 94)]
+
+# Usando a tecnica de unpacking com zip() (like "unzip")
+a = [
+    ('Apple', 10),
+    ('Banana', 20),
+    ('Orange', 30)
+]
+
+fruits, quantities = zip(*a)
+
+print(f"Fruits: {fruits}")         # Fruits: ('Apple', 'Banana', 'Orange')
+print(f"Quantities: {quantities}") # Quantities: (10, 20, 30)
+
+# Usando dicionarios
+d = {
+    'name': 'Alice',
+    'age': 25,
+    'grade': 'A'
+}
+
+res = list(zip(d.keys(), d.values()))
+
+print(list(res)) # [('name', 'Alice'), ('age', 25), ('grade', 'A')]
+```
+
+#### Arrays / Lists
+
+- _Creation_ and _Population_:
+
+```py
+# Lists store sequences
+li = []
+
+# Add data to list
+li.append(1) # li is now [1]
+li.append(2) # li is now [1, 2]
+li.append(4) # li is now [1, 2, 4]
+li.append(3) # li is now [1, 2, 4, 3]
+
+# Remove data from the end
+li.pop() # => 3 and li is now [1, 2, 4]
+```
+
+- _Accessing and Slicing Items_:
+
+```py
+# Consider
+li = [1, 2, 4, 3]
+
+# Looking out of bounds is an IndexError
+li[4]  # Raises an IndexError
+
+# Accessing items
+li[0] # => 1
+li[-1] # => 3
+
+# Defining ranges with slice syntax => li[start:end:step]
+li[1:3]  # Return list from index 1 to 3 => [2, 4]
+li[2:]   # Return list starting from index 2 => [4, 3]
+li[:3]   # Return list from beginning until index 3  => [1, 2, 4]
+li[::2]  # Return list selecting elements with a step size of 2 => [1, 4]
+li[::-1] # Return list in reverse order => [3, 4, 2, 1]
+```
+
+- _Copy_ and _Delete_:
+
+```py
+# Consider
+li = [1, 2, 4, 3]
+
+# Make a one layer deep copy using slices
+li2 = li[:] # => li2 = [1, 2, 4, 3] but (li2 is li) will result in false.
+
+# Remove arbitrary elements from a list with "del"
+del li[2] # li is now [1, 2, 3]
+```
+
+- _Insert, Search and Remove_:
+
+```py
+# Consider
+li = [1, 2, 3]
+
+# Remove first occurrence of a value
+li.remove(2) # li is now [1, 3]
+li.remove(2) # Raises a ValueError as 2 is not in the list
+
+# Insert an element at a specific index
+li.insert(1, 2) # li is now [1, 2, 3]
+
+# Get the index of the first item found matching the argument
+li.index(2) # => 1
+li.index(4) # Raises a ValueError as 4 is not in the list
+```
+
+- _Tricks_:
+
+```py
+# Consider
+li = [1, 2, 3]
+l2 = [4, 5, 6]
+
+# You can add lists
+# Note: values for li and for other_li are not modified.
+li + l2 # => [1, 2, 3, 4, 5, 6]
+
+# Concatenate lists with "extend()"
+li.extend(l2) # Now li is [1, 2, 3, 4, 5, 6]
+
+# Check for existence in a list with "in"
+1 in li # => True
+
+# Examine the length with "len()"
+len(li) # => 6
+```
+
+#### Tuples
+
+- Sao como as listas, mas sao **imutaveis**.
+
+- _Creation and Search_:
+
+```py
+# Creating a Tuple
+tup = (1, 2, 3)
+
+# Accessing items
+tup[0]     # => 1
+tup[0] = 3 # Raises a TypeError
+```
+
+- _Some Operations_:
+
+```py
+# Consider:
+tup = (1, 2, 3)
+
+len(tup)        # => 3
+tup + (4, 5, 6) # => (1, 2, 3, 4, 5, 6)
+tup[:2]         # => (1, 2)
+2 in tup        # => True
+del tup
+```
+
+- _Unpacking_:
+
+```py
+# You can unpack tuples (or lists) into variables
+a, b, c = (1, 2, 3) # a is now 1, b is now 2 and c is now 3
+
+# You can also do extended unpacking (just one starred expression for each assignment)
+a, *b, c = (1, 2, 3, 4) # a is now 1, b is now [2, 3] and c is now 4
+
+# Tuples are created by default if you leave out the parentheses
+d, e, f = 4, 5, 6 # d = 4, e = 5 and f = 6
+
+# swap two values
+e, d = d, e # d is now 5 and e is now 4
+```
+
+- _Obs_:
+
+```py
+# Note that a tuple of length one has to have a comma after the last element
+# But tuples of other lengths, even zero, do not.
+type((1))  # => <class 'int'>
+type((1,)) # => <class 'tuple'>
+type(())   # => <class 'tuple'>
+```
+
+#### Dictionaries
+
+- Armazena um mapa do tipo **chave-valor**;
+- As chaves precisam ser de tipos de dados **imutaveis** (_int_, _float_, _string_ e _tuplas_).
+
+- _Create, Delete and Populate_:
+
+```py
+# Create
+empty_dict = {}
+filled_dict = {"one": 1, "two": 2, "three": 3}
+
+# Populate
+filled_dict["four"] = 4 # => {"one": 1, "two": 2, "three": 3, "four": 4}
+filled_dict.update({"five": 5}) # # => {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+
+# Using UNPACKING to Populate (>=3.5)
+{"a": 1, **{"b": 2}} # => {'a': 1, 'b': 2}
+{"a": 1, **{"a": 2}} # => {'a': 2}
+
+# Delete
+del filled_dict["one"] # Removes the key "one" from filled dict
+```
+
+- _Searching_:
+
+```py
+# Consider
+filled_dict = {"one": 1, "two": 2, "three": 3, "four": 4}
+
+# Basic search
+filled_dict["one"] # => 1
+
+# Check for existence of keys in a dictionary with "in"
+"one" in filled_dict # => True
+1 in filled_dict     # => False
+
+# Looking up a non-existing key is a KeyError
+filled_dict["five"]  # KeyError
+
+# Get all keys as an iterable with "keys()"
+# We need to wrap the call in list() to turn it into a list
+# Note - for Python versions <3.7, dictionary key ordering is not guaranteed
+# Your results might not match the example below exactly
+# However, as of Python 3.7, dictionary items maintain the order at which they are inserted into the dictionary
+list(filled_dict.keys()) # => ["three", "two", "one"] in Python <3.7
+list(filled_dict.keys()) # => ["one", "two", "three"] in Python 3.7+
+
+# Get all values as an iterable with "values()"
+# Once again we need to wrap it in list() to get it out of the iterable
+# Note - Same as above regarding key ordering
+list(filled_dict.values()) # => [3, 2, 1]  in Python <3.7
+list(filled_dict.values()) # => [1, 2, 3] in Python 3.7+
+```
+
+- _Data Retrieve_:
+
+```py
+# Consider
+filled_dict = {"one": 1, "two": 2, "three": 3, "four": 4}
+
+# Use "get()" method to avoid the KeyError
+filled_dict.get("one")     # => 1
+filled_dict.get("five")    # => None
+# The get method supports a default argument when the value is missing
+filled_dict.get("one", 5)  # => 1
+filled_dict.get("five", 5) # => 5
+
+# "setdefault()" inserts into a dictionary only if the given key isn't present
+filled_dict.setdefault("six", 6)  # filled_dict["six"] is set to 6
+filled_dict.setdefault("six", 7)  # filled_dict["six"] is still 6
+```
+
+#### Sets
+
+- Colecoes nao ordenadas de elementos unicos;
+- Sao definidos pela classe `set()` e oferecem operacoes como _uniao_, _intersecao_, _diferenca_ e _diferenca simetrica_;
+- Os elementos devem ser _hashable_ (_imutaveis_), como numeros, strings ou tuplas.
+
+- _Create_:
+
+```py
+invalid_set = {[1], 1} # => Raises a TypeError: unhashable type: 'list'
+
+meu_set1 = {1, 2, 3}
+print(meu_set1) # => {1, 2, 3}
+
+meu_set2 = set([1, 2, 2, 3])
+print(meu_set2) # => {1, 2, 3}
+
+# Por mais que sejam mutaveis, podemos criar sets imutaveis
+meu_frozenset = frozenset([1, 2, 3])
+meu_frozenset.add(4) # Erro! frozenset eh imutavel
+```
+
+- _Adicao e Remocao de Elementos_:
+
+```py
+meu_set = {1, 2, 3}
+meu_set.add(4)    # Adiciona um elemento
+meu_set.remove(2) # Remove o elemento 2
+print(meu_set)    # => {1, 3, 4}
+```
+
+- _Operacoes Matematicas_:
+
+```py
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+# Uniao
+print(a | b) # => {1, 2, 3, 4, 5}
+
+# Intersecao
+print(a & b) # => {3}
+
+# Diferenca
+print(a - b) # => {1, 2}
+
+# Diferença Simetrica
+# Elementos que nao estao em ambos os conjuntos simultaneamente
+print(a ^ b) # => {1, 2, 4, 5}
+
+# Set da esquerda eh um superset do set da direita
+{1, 2} >= {1, 2, 3} # => False
+
+# Set da esquerda eh um subset do set da direita
+{1, 2} <= {1, 2, 3} # => True
+
+```
+
+- _Associacao e Copia_:
+
+```py
+# Association
+meu_set = {1, 2, 3}
+print(2 in meu_set) # => True
+print(5 in meu_set) # => False
+
+# Copy
+novo_set = meu_set.copy()
+novo_set is meu_set # => False
+```
+
+#### List / Dict / Set Comprehensions
+
+- Armazena a saida de um procedimento dentro de uma estrutura de dados.
+
+```py
+# List
+[x if x > 5 else 1 for x in [3, 4, 5, 6, 7]] # => [1, 1, 1, 6, 7]
+
+# Dict / Set
+{x for x in "abcddeef" if x not in "abc"} # => {'d', 'e', 'f'}
+
+{x: x ** 2 for x in range(3)} # => {0: 0, 1: 1, 2: 4}
+```
+
+## Conditionals and Iterables
+
+### Conditionals
+
+- Por convencao, usamos 4 _espacos_ ao inves de tabs.
+
+#### If / Elif / Else:
+
+```py
+some_var = 5
+
+if some_var > 10:
+    print("some_var is totally bigger than 10.")
+elif some_var < 10:
+    print("some_var is smaller than 10.") # This will be the output
+else:
+    print("some_var is indeed 10.")
+```
+
+#### Ternary:
+
+```py
+# (0 > 1) ? "yay!" : "nay!"
+"yay!" if 0 > 1 else "nay!" # => "nay!"
+```
+
+#### Try / "Catch"
+
+- Usado para lidar com excecoes e disparar acoes.
+
+```py
+try:
+    # Use "raise" to raise an error
+    raise IndexError("This is an index error")
+except IndexError as e:
+    pass
+except (TypeError, NameError):
+    pass
+else: # (Opcional) Caso nenhuma das exceptions acionem
+    print("All good!")
+finally: # (Opcional) executa no final independente se houve ou nao excecao
+    print("We can clean up resources here")
+```
+
+### Iterables
+
+#### Generators
+
+- Geradores podem nos ajudar a criar um **lazy code**;
+- Sao **memory-efficient** porque carregam os dados necessarios para processar apenas o proximo valor em um iteravel;
+- Isso permite que eles performem operacoes em intervalos de valores proibitivamente grandes.
+
+```py
+def double_numbers(iterable):
+    for i in iterable:
+        yield i + i
+
+for i in double_numbers(range(1, 900000000)): # `range` is a generator.
+    print(i)
+    if i >= 30:
+        break
+```
+
+- **Generator Comprehension**:
+
+```py
+# Ex 1
+values = (-x for x in [1,2,3,4,5])
+print(values) # => <generator object <genexpr> at 0x...>
+for x in values:
+    print(x)  # prints -1 -2 -3 -4 -5 to console/terminal
+
+# Ex 2
+# You can also cast a generator comprehension directly to a list.
+values = (-x for x in [1,2,3,4,5])
+gen_to_list = list(values)
+print(gen_to_list)  # => [-1, -2, -3, -4, -5]
+
+# Ex 3
+
+# Ex 3.1
+linhas = (linha.strip() for linha in open('arquivo.txt') if linha.strip())
+for linha in linhas:
+    print(linha)
+
+# Ex 3.2
+def ler_arquivo_grande(nome_arquivo):
+    with open(nome_arquivo, 'r') as arquivo:
+        for linha in arquivo:
+            yield linha.strip()
+
+for linha in ler_arquivo_grande('arquivo.txt'):
+    print(linha)
+```
+
+#### For Loop
+
+##### Over Lists
+
+```py
+"""
+- For loops iterate over lists
+
+prints:
+    dog is a mammal
+    cat is a mammal
+    mouse is a mammal
+"""
+for animal in ["dog", "cat", "mouse"]:
+    # You can use format() to interpolate formatted strings instead of f""
+    print("{} is a mammal".format(animal))
+```
+
+##### With range() Iterable
+
+```py
+"""
+- Lower and Step (default=1) are optional
+- Syntax: "range(lower, upper, step)"
+- Returns an iterable of numbers from the lower number to the upper number, while incrementing by step.
+
+prints:
+    4
+    6
+"""
+for i in range(4, 8, 2):
+    print(i)
+```
+
+##### With enumerate() Function
+
+```py
+"""
+Loop over a list to retrieve both the index and the value of each list item:
+    0 dog
+    1 cat
+    2 mouse
+"""
+animals = ["dog", "cat", "mouse"]
+
+for i, value in enumerate(animals):
+    print(i, value)
+```
+
+#### While Loop
+
+- Usage:
+
+```py
+"""
+- While loops go until a condition is no longer met.
+
+prints:
+    0
+    1
+    2
+    3
+"""
+x = 0
+
+while x < 4:
+    print(x)
+    x += 1 # Shorthand for x = x + 1
+```
+
+#### Iterable Abstraction
+
+- O Python oferece uma abstracao chamada de **Iterable**;
+- Nada mais eh do que um objeto que pode ser tratado como uma sequencia;
+- O objeto retornado pela funcao `range()` eh um _iterable_.
+
+```py
+# Simple Dict
+filled_dict = {"one": 1, "two": 2, "three": 3}
+
+# Assigning variable with iterable object
+our_iterable = filled_dict.keys()
+
+# This is an object that implements our Iterable interface
+print(our_iterable) # => dict_keys(['one', 'two', 'three'])
+
+# We can loop over it
+for item in our_iterable:
+    print(item) # one, two, three
+
+# However we cannot address elements by index...
+our_iterable[1] # Raises a TypeError
+```
+
+- Um _iterable_ eh um objeto que sabe como criar um iterador;
+- Nosso iterador eh um objeto que pode lembrar-se do estado passado;
+- Para acessarmos o objeto em seguida, usamos `next()`, e, apos ter retornado todos os dados, joga uma excecao `StopIteration`.
+
+```py
+filled_dict = {"one": 1, "two": 2, "three": 3}
+
+our_iterable = filled_dict.keys()
+
+our_iterator = iter(our_iterable)
+
+next(our_iterator) # => "one"
+next(our_iterator) # => "two"
+next(our_iterator) # => "three"
+next(our_iterator) # Raises StopIteration
+
+# Tambem podemos loopar e deixar o `next` implicito
+our_iterator = iter(our_iterable)
+
+for i in our_iterator:
+    print(i) # Prints one, two, three
+
+# Podemos pegar os elementos do iterable / iterator com a funcao list()
+list(our_iterable) # => Returns ["one", "two", "three"]
+list(our_iterator) # => Returns [] because state is saved
+```
+
+#### Break, Continue and Pass
+
+- Comumente vistos quando usados em conjunt com os loops _for_ e _while_;
+- Cada um realiza uma funcao diferente dentro de um loop, sao elas:
+    - `break`: quebra por completo o laco de repeticao;
+    - `continue`: volta para o inicio do loop, ignorando assim o codigo adiante da instrucao;
+    - `pass`: podendo tambem ser utilizada fora de loops (como em estruturas _try/catch_), permite negligenciar uma condicao e continuar normalmente o fluxo do programa.
+
+- **Break**:
+
+```py
+number = 0
+
+for number in range(5):
+    if number == 3:
+        break
+    print('Number is ' + str(number))
+
+"""
+prints:
+
+Number is 0
+Number is 1
+Number is 2
+"""
+```
+
+- **Continue**:
+
+```py
+number = 0
+
+for number in range(5):
+    if number == 3:
+        continue
+    print('Number is ' + str(number))
+
+"""
+prints:
+
+Number is 0
+Number is 1
+Number is 2
+Number is 4
+"""
+```
+
+- **Pass**:
+
+> _W3Schools_: The pass statement is used as a placeholder for future code. When the pass statement is executed, nothing happens, but you avoid getting an error when empty code is not allowed. Empty code is not allowed in loops, function definitions, class definitions, or in if statements.
+
+```py
+number = 0
+
+for number in range(5):
+    if number == 3:
+        pass
+    print('Number is ' + str(number))
+```
+
+## Functions
+
+### Basics
+
+```py
+# Creating a function
+def add(x, y):
+    return x + y
+
+# Two ways to call it
+add(1, 1)     # => 2
+add(y=2, x=1) # => 3
+```
+
+### Variable Number of Arguments
+
+- **Positional Arguments**:
+
+```py
+def varargs(*args):
+    return args
+
+varargs(1, 2, 3) # => (1, 2, 3) :: tuple
+```
+
+- **Keyword Arguments**:
+
+```py
+def keyword_args(**kwargs):
+    return kwargs
+
+keyword_args(big="foot", loch="ness") # => {"big": "foot", "loch": "ness"} :: dict
+```
+
+- **Both**:
+
+```py
+def all_the_args(*args, **kwargs):
+    print(args)
+    print(kwargs)
+
+# First Way:
+all_the_args(1, 2, a=3, b=4)
+"""
+prints:
+    (1, 2)
+    {"a": 3, "b": 4}
+"""
+
+# Second Way (With expanding operator - *, **):
+# Use * para expandir args (tuples) e ** para kwargs (dictionaries)
+args = (1, 2, 3, 4)
+kwargs = {"a": 3, "b": 4}
+
+all_the_args(*args)           # equivalent: all_the_args(1, 2, 3, 4)
+all_the_args(**kwargs)        # equivalent: all_the_args(a=3, b=4)
+all_the_args(*args, **kwargs) # equivalent: all_the_args(1, 2, 3, 4, a=3, b=4)
+```
+
+### Returning Multiple Values
+
+```py
+def swap(x, y):
+    return y, x # Return multiple values as a tuple without the parenthesis.
+                # (Note: parenthesis have been excluded but can be included)
+
+x, y = 1, 2
+x, y = swap(x, y)    # => x = 2, y = 1
+# (x, y) = swap(x,y) # Again the use of parenthesis is optional.
+```
+
+### Escopo de Variavel
+
+- Temos o _local_ / _de funcao_ e o _global_.
+
+```py
+# global scope
+x = 5
+
+def set_x(num):
+    # local scope begins here
+    # local var x not the same as global var x
+    x = num  # => 43
+    print(x) # => 43
+
+def set_global_x(num):
+    # global indicates that particular var lives in the global scope
+    global x
+    print(x) # => 5
+    x = num  # global var x is now set to 6
+    print(x) # => 6
+
+set_x(43)
+set_global_x(6)
+```
+
+### Closures
+
+- **First Class Functions**:
+
+```py
+def create_adder(x):
+    def adder(y):
+        return x + y
+    return adder
+
+add_10 = create_adder(10)
+
+add_10(3) # => 13
+```
+
+- **Closures in Nested Functions**:
+    - Podemos usar a keyword `nonlocal` para trabalhar com variaveis no escopo aninhado que nao poderao ser declaradas na propria funcao.
+
+```py
+def create_avg():
+    total = count = 0
+
+    def avg(n):
+        nonlocal total, count
+
+        total += n
+        count += 1
+
+        return total / count
+
+    return avg
+
+avg = create_avg()
+
+avg(3) # (0 + 3) / 1 => 3.0
+avg(5) # (3 + 5) / 2 => 4.0
+avg(7) # (8 + 7) / 3 => 5.0
+```
+
+### Anonymous functions
+
+- Sao conhecidas como funcoes _lambda_, e sao criadas sem nome e geralmente utilizadas para tarefas simples;
+- Podem ter multiplos argumentos, mas apenas uma expressao;
+- A expressao eh avaliada e retornada automatiamente;
+- Uteis para funcoes curtas, especialmente como argumentos de outras funcoes.
+
+- Sintaxe e Uso:
+
+```py
+# Soma de dois numeros
+soma = lambda x, y: x + y
+print(soma(1, 2)) # => 3
+
+# Ordenacao de uma lista
+dados = [(1, 'b'), (2, 'a'), (3, 'c')]
+dados.sort(key=lambda item: item[1])
+print(dados) # => [(2, 'a'), (1, 'b'), (3, 'c')]
+
+# "Chamadas Imediatas"
+(lambda x: x > 2)(3)                 # => True
+(lambda x, y: x ** 2 + y ** 2)(2, 1) # => 5
+```
+
+- Normalmente encontramos como parametors de outras funcoes como `map` e `filter`:
+
+```py
+# Eleve os numeros de uma lista ao quadrado
+list(
+    map(
+        lambda x: x ** 2,
+        [1, 2, 3]
+    )
+) # => [1, 4, 9]
+
+# Filtrando valores maiores do que 5
+list(
+    filter(
+        lambda x: x > 5,
+        [3, 4, 5, 6, 7]
+    )
+) # => [6, 7]
+
+# Filtrando apenas os numeros pares de um array
+list(
+    filter(
+        lambda x: not x & 1,
+        [1, 2, 3, 4]
+    )
+)
+```
+
+## Files
+
+- Para simplificar e abstrair o processo de tratamento e fechamento de arquivos, podemos usar a funcao built-in `with()`.
+
+```py
+# Instead of try / finally to cleanup resources you can use a with statement
+with open("myfile.txt") as f:
+    for line in f:
+        print(line)
+
+# Writing to a file
+
+## String
+contents = {"aa": 12, "bb": 21}
+with open("myfile1.txt", "w") as file:
+    file.write(str(contents))        # writes a string to a file
+
+## Json
+import json
+with open("myfile2.txt", "w") as file:
+    file.write(json.dumps(contents)) # writes an object to a file
+
+# Reading from a file
+
+## String
+with open("myfile1.txt") as file:
+    contents = file.read()           # reads a string from a file
+print(contents) # print: {"aa": 12, "bb": 21}
+
+## Json
+with open("myfile2.txt", "r") as file:
+    contents = json.load(file)       # reads a json object from a file
+print(contents) # print: {"aa": 12, "bb": 21}
+```
+
+## Modules
+
+- Criacao:
+    - O nome do modulo eh o mesmo que o nome do arquivo;
+    - Para encontar funcoes e atributos definidos em um modulo, podemos usar importar o modulo e dar um _dir_ nele: `dir(module_name)`;
+    - **Obs**: se tivermos um arquivo chamado `math.py` no mesmo diretorio do script atual, o arquivo `math.py` sera carregado no lugar da biblioteca built-in _math_;
+        - Isso acontece porque o diretorio local tem maior prioridade sobre as bibliotecas built-in.
+- Importacao:
+    - Podemos importar um modulo por inteiro, como: `import math` / `from math import *` (nao recomendado);
+    - Podemos importar funcoes especificas de um modulo, como: `from math import ceil, floor`;
+    - Podemos renomear nomes de modulos, como: `import math as m`.
+
+```py
+# Importing module
+import math
+print(math.sqrt(16))  # => 4.0
+
+# Importing specific functions
+from math import ceil, floor
+print(ceil(3.7))   # => 4
+print(floor(3.7))  # => 3
+
+# Importing all functions (not recommended)
+from math import *
+
+# Aliasing a module
+import math as m
+math.sqrt(16) == m.sqrt(16)  # => True
+
+# Searching for attributes and functions from a module
+import math
+dir(math)
+```
+
+## POO
+
+### Classes
+
+- Usamos a _keyword_ `class` para criacao de uma classe;
+- O inicializador basico `__init__` eh chamado quando a classe eh instanciada (construtor). Metodos que iniciam com dois underscores sao chamados de _special methods_ ou _dunder methods_;
+
+```py
+class Human:
+
+    # **Atributo de classe**
+    # Compartilhado com todas as instancias dessa classe
+    # Acessivel em todas as instancias
+    species = "H. sapiens"
+
+    # Inicializador da classe
+    def __init__(self, name):
+        # **Atributo de instancia**
+        # Seta o argumento da instancia para o atributo `name`
+        self.name = name
+
+        # Inicializando propriedade
+        self._age = 0 # o sublinhado inicial indica que a propriedade "_age" eh
+                      # destinado a ser usado internamente
+                      # nao confie que isso seja imposto: eh uma dica para outros desenvolvedores
+                      # famosa variavel `protected` / `private`
+                      # essa convencao tambem pode ser usada em metodos e attr. de classe
+
+    # Metodo de instancia
+    # Todos os metodos utilizam `self` como primeiro argumento
+    def say(self, msg):
+        print("{name}: {message}".format(name=self.name, message=msg))
+
+    # Outro metodo de instancia
+    def sing(self):
+        return "yo... yo... microphone check... one two... one two..."
+
+    """
+    O `@classmethod` define um metodo de classe, que eh ligado a classe em si,
+    e nao a uma instancia especifica dela
+
+    Ele recebe como primeiro parametro a propria classe (por convencao cls),
+    permitindo acessar ou modificar atributos e metodos da classe
+
+    Pode ser acessada sem ser instanciada de forma previa
+
+    Resumidamente, eh como se fosse um `staticmethod` mas com a classe em si
+    passada como referencia. Podemos ate usa-la como um metodo subconstrutor,
+    onde passamos `(cls, FOO)` e retornamos `cls(FOO.x, FOO.y, ...)`, vide:
+    https://cursos.alura.com.br/forum/topico-para-que-serve-o-classmethod-137797
+
+    O metodo get_species retorna o atributo species da classe a qual pertence,
+    e pode ser chamado diretamente pela classe ou por uma instancia
+    """
+    @classmethod
+    def get_species(cls):
+        return cls.species
+
+    # Um metodo estatico eh chamado sem uma referencia de instancia da classe
+    @staticmethod
+    def grunt():
+        return "*grunt*"
+
+    # Uma propriedade eh como um getter
+    # Transforma o metodo age() em um atributo read-only de mesmo nome
+    # No entanto, nao ha necessidade de escrever getters e setters triviais
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, age):
+        self._age = age
+
+    @age.deleter
+    def age(self):
+        del self._age
+
+"""
+A verificacao __name__ garante que este bloco de codigo seja
+executado somente quando este modulo for o programa principal
+"""
+if __name__ == "__main__":
+    foo = Human(name="Ian")
+    foo.say("hi") # "Ian: hi"
+
+    bar = Human("Joel")
+    bar.say("hi") # "Joel: hi"
+
+    # Call our class method
+    foo.say(foo.get_species()) # "Ian: H. sapiens"
+    # Change the shared attribute
+    Human.species = "H. neanderthalensis"
+    i.say(i.get_species()) # => "Ian: H. neanderthalensis"
+    j.say(j.get_species()) # => "Joel: H. neanderthalensis"
+
+    # Call the static method
+    print(Human.grunt()) # => "*grunt*"
+    # Static methods can be called by instances too
+    print(i.grunt()) # => "*grunt*"
+
+    # Update the property for this instance
+    i.age = 42
+    # Get the property
+    i.say(i.age) # => "Ian: 42"
+    j.say(j.age) # => "Joel: 0"
+    # Delete the property
+    del i.age
+    # i.age # => this would raise an AttributeError
+```
+
+### Heranca
+
+- A heranca permite que novas classes filhas sejam definidas com metodos e
+variaveis ​​de sua classe pai;
+- Usando a classe _Human_ definida acima como a classe base ou pai, podemos
+definir uma classe filha, _Superhero_, que herda variaveis ​​como "species",
+"name" e "age", bem como metodos, como "sing" e "grunt" da classe _Human_, mas tambem pode ter suas proprias propriedades exclusivas;
+- Para aproveitar a modularizacao por arquivo, você pode colocar as classes acima
+em seus proprios arquivos, digamos, _human.py_;
+- Para importar funcoes de outros arquivos, use o seguinte formato:
+    - `from "filename-without-extension" import "function-or-class"`
+
+```py
+# Importando a classe Human do arquivo human.py
+from human import Human
+
+# Especifique a(s) classe(s) pai(s) como parametros para a definicao da classe
+class Superhero(Human):
+    # Se a classe filha deve herdar todas as definicoes do pai sem
+    # nenhuma modificacao, voce pode usar apenas a palavra-chave "pass" (e nada mais)
+    # mas neste caso ela eh comentada para permitir uma classe filha unica:
+    # pass
+
+    # Classes filhas podem substituir os atributos de seus pais
+    species = "Superhuman"
+
+    # Filhos herdam automaticamente o construtor de sua classe pai, incluindo
+    # seus argumentos, mas tambem podem definir argumentos ou definicoes adicionais
+    # e substituir seus metodos, como o construtor de classe;
+    # Este construtor herda o argumento "name" da classe "Human" e
+    # adiciona os argumentos "superpower" e "movie":
+    def __init__(self, name, movie=False,
+        superpowers=["super strength", "bulletproofing"]):
+
+        # Cria atributos de classe adicionais:
+        self.fictional = True
+        self.movie = movie
+        # Esteja ciente dos valores padrao mutaveis, pois os padroes sao compartilhados
+        self.superpowers = superpowers
+
+        # A funcao "super" permite que voce acesse os metodos da classe pai
+        # que sao substituidos pelo filho, neste caso, o metodo __init__;
+        # Isso chama o construtor da classe pai:
+        super().__init__(name)
+
+    # Sobreescreva o metodo "sing"
+    def sing(self):
+        return "Dun, dun, DUN!"
+
+    # Adiciona um metodo de instancia adicional
+    def boast(self):
+        for power in self.superpowers:
+            print("I wield the power of {pow}!".format(pow=power))
+
+if __name__ == "__main__":
+    sup = Superhero(name="Tick")
+
+    # Instance type checks
+    if isinstance(sup, Human):
+        print("I am human") # => I am human
+    if type(sup) is Superhero:
+        print("I am a superhero") # => I am a superhero
+
+    # Obtenha a "Ordem de Resolucao do Metodo" usada por getattr() e super()
+    # (a ordem em que as classes sao pesquisadas por um atributo ou metodo)
+    # Este atributo eh dinamico e pode ser atualizado
+    print(Superhero.__mro__) # => (<class '__main__.Superhero'>, <class 'human.Human'>, <class 'object'>)
+
+    # Chama o metodo pai mas usa seu proprio atributo de classe
+    print(sup.get_species()) # => Superhuman
+
+    # Chama o "overridden method"
+    print(sup.sing()) # => Dun, dun, DUN!
+
+    # Chama o metodo de `Human`
+    sup.say("Spoon") # => Tick: Spoon
+
+    # Chama o metodo que existe apenas no `Superhero`
+    sup.boast() # => I wield the power of super strength!
+                # => I wield the power of bulletproofing!
+
+    # Atributo de classe herdado
+    sup.age = 31
+    print(sup.age) # => 31
+
+    # Atributo que existe apenas em `Superhero`
+    print("Am I Oscar eligible? " + str(sup.movie)) # => Am I Oscar eligible? False
+```
+
+### Heranca Multipla
+
+- Outra classe que sera usada para montar nossa classe com heranca multipla.
+
+```py
+# bat.py
+class Bat:
+    species = "Baty"
+
+    def __init__(self, can_fly=True):
+        self.fly = can_fly
+
+    # This class also has a say method
+    def say(self, msg):
+        msg = "... ... ..."
+        return msg
+
+    # And its own method as well
+    def sonar(self):
+        return "))) ... ((("
+```
+
+- Agora, nossa classe que herdara de _Superhero_ e _Bat_.
+
+```py
+class Batman(Superhero, Bat):
+
+    def __init__(self, *args, **kwargs):
+        # Typically to inherit attributes you have to call super:
+        # super(Batman, self).__init__(*args, **kwargs)
+        # However we are dealing with multiple inheritance here, and super()
+        # only works with the next base class in the MRO list.
+        # So instead we explicitly call __init__ for all ancestors.
+        # The use of *args and **kwargs allows for a clean way to pass
+        # arguments, with each parent "peeling a layer of the onion".
+
+        # Normalmente, para herdar atributos, voce tem que chamar super:
+        # super(Batman, self).__init__(*args, **kwargs)
+        # No entanto, estamos lidando com heranca multipla aqui, e super()
+        # so funciona com a proxima classe base na lista MRO;
+        # Entao, em vez disso, chamamos explicitamente __init__ para todos os ancestrais!
+        # O uso de *args e **kwargs permite uma maneira limpa de passar
+        # argumentos, com cada pai "descascando uma camada da cebola".
+        Superhero.__init__(
+            self,
+            "anonymous",
+            movie=True,
+            superpowers=["Wealthy"],
+            *args,
+            **kwargs
+        )
+
+        Bat.__init__(
+            self,
+            can_fly=False,
+            *args,
+            **kwargs
+        )
+
+        # override the value for the name attribute
+        self.name = "Sad Affleck"
+
+    def sing(self):
+        return "nan nan nan nan nan batman!"
+
+
+if __name__ == "__main__":
+    sup = Batman()
+
+    # The Method Resolution Order
+    print(Batman.__mro__)   # => (<class '__main__.Batman'>,
+                            # => <class 'superhero.Superhero'>,
+                            # => <class 'human.Human'>,
+                            # => <class 'bat.Bat'>, <class 'object'>)
+
+    # Calls parent method but uses its own class attribute
+    print(sup.get_species()) # => Superhuman
+
+    # Calls overridden method
+    print(sup.sing()) # => nan nan nan nan nan batman!
+
+    # Calls method from Human, because inheritance order matters
+    sup.say("I agree") # => Sad Affleck: I agree
+
+    # Call method that exists only in 2nd ancestor
+    print(sup.sonar()) # => ))) ... (((
+
+    # Inherited class attribute
+    sup.age = 100
+    print(sup.age) # => 100
+
+    # Inherited attribute from 2nd ancestor whose default value was overridden.
+    print("Can I fly? " + str(sup.fly)) # => Can I fly? False
+```
+
+## Decorators
+
+Decorator: É uma sintaxe especial (@) usada para aplicar um wrapper a uma função ou método, alterando ou estendendo seu comportamento.
+Wrapper: É a função que efetivamente envolve outra função, adicionando lógica antes, depois ou ao redor dela.
+
+- Sao uma forma de **syntatic sugar**;
+- Eles tornam o codigo mais facil de ler, ao mesmo tempo em que eliminam uma sintaxe desajeitada;
+- **Wrappers** sao um tipo de _decorator_ que efetivamente envolve outras funcoes para modificar ou estender seu comportamento (`@classmethod`, por exemplo, nao pode ser considerado um wrapper pois nao adiciona logica antes, depois ou ao redor da funcao);
+    - Eles sao realmente uteis para adicionar registro a funcoes existentes sem precisar modifica-las.
+
+```py
+def log_function(func):
+    def wrapper(*args, **kwargs):
+        print("Entering function", func.__name__)
+
+        result = func(*args, **kwargs)
+
+        print("Exiting function", func.__name__)
+
+        return result
+    return wrapper
+
+# O decorador @log_function nos diz quando comecamos a ler a definicao da funcao
+# para my_function que esta funcao sera encapsulada com log_function;
+# Quando as definicoes de funcao sao longas, pode ser dificil analisar a atribuicao nao decorada no final da definicao.
+@log_function               # equivalent:
+def my_function(x,y):       # def my_function(x,y):
+    return x+y              #   return x+y
+                            # my_function = log_function(my_function)
+
+my_function(1,2)  # => "Entering function my_function"
+                  # => "3"
+                  # => "Exiting function my_function"
+```
+
+- Mas, no codigo acima, ha um problema. O que acontece se tentarmos acessar informacos sobre `my_function`?
+    - O _argcount_ eh 0 porque ambos argumentos no `wrapper()` sao opcionais.
+
+```py
+print(my_function.__name__) # => 'wrapper'
+print(my_function.__code__.co_argcount) # => 0
+```
+
+- Porque nosso decorador eh equivalente a `my_function = log_function(my_function)`;
+- Substituimos informacoes sobre `my_function` com informacoes do wrapper;
+- Arrumamos isso com **functools** com o wrapper `wraps()`, que garante que a docstring, o nome da funcao, lista de argumentos, etc. serao todos copiados para a funcao wrapper (ao inves de ser substituida pela informacao do wrapper).
+
+```py
+from functools import wraps
+
+def log_function(func):
+    @wraps(func)  # !!!
+    def wrapper(*args, **kwargs):
+        print("Entering function", func.__name__)
+
+        result = func(*args, **kwargs)
+
+        print("Exiting function", func.__name__)
+
+        return result
+    return wrapper
+
+@log_function
+def my_function(x,y):
+    return x+y
+
+my_function(1,2)  # => "Entering function my_function"
+                  # => "3"
+                  # => "Exiting function my_function"
+
+print(my_function.__name__) # => 'my_function'
+print(my_function.__code__.co_argcount) # => 2
+```
+
+## Good Practices
+
+### Create an ignored variable
+
+- If you need to assign something (for instance, in Unpacking) but will not need that variable, use `__`.
+
+```py
+filename = 'foobar.txt'
+basename, __, ext = filename.rpartition('.')
+```
+> Many Python style guides recommend the use of a single underscore `_` for throwaway variables rather than the double underscore `__` recommended here. The issue is that `_` is commonly used as an alias for the gettext() function, and is also used at the interactive prompt to hold the value of the last operation. Using a double underscore instead is just as clear and almost as convenient, and eliminates the risk of accidentally interfering with either of these other use cases.
+
+### Create a length-N list
+
+#### Of the same thing
+
+```py
+four_nones = [None] * 4
+```
+
+#### Of lists
+
+```py
+four_lists = [[] for __ in range(4)]
+```
+
+### Create a string from a list
+
+```py
+letters = ['s', 'p', 'a', 'm']
+
+word = ''.join(letters) # => spam
+```
+
+### Searching for an item in a collection
+
+> Even though both functions look identical, because lookup_set is utilizing the fact that sets in Python are hashtables, the lookup performance between the two is very different. To determine whether an item is in a list, Python will have to go through each item until it finds a matching item. This is time consuming, especially for long lists. In a set, on the other hand, the hash of the item will tell Python where in the set to look for a matching item. As a result, the search can be done quickly, even if the set is large. Searching in dictionaries works the same way.
+
+```py
+s = set(['s', 'p', 'a', 'm'])
+l = ['s', 'p', 'a', 'm']
+
+def lookup_set(s):
+    return 's' in s
+
+def lookup_list(l):
+    return 's' in l
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

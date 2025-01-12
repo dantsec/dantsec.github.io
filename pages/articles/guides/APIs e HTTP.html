@@ -1,0 +1,292 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Guides</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Protocolo HTTP, APIs e Padrao Rest
+
+## Protocolo HTTP
+
+### Introducao
+
+- Protocolo de aplicacao que serve para transferir informacoes entre cliente e servidor, chamado de HTTP ou _Hyper Text Transfer Protocol_;
+- No modelo de camadas, o protocolo HTTP eh atribuido a **camada 7 (aplicacao)**, e usa o protocolo TCP para estabelecer suas comunicacoes;
+- Funciona sem criptografia e envia todas as informacoes em texto nao criptografado (seu irmao, "HTTPS", faz o contrario e junta o poder do HTTP e do SSL) e eh **stateless**;
+- **Uri** (_Uniform Resource Identifier_) permite que o protocolo identifique qual recurso deve ser acessado (uma URL eh um exemplo de como ele faz isso);
+- Recebe um pedido (**request**) e responde-o (**response**);
+- Sua estrutura eh a seguinte:
+	- Request:
+		- **Metodo / Verbo**;
+		- **Recurso**;
+		- **Versao do Protocolo** + **Headers** + **Body**.
+	- Response:
+		- **Versao do Protocolo**;
+		- **Status da Resposta**;
+		- **Mensagem de Status** + **Headers** + **Body**.
+	- Podemos ter alguns tipos de _headers_, sao eles:
+		- _Gerais_: aparecem tanto em requests quanto em responses, e nao estao relacionados ao conteudo da mensagem;
+			- ex: `Cache-Control`.
+		- _De Requisicao_: contem mais informacoes sobre a requisicao, seu cliente ou sobre o recurso solicitado;
+			- ex: `User-Agent`, `Accept`.
+		- _De Resposta_: fornecem informacoes adicionais sobre a resposta, como o seu local ou o seu servidor;
+			- ex: `Server`, `Set-Cookie`.
+		- _De Entidade_: contem informacoes sobre o corpo da entidade, como seu tamanho ou seu tipo;
+			- ex: `Content-Type`, `Content-Length`.
+
+```js
+/** Request */
+POST /uri HTTP/1.1
+
+// @Headers
+Host: example.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: application/json
+Content-Type: application/json
+Content-Length: 50
+
+// @Body
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com"
+}
+
+/** Response */
+HTTP/1.1 201 Created
+
+// @Headers
+Date: Sat, 27 Jul 2024 12:28:53 GMT
+Content-Type: application/json
+Content-Length: 92
+Location: /api/users/1
+
+// @Body
+{
+    "id": 1,
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "createdAt": "2024-07-27T12:28:53Z"
+}
+```
+
+### Metodos / Verbos HTTP
+
+- Verbos / Metodos sao maneiras **semanticas** de dizer o que queremos fazer com a requisicao (no fundo todas funcionam da mesma maneira);
+- Sao eles:
+	- `GET`: solicitar conteudo;
+	- `HEAD`: semelhante ao _get_, porem apenas os cabecalhos sao retornados;
+	- `POST`: utilizado quando eh necessario enviar algo a ser processado;
+	- `PUT` / `PATCH` / `MERGE`: utilizado para indicar alteracao de conteudo;
+		- _Put_ seria para alteracoes em massa (e caso ainda nao exista alguma das alteracoes, ele gera);
+		- _Patch_ para pequenas alteracoes.
+	- `DELETE`: utilizado para indicar remocao de conteudo;
+		- Nao aceita _body_ portanto se precisar de dados dinamicos use _queryStrings_;
+		- Para **bulk delete** use arrays na query.
+	- `OPTION`: utilizado para saber quais operacoes de um determinado recurso estao disponiveis;
+	- `CONNECT`: estabelece um tunelamento _TCP / IP_ com o servidor, geralmente para facilicar a comunicacao SSL;
+	- `TRACE`: envia um teste de loopback motrando o caminho que uma requisicao faz para chegar ate o recurso especificado no servidor destinado.
+
+### Respostas (Responses) HTTP
+
+- Existem 5 categorias, que estao localizadas nos _ranges_ `1~5`, onde de `1~3` sao informativos e de `4~5` sao erros.
+
+#### 1XX (Solicitacoes de Informacao)
+
+- Nao representam erros e apenas indicam que a solicitacao foi recebida pelo servidor e esta pronta para dar sequencia ao processo;
+- Algumas respostas:
+	- `100`: _continue_;
+		- indica que tudo ocorreu bem.
+
+#### 2XX (Operacao Bem Sucedida)
+
+- Algumas respostas:
+	- `200`: _ok_;
+		- _GET_: recurso obtido e retornado no corpo da mensagem;
+		- _PUT / POST_: recurso resultante da acao eh retornado no corpo da mensage.
+	- `201`: _created_;
+		- Nao deve ser usado sempre que algo for criado, mas quando atender a consideracao: "a requisicao foi feita com a intencao de criar algo?";
+		- Recurso criado e **retornado no corpo** da resposta.
+	- `202`: _accepted_;
+		- Indica que a solicitacao foi recebida mas ainda nao foi atendida e nao ha uma forma de enviar posteriormente uma resposta assincrona indicando o resultado da solicitacao (tratamento assincrono).
+	- `204`: _no-content_;
+		- Indica que nao ha conteudo para enviar para esta solicitacao, mas os cabecalhos podem ser uteis e sao o suficiante.
+
+#### 3XX (Redirecionamento de Conteudo)
+
+- Algumas respostas:
+	- `301`: _moved permanently_;
+		- A url do recurso requerido mudou.
+
+#### 4XX (Erros Cliente-Side)
+
+- `400`: _bad request_;
+	- Indica que o servidor nao pode ou nao ira processar a solicitacao devido a um problema com a sintaxe da request;
+	- Esta relacionado a **estrutura dos dados**.
+- `401`: _unauthorized_;
+	- Semanticamente significa "unauthenticated", e o cliente deve autenticar-se ou renovar seu token para obter a resposta.
+- `403`: _forbidden_;
+	- Mesmo que autenticado, nao possui o nivel de acesso necessario, e sao **erros de permissao**.
+- `404`: _not found_;
+	- Indica que o recurso solicitado nao esta disposto a divulgar que existe ou nao pode ser solicitado.
+- `422`: _unprocessable content_;
+	- A solicitacao esta bem formatada, com a sintaxe correta e foi entendida, mas nao pode ser atendida devido a problemas com os dados fornecidos pelo cliente;
+	- Exemplos:
+		- Usuario tenta fazer o cadastro, mas tenta usar um e-mail que ja esta cadastrado;
+		- Campo obrigatorio e eh esperado que tenha entre 4 a 255 caracteres e:
+			- Usuario nao enviou o campo;
+			- Usuario enviou 2 caracteres;
+			- Usuario enviou 256 caracteres.
+
+#### 5XX (Erros Server-Side)
+
+- `500`: _internal server error_;
+	- Condicao inesperada e resposta automatica do servidor.
+- `502`: _bad gateway_;
+	- Enquanto atuando como servidor intermediario (gateway ou proxy), recebeu uma resposta invalida do servidor para o qual a request foi encaminhada.
+- `503`: _service unavaiable_;
+	- Indica que o servidor nao esta pronto para lidar com a request, podendo ser por conta de sobrecarregamento ou manutencao;
+	- O cabecalho `HTTP Retry-After` deve sempre que possivel estar presente contendo o tempo estimado para restabelecimento do servico.
+- `504`: _gateway timeout_;
+	- Indica que o servidor atuando como gateway ou proxy nao conseguiu responder em tempo.
+
+![status-codes-guide-image](https://miro.medium.com/v2/resize:fit:720/format:webp/1*YjerWMVgAwQpf3qJLt7_8w.png)
+
+## APIs
+
+### Definicao
+
+- Significado:
+	- Interface de Programacao de Aplicacoes;
+	- Application Programming Interface.
+- Sao mecanismos que permitem que dois componentes de software se comuniquem usando um conjunto de definicoes e protocolos;
+- Tambem pode ser vista como um contrato de servico entre duas aplicacoes.
+
+### Funcionamento
+
+- Funcionam com base nas comunicacoes **cliente e servidor**;
+- Existem quatro maneiras diferentes pelas quais as APIs podem funcionar, dependendo de quando e por que elas foram criadas. Sao elas:
+	- `SOAP`:
+		- Usam o _Simple Object Access Protocol_;
+		- O cliente e servidor trocam mensagens usando _XML_;
+		- Esse design eh menos flexivel e era mais popular no passado.
+	- `RPC`:
+		- Conhecidas como _Remote Procedure Calls_;
+		- O cliente conclui uma funcao / procedimento no servidor e o servidor envia a saida de volta ao cliente.
+	- `WebSocket`:
+		- Usa objetos _JSON_ para transmitir dados;
+		- Oferece suporte a **comunicacao bidirecional** entre aplicativos cliente-servidor;
+		- O servidor pode enviar mensagens de retorno de chamada a clientes conectados, tornando-o mais eficiante que o design _REST_.
+	- `REST`:
+		- Sao as mais populares e flexiveis atualmente;
+		- O cliente envia solicitacoes ao servidor como dados e o servidor usa essa entrada do cliente para iniciar funcoes internas e retornar os dados de saida ao cliente.
+
+## O que sao APIs REST / Restful?
+
+- Significado:
+	- **Transferencia Representacional de Estado**;
+	- **Representational State Transfer**.
+- Define um conjunto de **metodos / verbos**, e usa o **protocolo HTTP** para estabelecer comunicacoes;
+- **Restful** eh o termo atribuido a uma API que possui a inteligencia de aplicao para o padrao _REST_;
+- Dando uma breve passada em autenticacao, o principal servico _open-source_ utilizado atualmente eh o _OAuth2.0_ com _JWT_;
+- Eh descrito em seis restricoes:
+	- **Uniform Interface**: definido por mais 4 restricoes;
+		- **URI**: identificador de recursos;
+		- **Verbos HTTP**: manipulacao de recursos atraves de representacoes;
+		- **Mensagens Auto-descritivas**: cada requisicao deve conter informacoes suficientes para o servidor processar a informacao;
+		- **HATEOAS** (opcional): diz que a resposta do servidor deve conter links de conteudos relacionados ao _resource_, dessa forma o controle de fluxo da aplicacao eh controlado atraves do servidor e nao do frontend.;
+		- **Resource Based**:
+			- _Resource_ eh qualquer coisa importante o suficiente para ser referenciada por um nome, nesse caso, _resource_ eh qualquer coisa que possa ter uma URI.
+	- **Stateless**: servidores nao salvam dados dos clientes entre as solicitacoes;
+	- **Cacheable**: a resposta de uma solicitacao deve implicitamente ou explicitamente informar se o dado pode ser mantido em cache ou nao, e o mesmo deve ser mantido e gerenciado pelo lado do cliente;
+	- **Client-Server**: separa as responsabilidades do front / back end;
+	- **Code on Demand** (opcional):  permite que as funcionalidades do cliente sejam extendidas baixando e executando applets ou scripts;
+	- **Layered System**: o sistema deve ter uma arquitetura de camadas.
+
+### Construindo uma API Rest
+
+| Método HTTP | Rota            | Descrição                              | Corpo da Requisição                                                         | Corpo da Resposta                                                                                                         |
+| ----------- | --------------- | -------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| GET         | /api/users      | Retorna uma lista de todos os usuários | N/A                                                                         | ```json [ { "id": 1, "name": "John Doe", "email": "john.doe@example.com" }, ... ] ```                                     |
+| GET         | /api/users/{id} | Retorna um usuário específico          | N/A                                                                         | ```json { "id": 1, "name": "John Doe", "email": "john.doe@example.com" } ```                                              |
+| POST        | /api/users      | Cria um novo usuário                   | ```json { "name": "John Doe", "email": "john.doe@example.com" } ```         | ```json { "id": 1, "name": "John Doe", "email": "john.doe@example.com", "createdAt": "2024-07-27T12:28:53Z" } ```         |
+| PUT         | /api/users/{id} | Atualiza um usuário existente          | ```json { "name": "John Doe Updated", "email": "john.doe@example.com" } ``` | ```json { "id": 1, "name": "John Doe Updated", "email": "john.doe@example.com", "updatedAt": "2024-07-27T12:35:00Z" } ``` |
+| DELETE      | /api/users/{id} | Deleta um usuário                      | N/A                                                                         | ```json { "message": "User deleted successfully" } ```                                                                    |
+
+### Boas Praticas
+
+- Utilize o **mesmo padrao de URI** na identificacao dos recursos;
+- Deixe facil o processo de **versionamento**;
+- Para nomear, utilize substantivos no plural, **evite verbos** (ja que _URIs_ representam recursos e nao acoes) e **use hifens junto de letras minusculas**;
+- Se atente ao contexto para usar o **verbo HTTP correto**;
+- Evite adicionar na URI a **operacao a ser realizada** no recurso;
+- Evite adicionar na URI o **formato desejado** da representacao do recurso;
+	- Suporte diferentes representacaos (HTML, XML, JSON, etc).
+- Evite manter **dados de autenticacao / autorizacao em sessao**, para isso use:
+	- OAUTH, JWT, Keycloack, etc.
+- Tente utilizar, **no maximo, 3 niveis de acoes**;
+- Utilize acoes apenas apos definir uma URI para um resource, desde que a **acao nao sobrescreva o sentido do verbo** HTTP;
+- Evite fazer com que o patch explique o da hierarquia anterior;
+	- ex: `POST /usuarios/criar`;
+		- Neste caso basta o verbo HTTP: `POST /usuarios`.
+- Filtros sempre na _queryString_, e **nunca** deve ser colocado como **parametro / parte da rota**;
+- Ordene endpoints por dependencia;
+	- ex: `/courses/1/topics/1/class`;
+		- _Courses_ depende de _topics_ que, por sua vez, depende de _class_.
+
+## Tooling
+
+- Saber mais sobre _Status Codes_: `https://http.cat/`;
+- Linguagem de consulta para APIs: `https://graphql.org/`;
+- Documentacao de APIs: `https://swagger.io/`.
+
+## Referencias
+
+- `https://medium.com/@jonatangall/um-breve-resumo-sobre-o-protocolo-http-1d32c333dd34`
+- `https://www.hostgator.com.br/blog/o-que-e-protocolo-http/`
+- `https://www.hostgator.com.br/guias/http-status-code-como-resolver/`
+- `https://aws.amazon.com/pt/what-is/api/`
+- `https://wssilva-willian.medium.com/design-de-api-rest-9807a5b16c9f`
+- `https://www.brunobrito.net.br/padrao-rest/`
+- `https://www.brunobrito.net.br/rest-nao-e-crud/`
+- `https://www.alura.com.br/artigos/rest-principios-e-boas-praticas`
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>
