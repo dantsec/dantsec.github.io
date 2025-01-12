@@ -1,0 +1,116 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Algorithms</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# BONUS - Paradigmas de Programacao
+
+## Introducao
+
+- Paradigma de programacao eh uma abordagem ou estilo de programacao que define a estrutura, organizacao e metodo de escrita de codigo de computador.
+
+## Tipos de Paradigma:
+
+1. **Programacao Imperativo / Procedural / Modular:** Se concentra em escrever procedimentos ou funcoes que realizam tarefas especificas. O codigo eh estruturado em torno de sequencias de comandos que sao executados passo a passo.
+	- C, Pascal, Fortran, ...
+
+2. **Programacao Orientada a Objetos (POO):** O codigo eh organizado em torno de objetos, que sao instancias de classes. Os objetos tem propriedades (atributos) e comportamentos (metodos), e as interacoes entre objetos sao fundamentais para a estruturacao do software.
+	- Java, C++, Python, Ruby, Swift, ...
+
+3. **Programacao Funcional:** Trata a computacao como a avaliacao de funcoes matematicas e evita o estado e a mutabilidade. Ele se concentra na aplicacao de funcoes a dados imutaveis e na composicao de funcoes para realizar tarefas.
+	- Haskell, Lisp, Erlang, Clojure, Scala, ...
+
+4. **Programacao Declarativa:** O foco esta na descricao do que deve ser feito, em vez de como deve ser feito. Isso inclui subparadigmas como programacao declarativa de banco de dados e programacao logica.
+	- SQL, Prolog, XSLT, ...
+
+5. **Programacao Orientada a Eventos:** Se concentra no processamento de eventos e na reacao a eles. Ele eh comumente usado em interfaces de usuario e sistemas de comunicacao assincrona.
+	- C#, Python, JavaScript, Java, C++, ...
+
+6. **Programacao Concorrente e Paralela:** Lida com a execucao de varias tarefas simultaneamente, seja em sistemas com varios threads (concorrencia) ou em sistemas com varios processos (paralelismo).
+	- Go, Java, C#, Erlang, Rust, ...
+
+7. **Paradigma Logico / Restritivo**: Muito utilizado em aplicacoes de IA. Esse paradigma chega no resultado esperado a partir de avaliacoes logico-matematicas.
+	- Prolog, ...
+
+## POO
+
+### Intro
+
+- Foi desenvolvida na Noruega (NCC) em meados de 1962 onde pesquisadores criaram uma linguagem chamada de _Simula 67_, a primeira com paradigma POO;
+- Funciona de modo similar ao raciocinio humano, onde os codigos sao organizados de acordo com objetos.
+
+### Conceitos
+
+- **Objeto**: Elementos do mundo real para o mundo da programacao. Eh criado a partir de uma classe (classe instanciada);
+	- exemplo: _Fusca 1964_.
+- **Atributo**: Caracteristicas do objeto;
+	- exemplo: _ano de fabricacao (1964)_, _formato (redondo)_, _posicao do motor (parte traseira)_, ...
+- **Metodos**: Comportamentos / acoes do objeto;
+	- exemplo: _andar_.
+- **Classes**: Agrupamentos que descrevem todos os objetos de um unico tipo;
+	- exemplo: o fusca pertence a classe _carros_.
+
+### Pilares do POO
+
+#### Abstracao
+
+- Processo de aproximar o mundo real do mundo da programacao, em resumo, simplificar um problema dificil, levando em conta apenas os aspectos importantes de um determinado ponto de vista e desconsiderando os aspectos restantes;
+- Uma _Classe Abstrata_ e a criacao de uma classe incompleta, assim nao permitindo a criacao de instancias e obriga a implementacao de todos os metodos da classe assinados como _abstract_.
+
+#### Encapsulamento
+
+- Nao eh obrigatorio mas eh considerado uma boa pratica;
+- E o ato de **criar uma protecao e um padrao para o codigo**. Oculta partes do mundo exterior.
+- "Ok, mas se no fim eu estou ocultando detalhes do código, como que ele vai funcionar?"
+	- POO permite que voce converse com esta capsula, trocando informacoes entre o mundo externo e o objeto por meio de mensagens (obtendo assim uma resposta sem precisar entrar nela), e quem permite essa comunicacao e a _interface_;
+		- **interface** e uma lista de servicos fornecidos por um componente, que define o que pode ser feito com um objeto de determinada classe; ou seja, uma classe composta apernas por metodos (nao possui atributos).
+
+#### Heranca
+
+- Eh a capacidade de um objeto ser criado em uma outra classe levando consigo todos os atributos ja existentes em sua classe de origem (reutilizando codigo).
+
+#### Polimorfismo
+
+- Permite que duas classes facam o uso do mesmo metodo, implementando-o de formas diferentes.
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

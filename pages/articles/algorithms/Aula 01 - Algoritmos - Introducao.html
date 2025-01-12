@@ -1,0 +1,152 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Algorithms</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 01 - Algoritmos - Introducao
+
+## Introducao
+
+### O que sao Algoritmos?
+
+- Algoritmos são conjuntos de passos finitos e organizados que, quando executados, resolvem um determinado problema.
+
+### O que ele deve ser?
+
+- **Completo**: todas as acoes precisam ser descritas e devem ser unicas;
+- **Sem redundancia**: um conjunto de instrucoes so pode ter uma unica forma de ser interpretada;
+- **Deterministico**: se as instrucoes forem executadas, o resultado esperado sera sempre atingido;
+- **Finito**: as instrucoes precisam terminar apos um numero limitado de passos.
+
+### Como eh a composicao de um algoritmo?
+
+- **Entrada**: informacoes que ficam armazenadas na memoria;
+- **Processamento**: manipulacao das informacoes coletadas (fase onde sso feitos os procedimentos);
+- **Saida**: nada mais eh do que o resultado (saida) de execucao do programa.
+
+### Etapas para solução de problemas
+
+1. **Identificar a entrada**: ver como os dados serao fornecidos e de onde vao ser lidos;
+2. **Identificar a saida**: quais informacoes devem ser fornecidas? E para quem? E de que forma?
+3. **Identificar o que deve ser feito**: deve-se entender bem o problema para elaborar uma solucao apropriada;
+4. **Encontrar** a **melhor estrategia** de solucao: uma vez identificando o problema, deve-se escolher a melhor forma de implementa-lo.
+
+## Formas de Representacao
+
+- A principal diferença entre as formas de representação estao no seu grau de abstração;
+	- Formas mais conhecidas:
+		- **Descricao Narrativa**;
+		- **Fluxograma**;
+		- **Pseudocodigo**.
+
+### Descrição Narrativa
+
+- Os algoritmos sao expressos diretamente em linguagem natural;
+- Pros e Contras:
+	- Nao eh necessario aprender novos conceitos, pois a lingua natural ja eh conhecida;
+	- A lingua natural da oportunidade de ambiguidade.
+
+### Fluxograma
+
+- Uma conhecida representacao de fluxograma eh o diagrama **Nassi-Shneiderman**, tambem conhecido como **Diagrama de Chapin**;
+- Representacao grafica em que formas geometricas diferentes implicam acoes distintas;
+- Eh mais preciso do que a _Descricao Narrativa_, porem nao se preocupa com detalhes de implementacao do programa, como o tipo das variaveis utilizadas;
+- Prós e Contras:
+	- O entendimento de elementos graficos eh mais simples que o entendimento de textos;
+	- O resultado do algoritmo nao eh detalhado, dificultando sua transcricao para um programa.
+
+### Pseudocodigo
+
+- Rico em detalhes, como a definicao dos tipos das variaveis usadas no algoritmo;
+- Estrutura basica do pseudocodigo:
+
+```
+Algoritmo <nome_do_algoritmo> // definicao
+<declaração_de_variáveis>     // declaracao de variaveis
+Início                        
+<corpo do algoritmo>
+Fim                           // delimita o termino do algoritmo
+```
+
+- Pros e Contras:
+	- Representacao clara sem as especificacoes de linguagem de programacao;
+	- As estruturas do pseudocodigo devem ser aprendidas.
+
+## Tipos de Dados
+
+- As informacoes manipuladas pelo computador podem ser classificadas em:
+	- **Instrucoes**: coordenam o funcionamento do computador, determinando a maneira como os dados devem ser tratados;
+	- **Dados**: sao as informacoes a serem processadas pelo computador.
+- Tipos de Dados:
+	- Numerico;
+	- Literal;
+	- Logico.
+
+```
+┌─────────────┬────────────┬───────────┐
+│  Numérico   │  Literal   │  Lógico   │
+├─────────────┼────────────┼───────────┤
+│  Inteiro    │  Cadeia de │Verdadeiro │
+│  Real       │  Caracteres│ou Falso   │
+└─────────────┴────────────┴───────────┘
+```
+
+### Dados Numericos
+
+- Sao divididos em duas classes: **Inteiros** e **Reais**;
+	- **Inteiros**: aqueles que nao possuem componentes decimais ou fracionarios, podendo ser positivos ou negativos;
+	- **Reais**: sao aqueles que podem possuir componentes decimais ou fracionarios, positivos ou negativos.
+
+### Dados Literais
+
+- Sao sequencias de caracteres que podem ser letras, digitos e simbolos especiais;
+- Representados nos algoritmos pelo delimitador `""` no seu inicio e termino.
+
+### Dados Logicos
+
+- Dois unicos valores possiveis: _Verdadeiro_ ou _Falso_;
+	- sim / não;
+	- 1 / 0;
+	- true / false.
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>
