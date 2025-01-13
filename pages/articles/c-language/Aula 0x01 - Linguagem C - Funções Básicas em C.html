@@ -1,0 +1,120 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 01 - Linguagem C - Funções Básicas em C
+
+## Caracteres Especiais
+
+- A princípio, para usarmos acentos e outros símbolos em nossos programas, utilizamos:
+
+```c
+#include <locale.h>
+
+int main() {
+	// no terminal, digite "locale" para verificar
+	// as variáveis de ambiente
+
+	setlocale(LC_ALL, "");
+	setlocale(LC_CTYPE, "pt_BR.UTF-8");
+}
+```
+
+## Função main()
+
+- Definimos como `main()` a função principal do nosso programa, onde ficará as principais chamadas de função;
+- Declarada da seguinte forma:
+
+```c
+// #include "/usr/include/stdio.h"
+#include <stdio.h>
+
+int main() {
+	printf("Hello, World!\n");
+	// declaração de variáveis
+	// ...
+	// sentenças
+	// ...
+	return 0;
+}
+```
+
+- E a partir desse primeiro passo, temos outra função: o **printf** ou **puts** (`printf` sem formatacao e com quebra de linha);
+	- É usada para mostrar informações na tela (output);
+	- Retorna um número inteiro, sendo ele:
+		- `len(caracteres) - null byte + (\n)`.
+- Declarada da seguinte forma:
+
+```c
+printf("anything %data_type1 %data_type2 ...", data1, data2, ...);
+```
+
+- Outra função que muita das vezes também acompanha o printf é o **scanf**;
+	- É usada para atribuir valores a variáveis;
+	- Declarada da seguinte forma:
+
+```c
+scanf("%data_type1 %data_type2 ...", &data1, &data2, ...);
+
+// para falarmos a funcao de que eh
+// para continuar apos os espacos, usamos:  
+scanf("%[^\n]", &buffer);
+
+fgets(buffer, buffer_size, stdin);
+```
+
+- **Comentários**:
+
+```c
+//isto é um comentario simples
+
+/*
+	comentario de multiplas
+	linhas
+*/
+```
+
+- OBS: Conteúdos de arquivos de cabeçalho (headers ou .h) **NÃO SÃO BIBLIOTECAS**, mas sim arquivos onde ficam escritos os protótipos das funções.
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 17 - Linguagem C - Escopo e classes de armazenamento
+
+- É a forma como o programa trabalha com uma variável;
+	- Caso seja **LOCAL**, será manipulada apenas no seu escopo;
+	- Caso seja **GLOBAL**, poderá ser manipulada no programa inteiro.
+
+```c
+#include <stdio.h>
+
+int main(void) {
+	// uma variavel, a principio, é declarada de forma completa (default) assim:
+	// mesmo que declarar "int x;"
+	extern auto signed int x;
+	
+	/*
+		!!CONTRARIO DE DECLARAÇOES!!
+		
+		extern -- static
+			-> extern
+				- faz o programa ver outras variaveis globais
+			-> static
+				- o valor da variavel se mantem a cada chamada
+				- o valor nao e reinicializado e é de uso local 
+		
+		auto   -- volatile
+			-> volatile
+				- compilador não assume que o conteúdo seja mantido em seus
+				diversos usos.
+				- isso diz ao compilador para não otimizar o uso da variavel
+				
+				exemplo:
+
+					volatile int x = 1;
+					// não assume que x seja 1 aqui
+					x++;
+	*/
+	
+	/*
+		register é uma dica para o compilador (de que não existe uma 'classe'
+		"unregister")
+	*/
+	register int y;
+	
+	return 0;
+}
+```
+
+- Exemplo de uso de **STATIC** e **EXTERN**:
+
+```c
+/*
+	EXTERN só tem sentido na declaração de protótipos de funções.
+	Dentro de uma função você pode declarar:
+*/
+
+// Em test.c
+void main(void) { extern void f(void); f(); }
+
+// Em test2.c
+#include <stdio.h>
+// prototipo para f(), externo ao módulo atual
+// mesmo que declarar o protótipo FORA do corpo da função como extern.
+void f(void) { puts("hello"); }
+
+/*
+	NO BASH:
+
+	$ cc -o test test*.c
+	$ ./test
+	
+	# output
+	hello
+*/
+```
+
+```c
+/*
+	Exemplo de uso do STATIC
+*/
+
+#include <stdio.h>
+
+int static_example(void) {
+	int static count = 0;
+	count++;
+	return count;
+}
+
+int main() {
+	printf("%d\n", static_example());
+	printf("%d\n", static_example());
+	return 0;
+}
+
+// output: 1 2
+```
+
+## Referências
+
+- http://www.cs.uwm.edu/classes/cs315/Bacon/Lecture/HTML/ch10s07.html
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

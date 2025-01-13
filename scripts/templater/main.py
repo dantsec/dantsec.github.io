@@ -17,16 +17,16 @@ Instructions:
 # PATHS
 TEMPLATE_PATH = '../../pages/articles/template.txt'
 INPUT_FILES_PATH = 'input/'
-OUTPUT_FILES_PATH = '../../pages/articles/algorithms/'
+OUTPUT_FILES_PATH = '../../pages/articles/c-language/'
 ZIP_OUTPUT_PATH = '../../pages/backups/'
-PAPER_HTML_PATH = '../pages/articles/algorithms/'
+PAPER_HTML_PATH = '../pages/articles/c-language/'
 # PAPER
 PAPER_AUTHOR = '0xDant'
 PAPER_INDEX = '0x01'
 PAPER_LANGUAGE = 'pt-BR'
-PAPER_TOPIC = 'Algorithms'
+PAPER_TOPIC = 'C Language'
 # OUTPUT
-ZIP_FILE_NAME = 'algorithms'
+ZIP_FILE_NAME = 'c-language'
 
 
 def get_text_from_file(file_path: str = '') -> str:

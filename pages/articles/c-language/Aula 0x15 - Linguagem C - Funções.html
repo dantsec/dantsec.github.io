@@ -1,0 +1,144 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 15 - Linguagem C - Funções
+
+- Inicialização:
+
+```c
+//return_type func_name(arg1_type arg1, arg2_type arg2, ...){}
+
+void anyFunction(void) {}
+int main(void) {}
+int cube(int num) {return num * num * num;}
+...
+
+/*
+	!!PROTÓTIPOS DE FUNÇÃO
+	
+	servem para dizer ao compilador que existem funções que estão escritas após
+	o main()
+
+	declaração:
+	
+	prot_type prot_name(arg's_type's)
+*/
+
+#include <stdio.h>
+
+// definindo um protótipo
+int cube(int);
+	
+int main(void) {
+	printf("3^3 == [%d]", cube(3));
+}
+
+// função escrita abaixo da main()
+int cube(int num) {
+	return num * num * num;
+}
+```
+
+- Saídas de erro padrão:
+
+```c
+/*
+	"1>" ou ">" -> saída padrão  (stdout)
+	"2>"		-> saída de erro (stderr)
+				-> entrada padrão (stdin)
+				-> saída auxiliar (stdaux)
+				-> saída de impressora (stdprn)
+	
+	retorno de processo padrão possui 2 constantes: EXIT_SUCCESS e EXIT_FAILURE.   O padrão de EXIT_FAILURE é 3 (e não 1). Mas, na prática, valores diferentes   de 0 são códigos de erro.
+*/
+
+void error(char *msg) {
+	fprintf(stderr, "ERRO: %s\n", msg);
+	exit(1);
+}
+
+int main(void) {
+	int num;
+	
+	scanf("%d", &num);
+	
+	if(num < 1)
+		error("mentiroso");
+	else
+		fprintf(stdout, "Sua idade e: %d", num);
+	
+	/*
+		!!CUIDADO!!
+		
+		o printf() usa um stream chamado stdout() que é
+		bufferizado p/ linha. Assim, devemos "descarregar"
+		esse buffer, dessa forma:
+		
+		// buffer ainda carregado
+		printf("Digite: ");
+		scanf("%d", &x);
+		
+		// buffer descarregado
+		printf("Digite: ");
+		fflush(stdout);
+		scanf("%d", &x);
+	*/
+	
+	return 0;
+}
+
+/*
+	# NO BASH
+
+	$ cc funcao.c -o func
+	$ ./func 2> log.txt
+	$ cat log.txt
+	
+	# output
+	ERRO: mentiroso
+*/
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

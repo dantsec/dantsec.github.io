@@ -1,0 +1,74 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 03 - Linguagem C - Var's do tipo Int
+
+## Especificação C99:
+
+- **FAZ PARTE DO PADRÃO** e é implementado em todo bom compilador;
+- Além dos tipos inteiros de 8 (char), 16 (short int), 32 (int) e 64 (long ou long long) bits, existe o tipo `__int128` (com dois underscores mesmo!);
+	- O tipo "long long" existe justamente porque, em algumas arquiteturas, o tipo "long int" tem o mesmo tamanho de um "int" (32 bits) - É o caso do WINDOWS, por exemplo, mesmo que você esteja usando a versão 64 bits deste OS;
+    - No LINUX, o "long" tem 64 bits na arquitetura x86-64 e 32 bits na i386. O "long long" sempre terá 64 bits.
+  	- Infelizmente, não existe, no padrão, um conversor para printf() para imprimir o conteúdo de variáveis desse tipo, mas você pode usá-la para conter valores realmente grandes! O prefixo unsigned também pode ser usado, como em `unsigned __int128 i`;
+  	- O header <stdint.h> só está disponivel no padrão C99 em diante. Nas versões mais atuais do GCC (>4.x) assumem, por default, uma extensão do C99 chamada GNU99;
+  	- Para a função scanf() também existem "conversores" padronizados, só que os símbolos são definidos como `SCNt#` (onde `t` pode ser _d_ ou _u_ e `#` pode ser 8, 16, 32 ou 64, de acordo com o tipo);
+- Quanto às formatações de printf(): 
+	- Para os tipos definidos em <stdint.h>, existe um header chamado <inttypes.h>, que define constantes como PRIi32, por exemplo;
+	- Isso vem de `PRintf_int32_t`. Para os tipos unsigned, substitua por `PRIu#` (onde `#` pode ser 8, 16, 32 ou 64, dependendo do tipo);
+	- Para usar essas constantes podemos usar uma "concatenação" de strings em tempo de compilação, como em:
+
+```c
+#include <inttypes.h>
+
+int32_t i;
+printf("Valor de i é " PRIi32 "\n", i);
+```
+
+## Referências:
+
+- https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdint.h.html
+- https://pt.wikipedia.org/wiki/IEEE_754
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

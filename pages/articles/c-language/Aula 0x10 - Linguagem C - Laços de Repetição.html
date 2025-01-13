@@ -1,0 +1,120 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 10 - Linguagem C - Laços de Repetição
+
+- Principais tipos de __Laços de Repetição__:
+	- `FOR`;
+	- `WHILE`;
+	- `DO / WHILE`;
+	- `LABEL`.
+- **Disclaimer**:
+	- `break`: simplesmente interrompe / quebra o ciclo;
+	- `continue`: interrompe o laço e salta para o final (para o ciclo e reinicia o laço);
+	- Interpretação válida: 
+		- Existem apenas 2 tipos de loop: `while` e `do / while`;
+		- O primeiro realiza o **teste de continuidade** do **loop NO INÍCIO** e o outro, **NO FINAL**.
+
+## FOR
+
+- São um "atalho" para o loop WHILE().
+
+```c
+// structure
+for(init; condition to break; increment/decrement) {}
+// infinity loop
+for(; ;){ }
+```
+
+## WHILE e DO / WHILE
+
+```c
+// while structure
+while(condition){
+	arguments;
+	...
+}
+
+// do/while structure
+// na 1a execução não é verificado a condição
+do {
+	arguments;
+	...
+} while(condition);
+
+// ANALOGIA COM O FOR
+for(init; condition to break; increment/decrement) {do_something();}
+
+// same
+init;
+while (condition to break (test))
+{
+  do_something();
+  increment/decrement;
+}
+```
+
+## Label / Rótulo
+
+- Não é mais tanto utilizada.
+
+```c
+imprimir:
+	unsigned int i = 0
+
+	printf("valor de i eh: %u\n", i);
+	i++;
+
+	if (i < 3);
+	    goto imprimir
+
+return 0;
+```
+
+## Referências
+
+- https://www.geeksforgeeks.org/local-labels-in-c/
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

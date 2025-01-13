@@ -1,0 +1,379 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | C Language</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Aula 0x21 - Linguagem C - Socket Programming
+
+## Introdução
+
+- Programação de sockets é uma forma de conectar dois nós em uma rede para a comunicação de um para o outro. Um dos nós "ouve", em uma porta particular em um IP, enquanto o outro socket conecta e espera pelo outro para formar a conexão;
+- O servidor faz o papel de "listener", enquanto o cliente se conecta ao servidor.
+
+```
+			TCP / IP                     UDP
+SERVER PROCESS     CLIENT PROCESS
+
+socket()           socket() - - - - - - - Same
+	|                  |                   |
+bind()                 | - - - - - - - - - |
+	|- - error - - - - |
+listen()               |- - - - - - - - - Not exist
+	|- - - - - - - - - |                   |
+accept()  (sync.)  connect() - - - - - - - |
+	|- - - - - - - - - |
++----------------------------------+
+| recv() <- - - - - - - - - send() |- - - recvfrom()         sendto()
+|                                  |          |- - - - - - - - |
+| send() - - - - - - - - -> recv() |- - - sendto()           recvfrom()          
+|                                  |          |- - - - - - - - |
+|  ...                       ...   |                   |
++----------------------------------+                   |
+	|                  |                               |
+	close()            close() - - - - - - - - - - - - - 
+```
+
+### Criação de Sockets
+
+- Socket Creation:
+
+```c
+// socket(domain, type, protocol);
+int sockfd = socket(AF_INET, SOCK_STREAM, 0); 
+
+/*
+	domain:
+		IPV4 -> AF_INET
+		IPV6 -> AF_INET6
+	type:
+		SOCK_STREAM: TCP (confiável, conexão orientada)
+		SOCK_DGRAM: UDP (não confiável, sem conexão)
+	protocol:
+		IP: 0
+*/
+```
+
+- Receive:
+
+```c
+// int recv(sock, recvBuf, buflen, flags)
+```
+
+- Receive From (UDP):
+
+```c
+// int recvfrom(sock, recvBuf, buflen, flags, &clientAddr, addrlen)
+```
+
+- Setsockopt:
+
+```c
+// opcional, mas ajuda no re-uso de endereços e portas
+// int setsockopt(int sockfd, int level, int optname,  const void *optval, socklen_t optlen);
+/*
+	exemplo:
+	
+	#include <sys/socket.h>
+	
+	#define TRUE   1
+	#define FALSE  0
+
+	int socket_desc;     // master socket returned by socket()
+	int opt = TRUE;        // option is to be on/TRUE or off/FALSE
+
+	setsockopt(socket_desc,SOL_SOCKET,SO_REUSEADDR,(char *)&opt,sizeof(opt));
+*/
+```
+
+- Bind:
+
+```c
+// int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+```
+
+- Listen:
+
+```c
+// int listen(int sockfd, int backlog);
+```
+
+- Accept:
+
+```c
+// int newSocket= accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+```
+
+- Connect:
+
+```c
+// int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+```
+
+- Read:
+
+```c
+// int read(int sockdf, char* buffer, int buffer_size);
+```
+
+- Send:
+
+```c
+// ssize_t send(int sockdf, char* buffer, size_t buffer_size, int protocol);
+```
+
+- Send To (UDP):
+
+```c
+// int sendto(sock, msg, msglen, flags, &foreignAddr, addrlen)
+```
+
+- Close:
+
+```c
+// int close(int sockdf);
+```
+
+- Shutdown:
+
+```c
+// int shutdown(int server_socket, SHUT_RDWR);
+```
+
+- INET_PTON:
+
+```c
+// converte endereços IPV4 / IPV6 de texto para binário
+// int inet_pton(int domain, const char *restrict src, void *restrict dst);
+// exemplo:
+//     inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)
+```
+
+- INET_NTOP:
+
+```c
+// converte endereçosIPV4 / IPV6 de binário para texto
+// const char *inet_ntop(int domain, const void *restrict src,
+//                       char *restrict dst, socklen_t size);
+```
+
+## Implementações
+
+### Server.c
+
+```c
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+#define PORT 8080
+
+int main(int argc, char const* argv[])
+{
+	int server_fd, new_socket, valread;
+	struct sockaddr_in address;
+	int opt = 1;
+	int addrlen = sizeof(address);
+	char buffer[1024] = { 0 };
+	char* hello = "Hello from server";
+
+	// Creating socket file descriptor
+	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+		perror("socket failed");
+		exit(EXIT_FAILURE);
+	}
+
+	// Forcefully attaching socket to the port 8080
+	if (setsockopt(server_fd, SOL_SOCKET,
+				SO_REUSEADDR | SO_REUSEPORT, &opt,
+				sizeof(opt))) {
+		perror("setsockopt");
+		exit(EXIT_FAILURE);
+	}
+	address.sin_family = AF_INET;
+	address.sin_addr.s_addr = INADDR_ANY;
+	address.sin_port = htons(PORT);
+
+	// Forcefully attaching socket to the port 8080
+	if (bind(server_fd, (struct sockaddr*)&address,
+			sizeof(address))
+		< 0) {
+		perror("bind failed");
+		exit(EXIT_FAILURE);
+	}
+	if (listen(server_fd, 3) < 0) {
+		perror("listen");
+		exit(EXIT_FAILURE);
+	}
+	if ((new_socket
+		= accept(server_fd, (struct sockaddr*)&address,
+				(socklen_t*)&addrlen))
+		< 0) {
+		perror("accept");
+		exit(EXIT_FAILURE);
+	}
+	valread = read(new_socket, buffer, 1024);
+	printf("%s\n", buffer);
+	send(new_socket, hello, strlen(hello), 0);
+	printf("Hello message sent\n");
+	
+// closing the connected socket
+	close(new_socket);
+// closing the listening socket
+	shutdown(server_fd, SHUT_RDWR);
+	return 0;
+}
+```
+
+### Client.c
+
+```c
+// Client side C/C++ program to demonstrate Socket
+// programming
+#include <arpa/inet.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#define PORT 8080
+
+int main(int argc, char const* argv[])
+{
+	int sock = 0, valread, client_fd;
+	struct sockaddr_in serv_addr;
+	char* hello = "Hello from client";
+	char buffer[1024] = { 0 };
+	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		printf("\n Socket creation error \n");
+		return -1;
+	}
+
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_port = htons(PORT);
+
+	// Convert IPv4 and IPv6 addresses from text to binary
+	// form
+	if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)
+		<= 0) {
+		printf(
+			"\nInvalid address/ Address not supported \n");
+		return -1;
+	}
+
+	if ((client_fd
+		= connect(sock, (struct sockaddr*)&serv_addr,
+				sizeof(serv_addr)))
+		< 0) {
+		printf("\nConnection Failed \n");
+		return -1;
+	}
+	send(sock, hello, strlen(hello), 0);
+	printf("Hello message sent\n");
+	valread = read(sock, buffer, 1024);
+	printf("%s\n", buffer);
+
+	// closing the connected socket
+	close(client_fd);
+	return 0;
+}
+```
+
+### Convertendo um hostname para um endereço de rede
+
+```c
+#include <netdb.h>
+/*
+	struct hostent {
+	    char    *h_name;        // official name of host
+	    char    **h_aliases;    // alias list
+	    int     h_addrtype;     // host address type
+	    int     h_length;       // length of address
+	    char    **h_addr_list;  // list of addresses
+	}
+*/
+struct hostent *hent;
+hent = gethostbyname("www.google.com");
+```
+
+### Convertendo um endereço de rede para um hostname
+
+```c
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
+int main()
+{
+    struct sockaddr_in sa; /* input */
+    socklen_t len;         /* input */
+    char hbuf[NI_MAXHOST];
+    
+    memset(&sa, 0, sizeof(struct sockaddr_in));
+    
+    /* For IPv4 */
+    sa.sin_family = AF_INET;
+    sa.sin_addr.s_addr = inet_addr("8.8.8.8");
+    len = sizeof(struct sockaddr_in);
+    
+    if (getnameinfo((struct sockaddr *) &sa, len, hbuf, sizeof(hbuf), 
+        NULL, 0, NI_NAMEREQD)) {
+        printf("could not resolve hostname\n");
+    }
+    else {
+        printf("host = %s\n", hbuf);
+    }
+    
+    return 0;                                                  
+}
+```
+
+## Referências:
+
+- https://www.csd.uoc.gr/~hy556/material/tutorials/cs556-3rd-tutorial.pdf
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>
