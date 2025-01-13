@@ -1,0 +1,127 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Artificial Intelligence</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# O que é IA Generativa? A importância e o uso das IA's
+
+- IA é uma área da Ciência da Computação, cujo objetivo é criar sistemas capazes de realizar tarefas que, até então, só poderiam ser executadas por seres humanos.
+- As IA's generativas têm a capacidade de criar novas informações a partir de conjuntos de dados pré-existentes.
+- São "ensinadas" a partir de grandes bases de dados com a intenção de que sejam capazes de dquirir o padrão de construção de dados. Com essa compreensão adquirida, se tornam capazes de gerar novos dados.
+
+# Como funciona a tecnologia de IA generativa?
+
+- As **redes neurais generativas adversativas (GANs)** têm essa capacidade de aprendizado e geração de novos dados. 
+	- Funcionam utilizando duas redes neurais:
+	    - A primeira é uma **rede geradora**, capaz de criar dados;
+	    - A segunda é uma **rede discriminadora**, que avalia os dados gerados pela primeira.
+	- Essas redes funcionam em conjunto em um ciclo:
+	    - A rede geradora melhora os dados criados com base na nota dada pela rede discriminadora;
+	    - Esse processo é repetido até que a qualidade dos dados gerados seja considerada boa.
+- Tudo isso faz com que as IA's generativas possam ir além da aprendizagem de máquina convencional, podendo aprender por conta própria, identificando padrões e agrupamentos dentro de um conjunto de dados. Normalmente, as IA's não generativas precisam de dados anotados por seres humanos.
+
+# O que pode ser criado com IA generativa?
+
+- Podemos criar imagens, músicas e até mesmo textos completamente novos;
+- Em áreas de saúde, IA's generativas podem ser utilizadas para gerar modelos de previsão de testes clínicos, identificar padrões em exames médicos e auxiliar no diagnóstico de doenças;
+- Na computação podemos gerar exemplos de códigos via instruções de texto;
+- Já no meio empresarial, as IA's podem ser usadas como ferramentas de automatização de tarefas repetitivas, onboarding de pessoas iniciantes e até mesmo análise de dados.
+
+## Exemplos de IA's Generativas (imagens e / ou texto)
+
+- DALL-E (https://openai.com/index/dall-e-2) (**imagem**);
+- Midjourney (https://www.midjourney.com/) (**imagem**);
+- Github Copilot (https://github.com/features/copilot) (**texto c/ ênfase em código**);
+- GPT-3 e GPT-4 (https://openai.com/index/gpt-4) (**texto**);
+- Jasper (https://www.jasper.ai/) (**texto**);
+- Bing Chat (https://www.bing.com/chat) (**texto**);
+- Google Bard ("Antigo" Gemini) (https://gemini.google.com/) (**texto**);
+- ChatGpt (https://chat.openai.com) (**texto**);
+- Phind (https://www.phind.com/) (**texto**).
+
+# Quais as vantagens e desvantagens das IA's generativas?
+
+- Vantagens:
+	- Na execução de tarefas criativas;
+	- A trabalhar mais rapidamente na criação de textos;
+	- A reduzir custos em diversas áreas.
+- Desvantagens:
+	- Algumas IA's podem gerar conteúdo nocivo, se não houver nenhum tipo de trava;
+	- Elas também reproduzem os vieses dos textos que foram utilizados no seu treinamento;
+	- Ainda existem limitações na capacidade de criar conteúdo totalmente original através dessas IA's. Sendo assim, é possível detectar o conteúdo gerado por esse tipo de ferramenta.
+	- Além disso, como os modelos são fechados, pode não ficar claro quais dados foram utilizados no seu treinamento, odendo envolver questões de direitos autorais.
+	- Por fim, esses modelos podem gerar informações incorretas; já foi observado que esses modelos possuem dificuldade em gerar respostas corretas em áreas de exatas, como matemática e física, por exemplo. 
+
+# LM's & LLM's
+
+## Introducao aos LLM's
+
+- _LM_ (Language Model): modelo de texto probabilistico;
+	- O modelo sabe uma lista de palavras e ira atribuir a ela uma probabilidade;
+- _LLM_ (Large Language Models): mesmo que um LM, mas o _large_ refere-se a quantidade a mais de parametros que temos.
+
+## Arquiteruras LLM
+
+- **Encoders**: codifica textos;
+	- Modelos que convertem sequencias de palavras para um embedding (representacao vetorial).
+- **Decoders**: decodifica textos (gera texto com um _LLM_);
+	- Modelos que pegam uma sequencia de palavras e retornam como saida a proxima palavra (as IAs mais famosas sao dessa classe).
+- **Encoders-Decoders**: codifica uma sequencia de palavras e usa o encoding para retornar como saida a proxima palavra (usado principalmente para servicos de traducao);
+
+## Aplicacoes das LLM's
+
+- **RAG** (_Retrieval Augmented Generation_):
+	- Usado principalment epara QA (Question Answering);
+	- Modelo tem acesso a documentos de suporte para realizar consultas;
+	- Reduz as alucinacoes.
+- **Code Models**:
+	- Modelos treinados para codificacao, comentarios e documentacao.
+- **Multi-Modal**:
+	- Modelos treinados em multiplas modalidades (texto, imagens, audio, etc);
+	- Podem produzir imagens a partir de uma descricao.
+- **Diffusion Models**:
+	- Produz retornos de saida simultaneos ao inves de um por vez (atualmente serve so para _image-to-text_ / _text-to-image_, visto que textos sao mais complexos por serem categoricos);
+- **Language Agents**:
+	- Treinados para cenarios de tomada de decisao.
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

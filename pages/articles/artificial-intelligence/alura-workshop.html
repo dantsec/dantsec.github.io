@@ -1,0 +1,158 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Artificial Intelligence</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Notes 0x01
+
+# Conceitos Gerais
+
+- O modelo generativo não pega os dados via pesquisa pela internet / base de dados, ele gera tudo do "zero";
+- As conversas (chamadas de contextos), guardam resquícios;
+- Cada pergunta / comando é chamado de **prompt**, e o área que constrói prompts é a engenharia de prompt.
+
+# Política do Gemini
+
+- Segurança de Conteúdo do Gemini: o Gemini já vem com uma série de filtros de conteúdo (palavras ofensivas, descriminatórias, etc);
+- De acordo com os termos de serviço da Google & Gemini, a Google tem permissão de acesso a todos os dados fornecidos para o modelo.
+
+# Plataforma de conversação (chatbot) do Gemini (https://gemini.google.com/app)
+
+- Para não ter que se preocupar com o copia e cola, é possível usar a opção de reescrever o prompt, que se localiza no canto superior direito do prompt;
+- O Gemini permite a integração com o workspace google;
+	- Assim, por exemplo, ao solicitar uma planilha, é possível acessá-la 	diretamente via google workspace.
+
+# Modelo de IA
+
+- Uma grande vantagem do Gemini é que ele possui um esquema de **multimodalidade**; ele é treinado com diversos tipos de dados (textos, imagens, etc);
+- Temos dois grandes modelos, são eles:
+	- **IA Preditiva**:
+		- É uma forma de treinamento do modelo em que ele aprende uma lógica para dada uma entrada, ele processe e dê uma saída;
+		- ex: Modelos de Classificação de Imagem, como identificar e diferenciar animais.
+	- **IA Generativa** (LLM - Large Language Model):
+		- É apresentado ao modelo um vasto conteúdo de informação, que o alimenta e a partir dai ele aprende a modelar a informação (uma espécie de análise linguística e semântica);
+		- Podemos pensar que ele cria um grafo gigante de palavras, onde as entidades são palavras, e pelo o que ele aprende no treinamento (sentenças, palavras, etc) ele começa a pensar em qual a probabilidade (partindo da análise do contexto) de uma palavra estar na frente da outra.
+
+# Tips
+
+- Sobre a forma de escrita (prompt), não é necessário humanizar o modelo, seja o mais direto ao ponto;
+- Para especificações (diretivas), é necessário deixar explícito para o modelo o que você deseja;
+- Ao passar dados "compostos" (como, por exemplo, uma pergunta e uma tabela formatada em csv) no prompt, busque separar as sentenças (com "---", por exemplo).
+
+---
+
+# Notes 0x02
+
+# Prompt
+
+## Conceitos de Prompt
+
+- Prompt é a ferramenta de interação com os modelos de IA;
+	- Possui camadas, são elas:
+		- Engenharia de Prompt;
+			- é uma técnica / maneira de criar um prompt de maneira que ele fique ideal para resultado esperado.
+		- Parâmetros de Execução;
+		- Configurações de Segurança;
+		- Redução intrínseca do modelo para informações inventadas ou alucinadas.
+- **Alucinação / Hallucination**:
+	- Eh quando o modelo "se confunde". O modelo generativo trabalha compondo / gerando a resposta de acordo com o solicitado. A alucinação ocorre quando a pergunta não é muito direcionada, podendo ser desde uma resposta inventada até uma totalmente fora de contexto, pois ele não julga se a entrada realmente é possível (ex: "Qual foi a primeira elefanta a pisar na lua?"). Por isso é necessário refinar o prompt e filtrar os resultados;
+	- Texto gerado nao e concreto e/ou infundado;
+	- Todo texto, em sua essencia, eh alucinado, so que na maioria das vezes pode ser que ele esteja correto;
+	- Podemos reduzir usando as _RAG's_.
+
+## Dicas para Construcao
+
+- Quando for fazer um pedido, tenha clareza nas instruções. Tenha foco e seja específico;
+- Divida tarefas grandes em tarefas menores;
+- Peça ao modelo que faça justificativas;
+
+## Técnicas de Prompt
+
+- **System Prompting**: é "personificar" o modelo, dar uma posição a ele (ex: "aja como um programador php sênior ...");
+- **Zero-Shot Prompting**: dar uma entrada ao modelo sem dar exemplos;
+- **Few-Shot Prompting**: dar uma entrada no modelo fornecendo alguns exemplos, dando suas respectivas perguntas e respostas (contextualizando-o). Nessa técnica, a rotulação (identificação das perguntas / respostas) é fundamental;
+- **Chain-Of-Thought**: tentar ensinar o modelo replicar a forma que nós idealizamos / raciocinamos o problema;
+- **Least-To-Most Prompting**: envia uma entrada grande para o modelo e pede para ele mesmo dissecar em problemas menores;
+- **Self-Consistency**: se baseia em fazer vários prompts e fazer uma análise / filtragem dos resultados (ex: com uma API o modelo executa o mesmo prompt 10 vezes, e, ao final do processo, os resultados dos prompts são fornecidos ao modelo novamente e ele analisa o resultado mais frequente).
+
+# Links Interessantes
+
+- https://ai.google.dev/gemini-api/docs/prompting-strategies?hl=pt-br
+- https://www.promptingguide.ai/pt
+- https://cookbook.openai.com/articles/techniques_to_improve_reliability
+
+---
+
+# Notes 0x03
+
+# Mais Conceitos
+
+- Visão Computacional: área do _machine learning_ que lida com soluções de imagem, vídeo, identificação de objetos, etc;
+- System Instruction: regra / diretriz de como o modelo deve comportar-se / agir. Dá um escalonamento melhor para a aplicação (menos repetição / "copia e cola").
+
+# Tipos de Chat no AIStudio
+
+- `Chat Prompt`: chatbot com opções de personalização de parâmetros;
+- `Freeform Prompt`: semelhante ao chatbot comum do Gemini (combinado com o estilo de chat anterior);
+- `Structured Prompt`: te dá a possibilidade de melhor estruturar o seu prompt (com inputs e outputs bem definidos).
+
+# Parâmetros dos modelos de IA
+
+- **Stop Sequence**: caracteres / sequência de caracteres para o modelo marcar como final da criação. Útil quando o resultado deve ser pós-processado;
+- **Safety Settings**: configurações de filtro de conteúdo;
+- **Top P & Top K**:
+	- Top K: quantas das possíveis possibilidades iremos usar (tamanho do conjunto de palavras), lembrando que o modelo ainda não escolheu as palavras. Resultado numérico;
+	- Top P: seleção de palavras baseado em probabilidades (estatística), definindo a probabilidade agregada que queremos trabalhar, que é a soma máxima da soma das probabilidades de cada palavra. As palavras ainda não foram escolhidas;
+	- Por fim, a partir da temperatura definida, o modelo escolherá as palavras.
+- **Temperature**: quanto mais próximo do 0 (conservadora), o modelo tende a pegar os resultados mais "corretos" (de acordo com o aprendizado dele), assim, com um resultado possivelmente menos criativo;
+	- Quando decodificamos, este hiper parametro modula a distribuicao no vocabulario;
+	- Quanto menor, mais _peaked_ eh ao redor das palavras mais _likely_ (menos criativo);
+	- Quanto maior, mais _flattened_ sobre as palavras (mais criativa).
+- **Token**: resultado final do processamento de informações pelo modelo (saída numérica).
+
+# Links Interessantes
+
+- Galeria de Prompts da Google:
+	- https://ai.google.dev/examples?hl=pt-br&authuser=2
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

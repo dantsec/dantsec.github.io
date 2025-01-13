@@ -1,0 +1,101 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | Artificial Intelligence</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Engenharia de Prompt
+
+- Se concentra no design estratégico de instruções / prompts para maximizar a eficácia com que os modelos de IA, especialmente os de _PLN_ (**P**rocessamento de **L**inguagem **N**atural), respondem às solicitações das pessoas usuárias;
+- Focado em modelos **Decoders**;
+- Alguns autores (como os do GPT-3) nomeiam prompt apenas o resultado que desejamos.
+
+# "Good Practices" na criacao de Prompts
+
+- Ter clareza ao dar instruções.
+	- Nesse quesito, você pode-se imaginar um profissional nível Sênior ensinando um Júnior a fazer alguma tarefa. Ou seja, sua explicação provavelmente será mais clara e detalhada dando uma "_role_" para o modelo.
+- Dividir tarefas complexas em subtarefas menores.
+- Pedir para o modelo explicar / justificar seus passos antes de dar a resposta.
+- Gerar várias respostas diferentes e pedir para o modelo julgar a melhor.
+
+# Algumas das principais técnicas de Engenharia de Prompt
+
+- **Zero-shot & Few-shot / K-shot Prompting**:
+	- Refere-se à capacidade de um modelo de linguagem de entender e executar uma tarefa sem ter recebido exemplos específicos dessa tarefa anteriormente.
+	- Porém, apesar de funcionarem em alguns casos, essas técnicas mais "direto ao ponto" deixavam bastante a desejar em problemas mais complexos.
+- **Chain-of-Thought Prompting**:
+	- Pode ser traduzido como "Criação de prompts com Cadeia de Pensamento".
+	- Essa técnica propõe que podemos obter respostas muito mais precisas quando demonstramos aos modelos, no próprio prompt, a forma exata de raciocinar, dando uma pergunta, o **passo-a-passo para se chegar à resposta** (isso é a cadeia de pensamento propriamente dita), e a resposta.
+		- Por isso, essa técnica **também é chamada de _Few-shot Chain-of-Thought Prompting_**.
+- **Zero-shot Chain-of-Thought**:
+	- Essa técnica de prompt propõe que modelos de linguagem não precisariam necessariamente de toda essa explicação e exemplos (few-shot) para darem uma resposta correta.
+	- E que, para fazer o modelo se comportar com uma cadeia de pensamento, bastaria utilizar a frase **_Let's think step by step_** (em _ptBr_, "Vamos pensar passo a passo") no final do prompt.
+- **Least-to-most Prompting**:
+	- Pode funcionar melhor que o _CoT_;
+	- E uma técnica que orienta os modelos a resolverem problemas complexos seguindo uma abordagem gradual, de menor para maior complexidade.
+	- Essa metodologia incentiva o modelo a abordar um problema em etapas, começando com as partes mais simples e avançando para as mais complexas.
+	- É particularmente útil para problemas que podem ser decompostos em subproblemas ou quando uma tarefa pode ser concluída em várias etapas incrementais.
+- **Self-consistency (Autoconsistência)**:
+	- Se baseia em reutilizar a técnica de _Few-shot Chain-of-Thought_ para obter um conjunto de diversas respostas para um mesmo prompt e, então, escolher a resposta que apareceu o maior número de vezes.
+	- Os pontos negativos dessa técnica é que ela só serve para problemas onde temos uma resposta factual, seja ela numérica ou lógica e que ela é mais custosa, pois gerar 10 respostas terá 10 vezes mais custo (computacional e financeiro).
+- **Chain-of-Verification**:
+	- Nesta técnica, após o modelo gerar uma resposta inicial a um prompt, são formuladas perguntas de seguimento para ajudar a verificar a veracidade e a precisão da resposta inicial.
+	- Assim, o modelo é encorajado a reavaliar ou confirmar suas próprias conclusões através de uma série de verificações que ele mesmo fará, seja citando fontes ou aplicando lógica dedutiva para reforçar a confiabilidade da informação fornecida.
+- **Step-Back**:
+	- Indica ao LLM para identificar conceitos de alto nivel na terafa;
+	- Util para resolver questoes de exatas.
+
+# Training
+
+- **Domain-Adaptation**: Adaptamos o modelo para performar fora da area que ele foi treinado;
+- **Decoding**: Ocorre de forma iterativa, uma palavra por vez;
+	- **Greedy Decoding (Decodificacao Gananciosa)**: escolha a palavra de maior probabilidade em cada etapa;
+	- _EOS_: End Of Sentence.
+- **Nucleo Sampling**: Manipulamos parametros adicionais que governam a diversidade das palavras;
+- **Beam Search**: Geraremos varias sequencias semelhantes simultaneamente e continuamente _podar_ as sequencias com baixa probabilidade;
+	- Gera sequencias com alta e baixa probabilidade.
+- **Non-deterministic Decoding**: Pega, de forma randomica (um por passo), um amontoado de candidatos com alta probabilidade;
+- **Groundedness and Attributability**:
+	- _Grounded_: texto gerado no documento eh _grounded_ caso o documento suporte texto;
+	- LLM trabalha junto com um norte (documento).
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>
