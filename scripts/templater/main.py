@@ -13,6 +13,7 @@ Instructions:
 4. Run the script.
 5. Edit pages/papers.html file with new content.
 6. Clean folder `input`.
+7. If your topic is new, add it to the `papers.html` nav section.
 """
 # PATHS
 TEMPLATE_PATH = '../../pages/articles/template.txt'
@@ -27,6 +28,7 @@ PAPER_LANGUAGE = 'pt-BR'
 PAPER_TOPIC = 'PHP'
 # OUTPUT
 ZIP_FILE_NAME = 'php'
+QUICK_ACCESS_ID = 'php'
 
 
 def get_text_from_file(file_path: str = '') -> str:
@@ -62,7 +64,7 @@ def write_text_to_file(file_path: str = '', text: str = ''):
 def generate_html_list(files: list = []) -> str:
     """Generate html list with all processed files.
     """
-    html_list = f"""<li>{PAPER_INDEX} .......... {PAPER_TOPIC}
+    html_list = f"""<li id="{QUICK_ACCESS_ID}">{PAPER_INDEX} .......... {PAPER_TOPIC}
     <ul>
     """
 
@@ -96,6 +98,8 @@ if __name__ == '__main__':
     html_list = generate_html_list(files_to_proccess)
 
     print(html_list)
+
+    exit(1)
 
     for file in files_to_proccess:
         paper_path = f'{INPUT_FILES_PATH}{file}'

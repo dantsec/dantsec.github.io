@@ -53,3 +53,14 @@ ul ul > li::before {
 ul ul > li {
     margin-left: 30px;
 }
+
+#papers-navbar {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#papers-navbar a {
+    color: var(--link-color);
+    margin: 0 10px;
+    font-size: small;
+}
