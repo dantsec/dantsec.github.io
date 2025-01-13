@@ -1,0 +1,207 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | PHP</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Linguagem PHP: 0x16 - Padronizacao de Codigo e PSR's
+
+## Boas Praticas de Codificacao
+
+- Ha dois repositorios no GITHUB dignos de um premio de tao espetaculares que sao:
+	- https://github.com/piotrplenik/clean-code-php
+	- https://github.com/php-pds/skeleton?tab=readme-ov-file
+
+## PSR's
+
+- Tambem conhecidas como **PHP Standards Recommendations** eh um conjunto de recomendacoes que visam:
+	- Padronizar praticas de desenvolvimento;
+	- Melhorar a interoperabilidade entre projetos;
+	- Criar um padrao de codigo para os diferentes frameworks da linguagem.
+- Sao mantidas pelo **PHP-FIG** (PHP Framework Interoperability Group) e sao amplamente adotadas na comunidade PHP;
+- As normas referentes a estilizacao de codigo sao: _psr-1_, _psr-4_ e _psr-12_;
+- Todas as PSRs: `https://www.php-fig.org/`.
+
+### PSR-1 (Basic Coding Standard)
+
+- Arquivos devem (_must_) usar apenas tags `<?php` e `<?=`;
+- Arquivos devem (_must_) usar apenas `UTF-8` sem BOM para codigo PHP;
+- Arquivos devem (_should_) declarar simbolos (classes, funcoes, constantes, etc.) ou causas _side-effects_ (geracao de output, mudanca das configuracoes do `.ini`, etc.) mas nunca (_should not_) ambos;
+- Namespaces e Classes devem (_must_) seguir o "autoloading" PSR;
+- Nomes de classes devem (_must_) ser declaradas em `StudlyCaps`;
+- Constantes de classes devem (_must_) ser declaradas em "upper case" com separadores "underscore";
+- Nomes de metodos devem (_must_) ser declarados em `camelCase`.
+
+```php
+<?php
+
+namespace App\Services;
+
+class SampleService
+{
+    // Constante da classe em UPPER_CASE com underscore
+    public const DEFAULT_LIMIT = 10;
+
+    // Propriedades da classe
+    protected int $limit;
+
+    // Metodo construtor
+    public function __construct(int $limit = self::DEFAULT_LIMIT)
+    {
+        $this->limit = $limit;
+    }
+
+    // Metodo em camelCase
+    public function processData(array $data): array
+    {
+        return array_slice($data, 0, $this->limit);
+    }
+}
+```
+
+### PSR-4 (Autoloading)
+
+- Padrao de autoloading de arquivos para projetos PHP, criado pelo PHP-FIG (PHP Framework Interoperability Group);
+- Especifica como classes, interfaces e traits devem ser carregadas automaticamente, mapeando namespaces para diretorios de forma padronizada;
+- Tem como objetivo facilitar a organizacao e o carregamento automatico de arquivos em projetos PHP, tornando a estrutura do codigo mais consistente e reutilizavel;
+- Para que o autoloader funcione corretamente com o PSR-4, eh necessario que a estrutura do diretorio siga a estrutura do namespace;
+	- O nome completo da classe eh dividido em partes, onde:
+		- O **namespace raiz** / **prefixo** eh mapeado para um diretorio base no sistema de arquivos;
+		- As **subpastas** e a **classe** sao mapeadas a partir do namespace.
+
+```php
+<?php
+
+/**
+ * Namespace Definition:
+ *
+ * \<NamespaceName>(\<SubNamespaceNames>)*\<ClassName>
+ */
+
+// Funcao PHP nativa para registro de classes
+spl_autoload_register(function ($class) {
+	// Definimos o prefixo do nosso projeto
+	$prefix = 'MyProject\\';
+
+	// Definimos o path de onde estarao as classes
+	$baseDir = __DIR__ . '/src/';
+
+	// Verifica se a classe chamada usa nosso prefixo
+	if (strncmp($prefix, $class, strlen($prefix)) !== 0 ) {
+		return;
+	}
+
+	// Resgatamos o nome da classe
+	$class_name = str_replace($prefix, '', $class);
+
+	// Resgatamos o path da nossa classe
+	$classPath = str_replace('\\', '/', $class_name);
+
+	// Defininos o path completo da nossa classe
+	$file = $baseDir . $classPath . '.php';
+
+	// Caso o arquivo da classe exista, importamos ele
+	if (file_exists($file)) {
+		require $file;
+		return;
+	}
+});
+```
+
+### PSR-12 (Extended Conding Style)
+
+- O range aceitavel de caracteres por linha vai de 80 a 120;
+	- Nao deve haver espacos em branco no final das linhas;
+	- Nao deve haver mais de uma declaracao por linha.
+- Deve-se usar uma identacao de 4 espacos por nivel de identacao, e nao deve-se usar tabs para identar;
+- Palavras reservadas PHP devem estar em "lower case";
+- Traits devem ser declaradas na primeira linha depois da abertura dos brackets da classe, e deve-se ter uma trait por linha;
+- Caso funcao / closure / estrutura que passe de 3 argumentos em uma linha, deve-se splitar e dar uma linha para cada argumento.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Vendor\Package;
+
+use Vendor\Package\{ClassA as A, ClassB, ClassC as C};
+use Vendor\Package\SomeNamespace\ClassD as D;
+use function Vendor\Package\{functionA, functionB, functionC};
+use const Vendor\Package\{ConstantA, ConstantB, ConstantC};
+
+class Foo extends Bar implements
+	FooInterface
+	\ArrayAccess,
+	\Countable,
+	\Serializable
+{
+	public function sampleFunction(int $a, int $b = null): array
+	{
+		use FirstTrait;
+
+		if ($a === $b) {
+			bar();
+		} elseif ($a > $b) {
+			$foo->bar($arg1);
+		} elseif (
+			$foo
+			&& $bar
+			|| $baz
+		) {
+			Do::idk();
+		} else {
+			BazClass::bar($arg2, $arg3);
+		}
+	}
+
+	public function aVeryLongMethodName(
+		ClassTypeHint ?$arg1,
+		&$arg2,
+		array $arg3 = []
+	): ?string {
+		return 'foo';
+	}
+}
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

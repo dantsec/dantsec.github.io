@@ -1,0 +1,111 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | PHP</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Linguagem PHP: 0x07 - Inclusao / Reutilizacao de Codigo
+
+## Inclusao / Reutilizacao de Codigo
+
+- Eh importante ressaltar que importar / incluir arquivos `.php` nao sao unica e exclusivamente para importacao de funcoes / classes, mas tambem sao muito usados para templates dinamicos com html;
+- Os arquivos sao pre-processados no arquivo pai, temos quatro instrucoes para incluir codigo, sao elas:
+	- `include`: insere um arquivo php (ou ate mesmo html) em outro arquivo;
+		- Caso de erro na inclusao, gera apenas um warning (que tem como desativar).
+	- `require`: faz o mesmo que o include;
+		- Mas, caso de erro na inclusao, gerara um erro fatal e matara o programa;
+		- **Importante**: ao pegar arquivos onde e necessario o uso de `../...` (subdiretorios) sera necessario o uso de uma constante pre-definida, a `__DIR__` (mesmo que nao seja necessaria a troca de pasta, use o `__DIR__`, eh uma boa pratica).
+	- `include_once`: faz o mesmo que o include, com uma pequena diferenca, impedindo que o arquivo importado seja adicionado mais de uma vez no arquivo;
+		- Caso de erro na inclusao gera um warning.
+	- `require_once`: faz o mesmo que o include_once, gerando um erro fatal caso nao seja possivel a inclusao do arquivo;
+		- Junto do `include_once` eh o metodo mais indicado quando estamos montando templates com PHP.
+
+```php
+# ./main.php
+<?php
+
+require "./to_include.php";
+	
+echo "<h1>Main: " . __FILE__ . "</h1>";
+echo "<p>Main: $localhost</p>";
+
+include_once "./sub-include/sub-include.php";
+// aqui ira se repetir mais uma vez
+require_once "./sub-include/sub-include.php";
+// aqui ja nao se repetira mais
+require_once "./sub-include/sub-include.php";
+// nem aqui
+include "./sub-include/sub-include.php";
+
+// ira gerar um warn (include) e um fatal error (require)
+include_once "./sub-include/sub-include.ph";
+require_once "./sub-include/sub-include.ph";
+
+?>
+
+###
+
+# ./to_include.php
+<?php
+
+$localhost = "127.0.0.1";
+$name = "WarMachine";
+
+echo "<h1>Include: " . __FILE__ . "</h1>";
+
+<p><?= $name; ?></p>
+
+?>
+
+###
+
+# ./sub-include/sub-include.php
+<?php
+
+echo "<p>Estou no sub-include</p>";
+
+include __DIR__ . "/../to_include.php";
+
+?>
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

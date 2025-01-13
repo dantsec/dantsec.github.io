@@ -1,0 +1,216 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | PHP</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Linguagem PHP: 0xFF - Tips!
+
+## Alguns outros recursos
+
+- Alterando o arquivo `php.ini` para o **uso de short tags**:
+	- `sudo sed -i 's/\(short_open_tag =\) Off/\1 On/' $(php --ini | grep "Loaded Configuration File" | cut -d" " -f12); sudo systemctl restart httpd`
+- Consultar informacoes do PHP instalado:
+	- `<?php phpinfo();`
+- Pegar o _type_ de uma variavel:
+	- `gettype($VAR_NAME);`
+- Constantes Pre-definidas
+	- `__DIR__`, `__FILE__`
+
+## Mostrando erros do servidor
+
+- Quando estiver em producao, deve-se setar display_erros para 0;
+
+```php
+<?php
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	// Mesmo que (E_ERROR | E_WARNING | E_NOTICE | ...)
+	error_reporting(E_ALL);
+?>
+```
+
+- Ou setando diretamente no arquivo `php.ini`.
+
+```ini
+# Development
+display_errors = On
+display_startup_errors = On
+error_reporting = -1
+log_errors = On
+
+# Production
+display_errors = Off
+display_startup_errors = Off
+error_reporting = E_ALL
+log_errors = On
+```
+
+## Recursos para termino do script
+
+- Temos duas funcoes principais:
+	- `die()`:
+		- _Alias_ para a funcao `exit()`;
+		- Nao eh uma boa pratica, prefira por usar um try/catch para _error handling_ e caso realmente seja necessario termine com um `exit()`.
+	- `exit(string | int $status): void`.
+- O final de ambas eh o mesmo, finalizar o fluxo da aplicacao;
+- Como ultimo "recurso" temos uma funcao que e presente em frameworks como o _laravel_, o `dd()`: "Dump and Die", que junta as funcoes de `var_dump()` e `die()`:
+
+```php
+# die() & exit()
+die();
+die('died...');
+
+exit(1);
+exit('exiting...');
+
+# dd()
+function dd($data) {
+	var_dump($data); 
+	die(); 
+}
+
+dd('idk');
+```
+
+## Usando tipagem estrita
+
+- Se o tipo passado for diferente do definido pela _type hint_, eh gerado um `TypeError`;
+- Ha apenas um caso especial, que caso o target seja float podemos passar valores do tipo inteiro;
+- Quando usamos em _includes_, afeta apenas o script atual e o include continua normalmente com as definicoes feitas nele.
+
+```php
+declare(strict_types=1); // 0 (false) || 1 (verdadeiro)
+```
+
+## Extrair uma palavra sem saber seu indice inicial na string
+
+```php
+echo substr($t, strpos($t, "queijo"), 6) . "\n"; # queijo
+```
+
+## PHPCS (linter) e PHPCBF para padronizacao de projetos
+
+### Instalacao
+
+- Baixe o pacote:
+	- `composer require --dev squizlabs/php_codesniffer`;
+	- `./vendor/bin/phpcs --version`.
+- Configure:
+	- `./vendor/bin/phpcs --standard=PSR12 src/`.
+- Execute:
+	- `./vendor/bin/phpcs app`.
+- Corrigindo erros automaticamente:
+	- `./vendor/bin/phpcbf src/`.
+- Podemos criar um arquivo _phpcs.xml_ na raiz do projeto para configurar regras especificas e padroes de codificacao, por exemplo:
+
+```xml
+<?xml version="1.0"?>
+<ruleset name="My Awesome Project">
+	<rule ref="PSR12"/>
+</ruleset>
+```
+
+### Uso do Linter
+
+- Para corrigirmos layout de codigo podemos utilizar as ferramentas:
+    - **PHPCS**: `https://cs.symfony.com/`;
+    - **PHPCBF**: `https://github.com/squizlabs/PHP_CodeSniffer/`.
+
+```php
+# Mostra todads as correcoes, e usando `-w` as aplica diretamente no arquivo
+phpcbf [-w] --standard=PSR1 <file>
+
+# Aqui temos mais liberdade na hora de definirmos regras para linting
+php-cs-fixer fix -v --rules=@PSR1 <file>
+```
+
+## PHP Xdebug - Debugger
+
+- Podemos usar o depurador `XDebug` para isso (`https://xdebug.org/docs/`);
+- Configuracao:
+
+```sh
+php_value xdebug.remote_host=APPLICATION_HOST
+php_value xdebug.remote_port=APPLICATION_PORT
+
+# Access:
+# http://application.local/index.php?XDEBUG_SESSION_START=1
+```
+
+## Tooling
+
+### Gerenciamento de Dependencias
+
+- Para o gerenciamento de pacotes / dependencias temos duas ferramentas principais, o **composer** e o **pear**;
+	- O **packagist** lista os pacotes instalaveis via _composer_.
+
+### Bancos de Dados
+
+- Ao mexer com bancos de dados, eh ideal que haja uma abstracao na conexao e no manuseio de queries do banco de dados, para isso temos alguns projetos que podem ser usados para esse fim, sao eles:
+	- [Aura SQL](https://github.com/auraphp/Aura.Sql)
+	- [Doctrine2 DBAL](http://www.doctrine-project.org/projects/dbal.html)
+	- [Propel](http://propelorm.org/)
+	- [ZF2 Db](http://packages.zendframework.com/docs/latest/manual/en/index.html#zend-db)
+
+### Templating
+
+- Os templates fornecem uma forma conveniente de separar seu controlador e a camada de apresentacao;
+- Geralmente contem codigo HTML da aplicacao, mas tambem podem ser usados para outros formatos, como o XML;
+- As principais ferramentas para templating sao:
+	- [Aura.View](https://github.com/auraphp/Aura.View) _(nativo)_
+	- [Blade](http://laravel.com/docs/templates) _(compilado, específico do framework)_
+	- [Dwoo](http://dwoo.org/) _(compilado)_
+	- [Latte](https://github.com/nette/latte) _(compilado)_
+	- [Mustache](https://github.com/bobthecow/mustache.php) _(compilado)_
+	- [PHPTAL](http://phptal.org/) _(compilado)_
+	- [Plates](http://platesphp.com/) _(nativo)_
+	- [Smarty](http://www.smarty.net/) _(compilado)_
+	- [Twig](http://twig.sensiolabs.org/) _(compilado, um dos mais famosos)_
+	- [Zend\View](http://framework.zend.com/manual/2.3/en/modules/zend.view.quick-start.html) _(nativo, específico do framework)_
+
+### Stardard PHP Library (SPL)
+
+- Conjunto de utilitarios prontos, padrao do PHP;
+- Sua documentacao eh detalhada e abrange os recursos disponiveis: https://www.php.net/book.spl.
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

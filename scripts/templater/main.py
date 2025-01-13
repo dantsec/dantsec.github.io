@@ -17,16 +17,16 @@ Instructions:
 # PATHS
 TEMPLATE_PATH = '../../pages/articles/template.txt'
 INPUT_FILES_PATH = 'input/'
-OUTPUT_FILES_PATH = '../../pages/articles/artificial-intelligence/'
+OUTPUT_FILES_PATH = '../../pages/articles/php/'
 ZIP_OUTPUT_PATH = '../../pages/backups/'
-PAPER_HTML_PATH = '../pages/articles/artificial-intelligence/'
+PAPER_HTML_PATH = '../pages/articles/php/'
 # PAPER
 PAPER_AUTHOR = '0xDant'
-PAPER_INDEX = '0x01'
+PAPER_INDEX = '0x06'
 PAPER_LANGUAGE = 'pt-BR'
-PAPER_TOPIC = 'Artificial Intelligence'
+PAPER_TOPIC = 'PHP'
 # OUTPUT
-ZIP_FILE_NAME = 'artificial-intelligence'
+ZIP_FILE_NAME = 'php'
 
 
 def get_text_from_file(file_path: str = '') -> str:

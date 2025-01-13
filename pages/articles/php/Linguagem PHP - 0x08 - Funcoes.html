@@ -1,0 +1,321 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | PHP</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Linguagem PHP: 0x08 - Funcoes
+
+## Fundamentos
+
+- Sao recursos _built-in_ e podem ser invocadas;
+- Pontos importantes:
+	- Para nomeacao faca o uso do **camelCase**;
+	- Parametros com valores _default_ devem ficar no final;
+	- Ao tipar algo que nao se tem certeza do tipo, use `mixed`, e no caso de nao retornar nada, use `void`. Tambem podemos setar se um tipo eh _nullable_ (PHP >= 7), para isso usamos o operador `?`;
+		- Mixed: `object | resource | array | string | int | float | bool | null`;
+		- Caso seja retorno do tipo vazio, omita o statement `return` (mesmo que seja valido);
+		- Para tipos nullable, faca algo como `?type`.
+	- A tipagem de unicao (`type1 | type2 | ...`) esta disponivel apenas a partir do PHP 8.
+
+```php
+function foo(type1 $arg1 = value1, ...): typeX | typeY
+{
+	// return ...;
+}
+
+function upper(?string $str): string { 
+	return strtoupper($str); 
+}
+
+echo upper(null); // warning de funcao depreciada
+```
+
+- Podemos consultar algumas informacoes da funcao, assim:
+	- `func_get_arg(ARG_INDEX)`: retorna o valor do parametro _ARG_INDEX_;
+	- `func_get_args()`: retorna, em formato de array, os indices dos parametros e seus respectivos valores (lista o "argv");
+	- `func_num_args()`: retorna um inteiro dizendo o "argc" da funcao.
+
+```php
+function no_return(string $text = "I don't return anything!"): void
+{
+	echo func_get_arg(0); // "a"
+	
+	// argv
+	print_r(func_get_args()); // Array ([0] => a)
+	
+	// argc
+	echo func_num_args(); // 1
+}
+
+no_return("a");
+```
+
+- Tambem podemos passar os argumentos de uma forma mais dinamica, usando os **named arguments** (nao use argumentos posicionais depois de argumentos nomeados), disponiveis nas versoes superiores a 8 (PHP>=8), dessa forma:
+
+```php
+function sayHello($name, $delimiter)
+{
+	echo "Hello - $delimiter - $name\n";
+}
+
+// Hello - , - teste
+sayHello(delimiter: ",", name: 'teste');
+// Fatal error: Cannot use positional argument after named argument
+sayHello(delimiter: ",", 'teste');
+// Fatal error: Uncaught Error: Named parameter $name overwrites previous argument
+sayHello(",", delimiter: 'teste');
+// Hello - , - teste
+sayHello("teste", delimiter: ',');
+```
+
+- Quando quisermos usar funcoes com parametros variaveis (**variadic functions**), podemos seguir esse modelo:
+	- **Importante**: caso uma funcao tenha multiplos parametros, apenas o ultimo pode ser variado.
+
+```php
+# Maneira menos usual
+
+function sum()
+{
+    $numbers = func_get_args();
+
+	$total = 0;
+
+	for ($i = 0; $i < count($numbers); $i++) {
+        $total += $numbers[$i];
+    }
+
+    return $total;
+}
+
+echo sum(10, 20); // 30
+echo sum(10, 20, 30); // 60
+
+# Maneira mais usual (PHP >= 5) com `spread operator`
+// Type hints para `variadic functions` apenas para PHP >= 7
+
+function sum(int ...$numbers): int
+{
+    $total = 0;
+
+	for ($i = 0; $i < count($numbers); $i++) {
+        $total += $numbers[$i];
+    }
+
+    return $total;
+}
+
+echo sum(10, 20) . "\n"; // 30
+echo sum(10, 20, 30) . "\n"; // 60
+```
+
+## Anonymous Functions / Closures
+
+- Pode simplificar muito a sintaxe de funcoes menores e pode ser util quando a funcao nao for chamada tantas vezes.
+
+```php
+# Closure
+$multiply = function ($x, $y) { 
+	return $x * $y; 
+};
+
+echo $multiply(10, 20); // 200
+
+var_dump($multiply); 
+/*
+	object(Closure)#1 (1) {
+		["parameter"] =>
+		array(2) {
+			["$x"] => string(10) "<required>"
+			["$y"] => string(10) "<required>"
+		}
+	}
+*/
+
+# Funcao anonima dentro de uma funcao
+function multiplier($x) {
+	return function ($y) use ($x) { 
+		return $x * $y; 
+	};
+}
+
+$double = multiplier(2);
+
+echo $double(100); // 200
+```
+
+- Escopo de uma funcao anonima:
+
+```php
+# Exemplo de erro
+
+$message = 'Hi';
+
+$say = function () {
+	echo $message; 
+}; 
+
+$say(); // Warn: Undefined variable $message
+
+# Acessando a variavel de um escopo pai
+
+$message = 'Hi';
+
+$say = function () use ($message) { 
+	echo $message; 
+}; 
+
+$say(); // Hi
+```
+
+### Estados nas Closures
+
+- Para manter os estados das nossa closures, podemos usar a palavra-chave `use` (que ja foi apresentada) ou o `bindTo`;
+- O `bindTo` abre portas para possibilidades interessantes. Permite fazer o _bind_ (associar) o estado interno de um objeto `Closure` com um _objeto diferente_;
+	- Aceita um segundo argumento importante que especifica a classe PHP do objeto ao qual a closure eh associada. Isso permite que a closure acesse variaveis-membro protegidas e privadas do objeto ao qual ela esta sendo associada.
+	- Normalmente eh utilizado por frameworks que mapeiam URLs de rotas e funcoes anonimas callback, ex:
+
+```php
+// App.php
+class App
+{
+	// ...
+
+	public function addRoute($routePath, $routeCallback)
+	{
+		$this->routes[$routePath] = $routeCallback->bindTo($this, __CLASS__);
+	}
+
+	public function dispatch($currentPath)
+	{
+		foreach ($this->routes as $route => $callback) {
+			if ($route === $currentPath) {
+				$callback();
+			}
+		}
+	}
+
+	// ...
+}
+
+// index.php
+$app = new App();
+
+$app->addRoute('/welcome', function () {
+	return 'Welcome!';
+});
+
+$app->dispatch('welcome');
+```
+
+## Arrow Functions
+
+- Introduzido no PHP 7.4, promove uma sintaxe mais consica para as funcoes anonimas / closures, dessa forma:
+
+```php
+/*
+	Sintaxe:
+		Anon: 
+			function(args) { return expression; }
+		Arrow: 
+			fn(args) => expression;
+*/
+
+$ann_add = function ($x, $y) { return $x + $y; };
+
+$arr_add = fn ($x, $y) => $x + $y;
+
+echo $ann_add(10, 20); // 30
+echo $arr_add(10, 20); // 30
+```
+
+## Variable Functions
+
+- Sao funcoes que podem variar dependendo do nome que ela eh chamada, podemos usa-la dessa forma:
+
+```php
+class Dog
+{
+	public function say(): void
+	{
+		echo 'woof woof!';
+	}
+}
+
+$myDog = new Dog();
+$action = 'say';
+
+echo $myDog->$action(); // woof woof!
+```
+
+## Funcao de Callback
+
+- `call_user_func_array(callable $callback, array $args): mixed`:
+	- Essa funcao chama uma funcao de callback com parametros, dessa forma:
+
+```php
+function add(int $a, int $b): int
+{
+	return $a + $b; 
+} 
+
+$result = call_user_func_array('add', [10, 20]);
+
+echo $result; // 30
+```
+
+- `call_user_func(callable $callback, mixed ...$args): mixed`:
+	- Tambem chama uma funcao por callback, mas agora sem vir de um array, mas diretamente de qualquer tipo, dessa forma:
+
+```php
+class User {
+	private static $name = 'admin';
+	
+	public static function getName() {
+		return self::$name;
+	}
+}
+
+echo call_user_func([User::class, 'getName']); // admin
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

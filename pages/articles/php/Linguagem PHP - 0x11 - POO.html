@@ -1,0 +1,987 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | PHP</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Linguagem PHP: 0x11 - POO
+
+## Introducao
+
+- Documentacao: https://www.php.net/language.oop5.
+
+### Classes, Atributos / Propriedades e Metodos
+
+- Ao acessar o conteudo de uma classe podemos cair em um dilema: usar `$this` ou `self::`?
+	- Em resumo, `$this` se refere ao objeto (instancia) atual, e `self::` se refere a classe;
+	- Como regra geral, usa-se `$this` para acessar membros (atributos e metodos) da **instancia** e `self::` para acessar membros **estaticos**;
+	- Curiosidade: o operador `::` se chama _Paamayim Nekudotayim_.
+- Antes de continuar, o que significa a _keyword_ `static`?
+	- Serve para definir propriedades e metodos que pertencem a classe em si, em vez de pertencerem a instancias individuais dessa classe;
+	- Significa que eles sao compartilhados entre todas as instancias da classe e podem ser acessados diretamente usando o nome da classe, sem a necessidade de criar uma instancia de classe.
+- Propriedades:
+	- Temos 3 niveis de acesso / visibilidade, sao elas:
+		- `public`: padrao e define que qualquer parte do projeto possa ver;
+		- `protected`: acessado apenas pela classe de origem ou pelas que herdaram;
+		- `private`: apenas a classe em que foi criada tem acesso.
+- Tambem podemos setar classes e metodos como **final**, que significa que ela nao pode ser estendida por outras classes (no caso de estar direcionada a uma classe) ou nao pode ser sobreescrito por classes derivadas (no caso de metodos);
+	- Usada para proteger classes e metodos de modificacoes, garantindo que a implementacao original permaneca intacta.
+- Boas praticas:
+	- Ao criar uma classe, a inicial deve ser sempre **maiuscula**;
+
+```php
+# Criacao da Classe
+
+// Nao pode ser extendida
+final class User
+{
+	# Atributos
+	private $id = 1;
+	public const TOKEN = 'iDkajnb19';
+
+	# Metodos
+	private function info(): void
+	{
+		echo "id: " . $this->id . "\n";
+		echo "token: " . self::TOKEN . "\n";
+	}
+
+	final public function show(): void
+	{
+		$this->info();
+	}
+}
+
+// Fatal error: Class testingFinal cannot extend final class User
+class testingFinal extends User {
+	// Fatal error: Cannot override final method User::show()
+	public function show(): void
+	{
+		echo 'function overrided...';
+	}
+}
+
+$testingFinal = new testingFinal();
+$testingFinal->show();
+
+# Criando uma Instancia
+$user = new User();
+
+$user->show();
+/*
+	id: 1
+	token: iDkajnb19
+*/
+
+echo $user::TOKEN; // iDkajnb19
+```
+
+### Getters e Setters
+
+- Usamos para o **encapsulamento** da nossa classe, nao eh algo obrigatorio mas eh considerado uma boa pratica.
+
+```php
+class Person
+{
+	private $name = 'random';
+
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	public function setName(string $value): void
+	{
+		$this->name = $value;
+	}
+}
+
+$person = new Person();
+
+$person->setName('john');
+
+echo $person->getName(); // john
+```
+
+### Rotinas de Informacao
+
+- Para **classe**:
+	- `class_exists()`: verifica se uma classe existe;
+	- `get_class_methods()`: retorna os metodos da classe;
+	- `get_class_vars()`: mapeia as propriedades de uma classe.
+- Para **objeto**:
+	- `is_object()`: verifica se uma variavel eh um objeto;
+	- `get_class()`: verifica a classe de um objeto;
+	- `method_exists()`: verifica se um metodo existe em um objeto.
+
+```php
+class Car
+{
+	public $whells = 4;
+
+	public function run(): void
+	{
+		echo 'running...';
+	}
+}
+
+# Classe
+echo class_exists('Car') ? 'found!' : 'not found!';
+// found!
+
+var_dump(get_class_methods("Car"));
+/*
+	array(1) {
+	  [0]=>
+	  string(3) "run"
+	}
+*/
+
+var_dump(get_class_vars("Car"));
+/*
+	array(1) {
+	  ["whells"]=>
+	  int(4)
+	}
+*/
+
+# Objeto
+$car = new Car();
+
+echo is_object($car) ? 'object!' : 'not object!';
+// object!
+
+echo var_dump(get_class($car));
+// string(3) "Car"
+
+echo method_exists($car, 'run')
+	? 'method found!'
+	: 'method not found!';
+// method found!
+```
+
+### Namespaces
+
+- Funcionalidade do PHP (a partir da versao 5.3) que permite organizar melhor o codigo, **evitando conflitos entre nomes de classes, funcoes e constantes**;
+- Permite, assim, que voce use nomes iguais em partes diferentes do projeto sem causar conflito;
+- Precisa de alguma forma que um **autoloader** esteja no projeto, seja via composer ou manualmente.
+- Evite mais de um namespace por arquivo;
+- Outros pontos importantes:
+	- A keyword `use` deve existir no contexto global pois eh usada em tempo de compilacao;
+	- Podemos importar, alem das classes, funcoes e constantes, assim:
+		- Funcoes: `use func NAMESPACE_NAME`;
+		- Constantes: `use constant NAMESPACE_NAME`.
+
+```php
+## File_1.php
+<?php
+
+namespace MyProject;
+
+class User
+{
+	public function speak(): void
+	{
+		echo 'hello, world!';
+	}
+}
+
+### File_2.php
+<?php
+
+namespace AnotherProject;
+
+class User
+{
+	public function speak(): void
+	{
+		echo 'hello, world!';
+	}
+}
+
+### File_3.php
+<?php
+
+// Namespace aninhado
+namespace AnotherProject\Something;
+
+class Idk1
+{
+	public function info(): void
+	{
+		echo 'something 1...';
+	}
+}
+
+class Idk2
+{
+	public function info(): void
+	{
+		echo 'something 2...';
+	}
+}
+
+### File_4.php
+<?php
+
+/*
+	O uso da `\` no inicio da hierarquia indica um namespace global
+	E nao um namespace atual
+	
+	ex de global: `\Exception`
+*/
+use \MyProject\User as myProjectUser;
+use \AnotherProject\User;
+/*
+	Para multiplas importacoes dentro do mesmo nivel:
+
+	1. Usar as `{}`
+		use \AnotherProject\Something\{Idk1, Idk2};
+
+	2. Separar por virgulas (mais verboso), ex:
+		use \AnotherProject\Something\Idk1,
+			\AnotherProject\Something\Idk2;
+*/
+use \AnotherProject\Something\{Idk1, Idk2};
+
+$user_1 = new myProjectUser();
+$user_2 = new User();
+$something_1 = new Idk1();
+$something_2 = new Idk2();
+
+$user_1->speak(); // hello, world!
+$user_2->speak(); // hello, world!
+$something_1->info(); // something 1...
+$something_2->info(); // something 2...
+```
+
+## Fundamentos do POO
+
+### Heranca (Inheritance) (Extends)
+
+- Um dos quatro principais tipos de relacionamentos entre classes (os outros sao composicao, agregacao e associacao);
+- Da a possibilidade de herdar metodos e propriedades de outra classe;
+- Fins de reducao e reutilizacao de codigo.
+
+```php
+# Classe pai
+class Human
+{
+	public $age = 0;
+
+	// Acessivel apenas para a propria classe ou herdeiras
+	protected function speak(): void
+	{
+		echo 'Hello, World!';
+	}
+}
+
+# Classe filha
+class Dev extends Human
+{
+	public function devSpeak(): void
+	{
+		$this->speak();
+	}
+}
+
+# Objetos
+$justHuman = new Human();
+$humanDev = new Dev();
+
+$humanDev->devSpeak(); // 'Hello, World!'
+
+# Ancestralidade
+echo $justHuman instanceof Human; // 1
+echo $justHuman instanceof Dev; // 0
+echo $humanDev instanceof Human; // 1
+echo $humanDev instanceof Dev; // 1
+```
+
+### Interface (Implements)
+
+- Antes de tudo, **qual a diferenca entre interfaces e classes abstratas?**
+	- Interfaces concentram-se em **modelos / contratos**, garantindo que as classes que as implementam cumpram um conjunto especifico de regras, fazendo com que a classe que implemente ela nao dependa do que a outra classe eh mas sim do que ela pode fazer;
+	- Classes abstratas focam na **heranca** e reutilizacao de codigo;
+	- Alem disso, nas **interfaces nao podemos definir atributos**, apenas constantes.
+- Ao implementar interfaces nossas classes deverao implementar tambem suas propriedades e metodos **obrigatoriamente**;
+- Analogia:
+	- "Temos 3 carros: um hyundai compacto, uma perua subaru e uma bugatti veyron. Preciso me locomover, porem cada maneira faz isso de maneira diferente. O hyundai eh bom, mas gostaria de algo mais atraente. Nao tenho filhos entao a perua nao seria util pela quantidade de assentos, entao ficaria com a bugatti."
+	- A realidade eh que posso dirigir qualquer um dos tres, pois todos **partilham uma interface comum**. Todos tem volante, acelerador, freio, setas de direcao e usam gasolina como combustivel.
+
+- Exemplo Simples:
+
+```php
+interface Characteristics
+{
+	const NAME = 'John';
+
+	public function speak(): void;
+}
+
+class Human implements Characteristics
+{
+	public function speak(): void
+	{
+		/*
+			Aqui podemos tambem acessar a const com self
+			Mas viola principios SOLID (LSP)
+			Visto como ma pratica
+		*/
+		echo "My name is " . Characteristics::NAME . "!\n";
+	}
+}
+
+$john = new Human();
+$john->speak(); // My name is John!
+```
+
+- Exemplo Avancado:
+
+```php
+interface Documentable
+{
+	public function getId();
+	public function getContent();
+}
+
+class DocumentStore
+{
+	protected $data = [];
+
+	// `Documentable` eh uma interface!
+	public function addDocument(Documentable $document)
+	{
+		$key = $document->getId();
+		$value = $document->getContent();
+		$this->data[$key] = $value;
+	}
+
+	public function getDocuments()
+	{
+		return $this->data;
+	}
+}
+
+class HtmlDocument implements Documentable
+{
+	public function __construct(
+		protected string $url
+	) {}
+
+	public function getId()
+	{
+		return $this->url;
+	}
+
+	public function getContent()
+	{
+		// ...
+	}
+}
+
+class StreamDocument implements Documentable
+{
+	public function __construct(
+		protected int $resource
+		protected int $buffer
+	) {}
+
+	public function getId()
+	{
+		return 'resource-' . (int) $this->resource;
+	}
+
+	public function getContent()
+	{
+		// ...
+	}
+}
+
+class CommandOutputDocument implements Documentable
+{
+	public function __construct(
+		protected string $command
+	) {}
+
+	public function getId()
+	{
+		return $this->command;
+	}
+
+	public function getContent()
+	{
+		// ...
+	}
+}
+
+###
+
+$documentStore = new DocumentStore();
+
+// Adiciona documento HTML
+$htmlDoc = new HtmlDocument('https://php.net');
+$documentStore->addDocument($htmlDoc);
+
+// Adiciona documento Stream
+$streamDoc = new StremDocument(/** ... */);
+$documentStore->addDocument($streamDoc);
+
+// Adiciona documento Shell
+$cmdDoc = new CommandOutputDocument('cat /etc/hosts');
+$documentStore->addDocument($cmdDoc);
+
+print_r($documentStore->getDocuments());
+```
+
+### Classes Abstratas (Abstract)
+
+- Classes abstratas **nao podem ser instanciadas**;
+- Podem ter **apenas propriedades estaticas**;
+- Podem ter **metodos abstratos** e devem ser implementados obrigatoriamente em caso de heranca.
+
+```php
+abstract class Human
+{
+	public static int $age = 10;
+
+	public static function speak(): void
+	{
+		echo "speaking...\n";
+	}
+
+	abstract public function walk(): void;
+}
+
+Human::speak(); // speaking...
+echo Human::$age . "\n"; // 10
+
+class HomoSapiensSapiens extends Human
+{
+	public function walk(): void
+	{
+		echo "walking...\n";
+	}
+}
+
+$newHuman = new HomoSapiensSapiens();
+$newHuman->speak(); // speaking...
+$newHuman->walk(); // walking...
+```
+
+### Polimorfismo
+
+- No PHP temos apenas o polimofismo **dinamico**, onde ocorre a sobreposicao dos metodos da classe em questao pela classe pai;
+- Basicamente criamos uma classe abstrata, depois os recursos que sofrerao a sobreposicao devem ser setados tambem como abstratos.
+
+```php
+abstract class Animal
+{
+	abstract public function say(): void;
+}
+
+class Dog extends Animal
+{
+	// Faz o `override` da funcao vinda do pai
+	public function say(): void
+	{
+		echo 'woof woof!';
+	}
+}
+
+$dog = new Dog();
+$dog->say(); // woof woof!
+```
+
+### Anon Classes
+
+- Sao classes que sao instanciadas diretamente em uma variavel.
+
+```php
+$tempClass = new class() {
+	private $foo = '?:)';
+
+	public function getFoo()
+	{
+		return $this->foo;
+	}
+};
+
+echo $tempClass->getFoo(); // ?:)
+```
+
+### Traits (Use)
+
+- Permitem o reuso de codigo sem hierarquia de classes (ou seja, sem heranca);
+- Assim como nas definicoes de classes e interfaces, definir apenas um trait por arquivo eh uma boa pratica, alem de serem copiadas para dentro das definicoes de classe em tempo de compilacao;
+- Implementacao parcial de classe (ou seja, constantes, propriedades e metodos) que pode ser _combinada_ com uma ou mais classes PHP existentes;
+- Tem dupla funcao:
+	- Dizem o que uma classe pode fazer (como uma interface);
+	- Permitem implementacao modular (como uma classe);
+		- Isso eh interessante pois classes que, de outra maneira, nao estaria relacionadas, podem receber estruturas em comum.
+- Exemplo onde as _traits_ salvaram um codigo:
+	- Imagine uma classe `RetailStore` e outra `Car`, as duas nao tem nada haver, correto? Sim, mas ambas podem ter metodos de geolocalizacao, indicando latitude e longitude, mas como fariamos isso?
+		- _Ruim_: criar uma classe-pai comum `Geocodable` onde ambas as classes herdam. Isso eh ruim pois forca duas classes nao relacionadas a se relacionarem, onde a classe-pai nao pertence naturalmente a nenhuma das hierarquias da heranca;
+		- _Regular_: criar uma interface `Geocodable` que defina quais metodos sao necessarios. Eh meio ruim pois teriamos de duplicar o codigo de uma em outra, e isso nao eh uma **solucao DRY**;
+		- _Otima_: Criar uma trait `Geocodable` que defina e implemente os metodos, ai podemos combinar a trait com essas classes sem poluir hierarquias naturais de heranca.
+
+```php
+trait Logger
+{
+	private $foo = 10;
+
+	private function log(mixed $message): void
+	{
+		echo "Out: $message";
+	}
+}
+
+class User
+{
+	// Chamando a Trait
+	// Diferentemente dos namespaces, importamos dentro da classe
+	use Logger;
+
+	public function register(): void
+	{
+		// code...
+
+		$this->log('success!');
+	}
+}
+
+$user = new User();
+$user->register(); // Out: success!
+```
+
+### Associacao
+
+- Um objeto pode referenciar ou conhecer outro, mas podem existir de forma independente, ex: _carro e motorista_;
+- Basicamente uma classe usa outra para realizar uma tarefa especifica, e podemos ter dois tipos:
+	- _Unidirecional_: um objeto conhece e pode interagir com outro, mas nao o contrario;
+	- _Bidirecional_: ambos os objetos podem interagir entre si.
+- Geralmente usada quando objetos de classes diferentes precisam interagir, mas sem que uma classe depende da outra como dito no primeiro topico;
+- Os objetos possuem uma relacao fraca.
+
+```php
+class Driver
+{
+    private $name;
+
+	public function __construct($name) {
+	    $this->name = $name;
+	}
+
+	public function getName()
+	{
+		return $this->name;
+	}
+}
+
+class Car
+{
+	private $brand;
+	private $driver;
+
+	public function __construct($brand)
+	{
+		$this->brand = $brand;
+	}
+
+	public function setBrand($value)
+	{
+		$this->brand = $value;
+	}
+
+	public function getBrand()
+	{
+		return $this->brand;
+	}
+
+	public function setDriver(Driver $driver)
+	{
+		$this->driver = $driver;
+	}
+
+	public function getDriverName()
+	{
+		return $this->driver->getName();
+	}
+}
+
+// Aqui mostra que os dois podem existir um fora do outro
+$driver = new Driver('John');
+$myCar = new Car('Toyota');
+
+// Associando motorista ao carro
+$myCar->setDriver($driver);
+
+echo "The property [" . $myCar->getBrand() . "] is " . $myCar->getDriverName(); // The property [Toyota] is John
+```
+
+### Composicao
+
+- Diferente da associacao, na composicao os objetos **dependem completamente um do outro**, ex: _carro e motor_;
+- Dessa forma, se um objeto for destruido todas as suas partes tambem sao destruidas (ja que um foi construido dentro do outro);
+- Possui relacao forte.
+
+```php
+class Engine
+{
+	private $cc;
+
+	public function __construct($cc)
+	{
+		$this->cc = $cc;
+	}
+
+	public function getCC()
+	{
+		return $this->cc;
+	}
+}
+
+class Car
+{
+	private $brand;
+	private $engine;
+
+	public function __construct($brand, $engineCC)
+	{
+		$this->brand = $brand;
+		// Aqui motor faz parte do carro (compondo)
+		$this->engine = new Engine($engineCC);
+	}
+
+	public function getBrand()
+	{
+		return $this->brand;
+	}
+
+	public function getEngineCC()
+	{
+		return $this->engine->getCC();
+	}
+}
+
+// Como o carro depende do motor, nao podem ser separados
+$myCar = new Car('Toyota', 600);
+
+echo "Car [" . $myCar->getBrand() . "] has " . $myCar->getEngineCC() . " CC of potency"; // Car [Toyota] has 600 CC of potency
+```
+
+### Agregacao
+
+- Mais fraca do que a composicao, mas mais forte do que a associacao simples;
+- Na agregacao **um objeto "contem" outro**, mas os objetos **podem existir de forma independente**, ou seja, um objeto agregado pode existir mesmo apos o objeto "todo" ser destruido, ex: _carro e rodas_;
+- Relacao fraca.
+
+```php
+class Wheel
+{
+	private $size;
+
+	public function __construct($size)
+	{
+		$this->size = $size;
+	}
+
+	public function getSize()
+	{
+		return $this->size;
+	}
+}
+
+class Car
+{
+	private $brand;
+	private $wheels = [];
+
+	public function __construct($brand)
+	{
+		$this->brand = $brand;
+	}
+
+	public function addWheel(Wheel $wheel)
+	{
+		$this->wheels[] = $wheel;
+	}
+
+	public function getBrand()
+	{
+		return $this->brand;
+	}
+
+	public function getWheelsSize()
+	{
+		$sizes = [];
+
+		foreach ($this->wheels as $wheel) {
+			$sizes[] = $wheel->getSize();
+		}
+
+		return $sizes;
+	}
+}
+
+// Criando instancias de rodas (que independem do carro)
+$wheel1 = new Wheel(16);
+$wheel2 = new Wheel(16);
+$wheel3 = new Wheel(16);
+$wheel4 = new Wheel(16);
+
+$myCar = new Car('Toyota');
+
+// Agregrando as rodas ao carro
+$myCar->addWheel($wheel1);
+$myCar->addWheel($wheel2);
+$myCar->addWheel($wheel3);
+$myCar->addWheel($wheel4);
+
+echo "Car [" . $myCar->getBrand() . "] has wheels w/ size " . implode(", ", $myCar->getWheelsSize()); // Car [Toyota] has wheels w/ size 16, 16, 16, 16
+```
+
+## Metodos Magicos
+
+- Sao **funcoes especiais que sao invocadas automaticamente em determinadas situacoes**;
+- Comecam com dois underscores (`__`).
+
+### Construct
+
+- `__construct()`;
+- Eh o metodo construtor da classe, e eh **chamado automaticamente quando um objeto da classe eh criado**;
+- Usado para inicializar objetos com valores de propriedades unicos de cada um;
+- Para fins de legibilidade, o PHP permite o que chamamos de _constructor property promotion_, que diminui a verbosidade do codigo.
+
+```php
+class Person
+{
+	public $name;
+
+	public function __construct(string $name)
+	{
+		$this->name = $name;
+	}
+
+	/*
+		Com `Constructor Property Property`:
+
+		public function __construct(
+			public string $name
+		) {}
+	*/
+}
+
+$anyone = new Person('john');
+
+echo $anyone->name; // john
+```
+
+### Destruct
+
+- `__destruct()`;
+- Eh o destrutor da classe, e eh **chamado quando o objeto eh destruido** (quando a execucao do script termina ou o objeto eh explicitamente desalocado).
+
+```php
+class File
+{
+	public function __construct()
+	{
+		echo 'Opening file...';
+	}
+
+	public function __destruct()
+	{
+		echo 'Closing file...';
+	}
+}
+
+$file = new File(); // Opening file...
+
+/*
+	Podemos verificar o destruct de duas formas:
+
+	1. Apenas esperando o fim do script
+	2. Usando unset() (vou usar esse so para guardar o exemplo)
+*/
+
+unset($file); // Closing file...
+```
+
+### Get e Set
+
+- `__get($name)` e `__set($name, $value)`;
+- **Get**: Usamos quando tentamos **acessar uma propriedade inacessivel ou inexistente na classe** (eh o ato de fazermos `$instance->name`);
+- **Set**: Invocada quando **tentamos definir um valor de uma propriedade inacessivel ou inexistente da classe** (eh o ato de fazermos `$instance->name = $value`).
+
+```php
+class Product
+{
+	private $data = ['price' => 100];
+
+	public function __get($name)
+	{
+		if (array_key_exists($name, $this->data)) {
+			return $this->data[$name];
+		}
+
+		return 'Invalid option';
+
+		// return $this->data[$name] ?? null;
+	}
+
+	public function __set($name, $value)
+	{
+		$this->data[$name] = $value;
+	}
+}
+
+$myProd = new Product();
+
+// Get
+echo $myProd->price; // 100
+echo $myProd->name; // Invalid option
+
+// Set
+$myProd->name = 'shoes';
+
+// Get, again
+echo $myProd->name; // shoes
+```
+
+### Call
+
+- `__call($name, $args)`;
+- Chamado quando tenta-se **invocar um metodo inacessivel ou inexistente da classe** (eh o ato de fazermos `$instance->method($args)`).
+
+```php
+class Calc
+{
+	public function __call($name, $args)
+	{
+		if ($name === 'sum') {
+			return array_sum($args);
+		}
+
+		return 'Invalid method';
+	}
+}
+
+$calc = new Calc();
+
+echo $calc->sum(5, 10); // 15
+echo $calc->sub(5, 10); // Invalid method
+```
+
+### toString
+
+- `__toString()`;
+- Este metodo eh chamado automaticamente quando um **objeto eh tratado como uma string**.
+
+```php
+class Person
+{
+	public $name;
+
+	public function __construct($name)
+	{
+		$this->name = $name;
+	}
+
+	public function __toString()
+	{
+		return $this->name;
+	}
+}
+
+$anyone = new Person('john');
+
+echo $anyone; // john
+```
+
+### Invoke
+
+- `__invoke($args)`;
+- Eh chamada quando se tenta **usar o objeto como funcao**.
+
+```php
+class Speaker
+{
+	public function __invoke($message)
+	{
+		return "Repeater: $message";
+	}
+}
+
+$speaker = new Speaker();
+
+echo $speaker('hi!'); // Repeater: hi!
+```
+
+### Clone
+
+- `__clone($name)`;
+- Chamado ao **clonar um objeto**, permitindo assim **personalizar o comportamento da clonagem**.
+
+```php
+class Car
+{
+	public $brand;
+
+	public function __construct($brand)
+	{
+		$this->brand = $brand;
+	}
+
+	public function __clone()
+	{
+		$this->brand = 'Copy from: ' . $this->brand;
+	}
+}
+
+$car1 = new Car('Toyota');
+$car2 = clone $car1;
+
+echo $car2->brand; // Copy from: Toyota
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

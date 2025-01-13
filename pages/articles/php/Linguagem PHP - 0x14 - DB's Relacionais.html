@@ -1,0 +1,247 @@
+<!-- CREATE TOPIC DIRECTORY, THE LANGUAGE, THE TITLE AT HEAD AND WRITE YOUR PAPER OR USE THE SCRIPT TO AUTOMATE PROCCESS! -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | PHP</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<!-- ARTICLE BEGIN -->
+<zero-md>
+<script type="text/markdown">
+
+# Linguagem PHP: 0x14 - DB's Relacionais
+
+## Introducao
+
+- **MYSQLi**:
+	- Driver antigo e descontinuado, porem mais rapida que a PDO pois tem uma proximidade maior do codigo nativo.
+- **PDO**:
+	- PHP Data Objects;
+	- API para conexao com diversos tipos de bancos de dados;
+	- Abstrai alguns conceitos com codigo PHP tornando esta abordagem mais lenta;
+	- Para habilita-lo precisamos editar o arquivo `php.ini` e descomentar os campos `php_pdo` e `php_pdo_mysql` (nesse caso para trabalharmos com o banco de dados MySql).
+
+## Mysqli
+
+- **Conectando-se** ao banco de dados:
+
+```php
+// Connection
+$conn = new mysqli(ADDR, USER, PASS, DATABASE);
+
+// Error handling
+if($conn->connect_errno) {
+	echo 'Failed to connect...';
+}
+
+// Executing query
+$query = 'SELECT * FROM books';
+$response = $conn->query($query);
+
+// Formatting data
+$row = $response->fetch_assoc(); // "show"
+print_r($row);
+
+$rows = $response->fetch_array(); // "index"
+print_r($rows);
+
+// Close connection (important!)
+$conn->close();
+```
+
+- **Prepared Statements**:
+	- Sao queries (_statements_) com _placeholders_ a fim de aumentar a seguranca e performance da requisicao;
+	- Fluxo:
+		- `C / U / D`: _prepare_, _bindParam_, _execute_;
+		- `R`: _prepare_, _bindParam_, _execute_, _getResult_, _fetchAll_;
+
+```php
+$conn = new mysqli('localhost', 'root', 'toor', 'books');
+
+/*
+	Data Insert
+*/
+list(
+	$book_name,
+	$book_pages,
+	$book_release,
+	$book_genre,
+	$book_authors,
+	$book_pcompany,
+	$book_synopsis
+) = [
+	"livro foda",
+	12,
+	"2024-04-17",
+	"terror",
+	"eu mesmo",
+	"seilakk",
+	"livro muito bom compre."
+];
+
+// Preparing query w/ placeholders (`?`)
+$stmt = $conn->prepare(
+	'INSERT INTO books
+	(
+		book_name, book_pages,
+		book_release, book_genre,
+		book_authors, book_pcompany,
+		book_synopsis
+	)
+	VALUES (?, ?, ?, ?, ?, ?, ?)'
+);
+
+// Placeholders
+$stmt->bind_param(
+	// s => string, i => integer, d => double / float, b => blob
+	'sisssss',
+	$book_name,
+	$book_pages,
+	$book_release,
+	$book_genre,
+	$book_authors,
+	$book_pcompany,
+	$book_synopsis
+);
+
+// Execute query
+$stmt->execute();
+
+/*
+	Data Consult
+*/
+$id = 17;
+
+// Prepare query w/ placeholders
+$stmt = $conn->prepare('SELECT * FROM books WHERE book_id > ?');
+// Placeholders
+$stmt->bind_param('i', $id);
+// Execute query
+$stmt->execute();
+// Get response
+$response = $stmt->get_result();
+
+/*
+	fetch_all(): multiplas linhas
+	fetch_row(): uma unica linha
+*/
+$data = $response->fetch_all();
+
+print_r($data);
+
+// Close connection
+$conn->close();
+```
+
+## PDO
+
+- **Conexao + Prepared Statements**:
+	- `C / U / D`: _prepare_, _bindParam_, _execute_;
+	- `R`: _prepare_, _bindParam_, _execute_, _fetchAll_;
+
+```php
+// Connection
+$conn = new PDO('mysql:host=' . ADDR . ';dbname=' DATABASE, USER, PASS);
+
+/*
+	Data Insert
+*/
+list(
+	$book_name,
+	$book_pages,
+	$book_release,
+	$book_genre,
+	$book_authors,
+	$book_pcompany,
+	$book_synopsis
+) = [
+	"livro foda",
+	12,
+	"2024-04-17",
+	"terror",
+	"eu mesmo",
+	"seilakk",
+	"livro muito bom compre."
+];
+
+// Prepare query w/ placeholders (`:`)
+$stmt = $conn->prepare(
+	'INSERT INTO books
+	(
+		book_name, book_pages,
+		book_release, book_genre,
+		book_authors, book_pcompany,
+		book_synopsis
+	)
+	VALUES (
+		:nome, :paginas,
+		:lancamento, :genero,
+		:autores, :editora,
+		:sinopse
+	)'
+);
+
+// Binding params
+$stmt->bindParam(':nome', $book_name);
+$stmt->bindParam(':paginas', $book_pages);
+$stmt->bindParam(':lancamento', $book_release);
+$stmt->bindParam(':genero', $book_genre);
+$stmt->bindParam(':autores', $book_authors);
+$stmt->bindParam(':editora', $book_pcompany);
+$stmt->bindParam(':sinopse', $book_synopsis);
+
+// Execute query
+$stmt->execute();
+
+/*
+	Data Consult
+*/
+$id = 17;
+
+// Prepare query w/ placeholders (`:`)
+$stmt = $conn->prepare('SELECT * FROM books WHERE book_id > :id');
+// Binding params
+$stmt->bindParam(':id', $id);
+// Executing query
+$stmt->execute();
+// Get data
+$response = $stmt->fetchAll();
+
+print_r($response);
+```
+
+</script>
+</zero-md>
+<!-- ARTICLE END -->
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>
