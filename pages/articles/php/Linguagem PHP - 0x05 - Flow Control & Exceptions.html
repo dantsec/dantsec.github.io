@@ -132,8 +132,8 @@ match($mes) {
 - Podemos tambem suprimir erros usando o operador de controle de erro `@`, assim qualquer erro resultado pela expressao sera escondido;
 	- Ex: Com o codigo `<?php echo @$foo['bar']`, caso o array ou a chave nao exista, simplesmente devolvera um `null` e nao mostrara nada;
 		- Sem o operador, essa expressao poderia criar um erro `PHP Notice: Undefined variable: foo` ou `PHP Notice: Undefined index: bar`.
-	- Um exemplo em que a supressao de erro pode fazer sentido eh onde a função `fopen()` falha em nao conseguir encontrar o arquivo para carregar;
-		- Voce pode verificar a existencia do arquivo antes de tentar carrega-lo, mas se o arquivo for apagado apos a verificacao e antes da `fopen()` (que pode parecer impossivel, mas pode acontecer), entao a `fopen()` retornara `false` e lancara um erro.
+	- Um exemplo em que a supressao de erro pode fazer sentido eh onde a função `fopen()` falha em nao conseguir encontrar o arquivo para carregar;
+		- Voce pode verificar a existencia do arquivo antes de tentar carrega-lo, mas se o arquivo for apagado apos a verificacao e antes da `fopen()` (que pode parecer impossivel, mas pode acontecer), entao a `fopen()` retornara `false` e lancara um erro.
 - O PHP consegue ser  perfeitamente capaz de ser **exception-heavy** e requer apenas algumas linhas de codigo. Basicamente, podemos lancar erros como excecoes utilizando a classe `ErrorException`, que estende a classe `Exception`;
 	- Eh uma pratica comum e implementada por um grande numero de frameworks modernos, como Symfony e Laravel;
 	- Por padrao, o Laravel ira exibir todos os erros como excecoes usando o pacote [Whoops!](http://filp.github.io/whoops/) se o `app.debug` estiver ligado;

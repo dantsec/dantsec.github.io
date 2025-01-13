@@ -80,7 +80,7 @@ header(
 #### Filtragem e Sanitizacao de Dados
 
 - `filter_has_var(int $inpType, string $varName): bool`: usada para checar se uma variavel existe no input;
-	- Tipos de input validos: `INPUT_GET`, `INPUT_POST`, `INPUT_COOKIE`, `INPUT_SERVER`, e `INPUT_ENV`;
+	- Tipos de input validos: `INPUT_GET`, `INPUT_POST`, `INPUT_COOKIE`, `INPUT_SERVER`, e `INPUT_ENV`;
 	- Sua principal diferenca para o `isset()` eh que ele verifica realmente os dados que vem de uma requisicao do tipo especificado.
 
 ```php
