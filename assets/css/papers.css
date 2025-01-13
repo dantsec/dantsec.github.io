@@ -62,5 +62,11 @@ ul ul > li {
 #papers-navbar a {
     color: var(--link-color);
     margin: 0 10px;
-    font-size: 18px;
+    font-size: 22px;
+}
+
+@media (max-width: 768px) {
+    #papers-navbar a {
+        font-size: 20px;
+    }
 }
