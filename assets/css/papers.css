@@ -13,6 +13,10 @@
 	height: auto;
 }
 
+a {
+	color: var(--text-tertiary-color);
+}
+
 ul {
 	list-style: none;
 	padding: 0;
@@ -38,16 +42,6 @@ ul ul > li {
 	margin-left: var(--list-margin-left);
 }
 
-ul ul > li::before {
-	content: '-';
-	color: var(--list-color-red);
-	font-weight: bold;
-	display: inline-block;
-	width: var(--list-icon-width-sm);
-	text-align: center;
-	margin-right: var(--spacing-sm);
-}
-
 #papers-navbar {
 	margin-top: var(--spacing-md);
 	margin-bottom: var(--spacing-sm);
@@ -59,7 +53,7 @@ ul ul > li::before {
 	font-size: var(--navbar-font-size);
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+@media (max-width: 768px) {
 	#papers-navbar a {
 		font-size: var(--navbar-font-size-mobile);
 	}

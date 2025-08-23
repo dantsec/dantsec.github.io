@@ -22,7 +22,7 @@
 	height: auto;
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+@media (max-width: 768px) {
 	#index-navbar {
 		flex-direction: column;
 	}

@@ -7,15 +7,6 @@
 - Banners (write and take a print in light / dark mode):
     - https://patorjk.com/software/taag/#p=display&f=3D%20Diagonal&t=example
 
-## Todo List 📌
-
-- Future Content:
-  - [ ] JS / TS / Node;
-  - [ ] SQL;
-  - [ ] Laravel;
-  - [ ] Assembly x86;
-  - [ ] SO's.
-
 ## Contributing 🛠️
 
 - You can contribute with your knowledge! Make a `.md` paper and follow instructions of `pages/articles/template.txt` file;
@@ -26,10 +17,10 @@
 git clone https://github.com/YOUR_USERNAME/yourproject.git
 # Enter into the project folder.
 cd yourproject/
-# Create a new branch with the name feat-[BRANCH_NAME].
-git checkout -b feat-[BRANCH_NAME]
+# Create a new branch with the name feat/[BRANCH_NAME].
+git checkout -b feat/[BRANCH_NAME]
 # Make your changes and commit them.
 git add . && git commit -m "YOUR_COMMIT_MESSAGE"
 # Push your branch and open a pull request.
-git push origin feat-[BRANCH_NAME]
+git push origin feat/[BRANCH_NAME]
 ```

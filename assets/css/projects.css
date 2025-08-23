@@ -20,7 +20,7 @@
 .project-box {
 	background-color: var(--box-bg);
 	border-radius: var(--box-radius);
-	width: var(--project-width);
+	width: 30%;
 	padding: var(--project-padding);
 	display: flex;
 	flex-direction: column;
@@ -55,7 +55,7 @@
 	margin-top: var(--spacing-sm);
 }
 
-@media (max-width: var(--breakpoint-md)) {
+@media (max-width: 1024px) {
 	.projects-container {
 		justify-content: center;
 	}
@@ -77,7 +77,7 @@
 	}
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+@media (max-width: 768px) {
 	.projects-container {
 		justify-content: center;
 	}
@@ -99,7 +99,7 @@
 	}
 }
 
-@media (max-width: var(--breakpoint-xs)) {
+@media (max-width: 480px) {
 	.projects-container {
 		justify-content: center;
 	}

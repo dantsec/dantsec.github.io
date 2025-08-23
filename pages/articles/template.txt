@@ -1,0 +1,53 @@
+<!--
+    CREATE / MODIFY:
+        - TOPIC DIRECTORY;
+        - THE LANGUAGE;
+        - THE TITLE AT HEAD;
+        - ADD YOUR TOPIC (IF IS NEW) TO NAVBAR;
+        - WRITE YOUR PAPER DOWN.
+-->
+
+<!DOCTYPE html>
+<html lang="PAPER_LANGUAGE">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/css/markdown.css">
+    <link rel="shortcut icon" href="../../../assets/images/sterile-box.ico">
+    <title>Void | PAPER_TOPIC</title>
+
+    <script type="module">
+        import ZeroMd, { STYLES } from 'https://cdn.jsdelivr.net/npm/zero-md@3'
+      
+        customElements.define('zero-md', class extends ZeroMd {
+          async load() {
+            await super.load()
+            this.template = STYLES.preset('dark')
+          }
+        })
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</header>
+
+<zero-md>
+<script type="text/markdown">
+
+<<$PUT_YOUR_CONTENT_HERE>>
+
+</script>
+</zero-md>
+
+<footer>
+    <a href="../../papers.html">
+        <p id="footer-text">0xDant &copy; 2023</p>
+    </a>
+</footer>
+
+</body>
+</html>

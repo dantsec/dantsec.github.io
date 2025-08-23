@@ -3,6 +3,7 @@
 :root {
 	--text-primary-color: #fff;
 	--text-secondary-color: #000;
+	--text-tertiary-color: #2c6cbe;
 
 	--border-color: #000;
 	--background-dark: #000;
@@ -14,10 +15,11 @@
 	--navbar-font-size-mobile: 20px;
 
 	--link-color: #f00;
+	--link-hover-color: #00f;
 	--link-box-bg: #919191;
-	--link-text-font-size: 20px;
+	--link-text-font-size-md: 20px;
+	--link-text-font-size-sm: 16px;
 
-	--project-width: 30%;
 	--project-padding: 20px;
 	--project-title-size: 1.5em;
 	--project-subtitle-size: 1em;
@@ -57,7 +59,10 @@ body {
 
 a {
 	text-decoration: none;
-	color: inherit;
+}
+
+a:hover {
+	color: var(--link-hover-color) !important;
 }
 
 #footer-text {
