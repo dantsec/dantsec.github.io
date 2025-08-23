@@ -1,23 +1,37 @@
-@import "./base.css";
+@import './base.css';
 
 #index-navbar {
-    margin-top: 20px;
-    margin-bottom: 10px;
+	margin-top: var(--spacing-md);
+	margin-bottom: var(--spacing-sm);
 }
 
 #index-navbar a {
-    color: var(--link-color);
-    margin: 0 10px;
+	color: var(--link-color);
+	margin: 0 var(--spacing-sm);
 }
 
 #index {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: var(--spacing-sm);
 }
 
 #index-image {
-    max-width: 100%;
-    height: auto;
+	max-width: 100%;
+	height: auto;
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+	#index-navbar {
+		flex-direction: column;
+	}
+
+	#index-navbar a {
+		margin: var(--spacing-sm) 0;
+	}
+
+	#index {
+		padding: var(--spacing-xs);
+	}
 }

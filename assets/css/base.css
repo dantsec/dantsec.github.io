@@ -1,42 +1,67 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root {
-    --background-dark: #000;
-    --link-color: #f00;
-    --text-color: #fff;
-    --border-color: #000;
+	--text-primary-color: #fff;
+	--text-secondary-color: #000;
+
+	--border-color: #000;
+	--background-dark: #000;
+
+	--box-radius: 10px;
+	--box-bg: #fff;
+
+	--navbar-font-size: 22px;
+	--navbar-font-size-mobile: 20px;
+
+	--link-color: #f00;
+	--link-box-bg: #919191;
+	--link-text-font-size: 20px;
+
+	--project-width: 30%;
+	--project-padding: 20px;
+	--project-title-size: 1.5em;
+	--project-subtitle-size: 1em;
+	--project-link-size: 1em;
+
+	--list-icon-width: 20px;
+	--list-icon-width-sm: 5px;
+	--list-margin-left: 30px;
+	--list-margin: 10px 0;
+	--list-margin-sm: 5px 0;
+	--list-color-green: #008000;
+	--list-color-red: #f00;
+
+	--spacing-xs: 5px;
+	--spacing-sm: 10px;
+	--spacing-md: 20px;
+	--spacing-lg: 40px;
+
+	--breakpoint-xs: 480px;
+	--breakpoint-sm: 768px;
+	--breakpoint-md: 1024px;
+	--breakpoint-lg: 1200px;
 }
 
 body {
-    background-color: var(--background-dark);
-    font-family: 'VT323', monospace;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-
-@media (max-width: 768px) {
-    #index-navbar, #links-navbar {
-        flex-direction: column;
-    }
-
-    #index-navbar, #links-navbar a {
-        margin: 5px 0;
-        margin-right: 10px;
-    }
-}
-
-#footer-text {
-    text-align: center;
-    color: #fff;
-    padding: 10px;
+	background-color: var(--background-dark);
+	font-family: 'VT323', monospace;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
 }
 
 a {
-    text-decoration: none;
+	text-decoration: none;
+	color: inherit;
+}
+
+#footer-text {
+	text-align: center;
+	color: var(--text-primary-color);
+	padding: var(--spacing-sm);
 }
