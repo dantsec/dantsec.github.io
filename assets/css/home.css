@@ -21,17 +21,3 @@
 	max-width: 100%;
 	height: auto;
 }
-
-@media (max-width: 768px) {
-	#index-navbar {
-		flex-direction: column;
-	}
-
-	#index-navbar a {
-		margin: var(--spacing-sm) 0;
-	}
-
-	#index {
-		padding: var(--spacing-xs);
-	}
-}
