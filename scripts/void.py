@@ -4,6 +4,7 @@ Disclaimer:
 This entire script was developed by an AI.
 I was lazy and didn't want to write it myself.
 The code is very ugly and it doesn't represent me.
+But, to contribute to this simple blog, just put your content in `/input` and run the script.
 If you want to contribute with this code, feel free and good luck!
 
 30 78 44 61 6E 74
@@ -17,6 +18,16 @@ import re
 
 
 TEMPLATE_PATH = "../pages/articles/template.txt"
+
+
+def remove_md_files(path):
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.lower().endswith('.md'):
+                try:
+                    os.remove(os.path.join(root, file))
+                except Exception:
+                    pass
 
 
 def slugify(name):
@@ -65,7 +76,7 @@ def create_html(md_path, html_path, template, language, paper_topic):
     html_content = template.replace("PAPER_LANGUAGE", language).replace("PAPER_TOPIC", paper_topic)
     html_content = html_content.replace("../../../assets/css/markdown.css", f"{css_prefix}assets/css/markdown.css")
     html_content = html_content.replace("../../../assets/images/sterile-box.ico", f"{css_prefix}assets/images/sterile-box.ico")
-    html_content = html_content.replace("../../papers.html", f"{papers_prefix}/pages/papers.html")
+    html_content = html_content.replace("../../papers.html", f"{papers_prefix}pages/papers.html")
     html_content = html_content.replace("<<$PUT_YOUR_CONTENT_HERE>>", md_content)
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html_content)
@@ -110,6 +121,23 @@ def build_html_list(folder, rel_path, author, level=0, prefix="0x0000", topic_na
 
 
 def process_folder(folder, output, language, author):
+    # Após todo processamento, remove arquivos .md do diretório de saída
+    for root, dirs, files in os.walk(output):
+        for file in files:
+            if file.lower().endswith('.md'):
+                try:
+                    os.remove(os.path.join(root, file))
+                except Exception:
+                    pass
+    # ...existing code...
+    # Após todo processamento, remove arquivos .md do diretório de saída
+    for root, dirs, files in os.walk(output):
+        for file in files:
+            if file.lower().endswith('.md'):
+                try:
+                    os.remove(os.path.join(root, file))
+                except Exception:
+                    pass
     # Skip unwanted folders
     skip_folders = ["docs", "DOCS", "zDocs", "zdocs", "documentation", "Documentation"]
     if os.path.basename(folder) in skip_folders:
@@ -127,12 +155,27 @@ def process_folder(folder, output, language, author):
             paper_topic = os.path.basename(folder)
         else:
             paper_topic = f"{os.path.basename(folder)} - {rel_root}"
-        for file in files:
-            if file.endswith(".md"):
-                md_path = os.path.join(root, file)
-                html_name = slugify(os.path.splitext(file)[0]) + ".html"
-                html_path = os.path.join(out_root, html_name)
-                create_html(md_path, html_path, template, language, paper_topic)
+            for file in files:
+                if file.endswith(".md"):
+                    md_path = os.path.join(root, file)
+                    html_name = slugify(os.path.splitext(file)[0]) + ".html"
+                    html_path = os.path.join(out_root, html_name)
+                    create_html(md_path, html_path, template, language, paper_topic)
+                elif not file.lower().endswith('.md'):
+                    src_path = os.path.join(root, file)
+                    dst_path = os.path.join(out_root, file)
+                    shutil.copy2(src_path, dst_path)
+        # Copia subdiretórios (ex: pasta de imagens)
+        for d in dirs:
+            if d.lower() in ["images", "imagens", "imgs"]:
+                continue
+            src_dir = os.path.join(root, d)
+            dst_dir = os.path.join(out_root, d)
+            if not os.path.exists(dst_dir):
+                shutil.copytree(src_dir, dst_dir)
+                remove_md_files(dst_dir)
+    # Remove arquivos .md do diretório de saída ao final do processamento
+    remove_md_files(output)
     # Create zip
     zip_path = os.path.join(output, os.path.basename(output) + ".zip")
     zip_folder(output, zip_path)
