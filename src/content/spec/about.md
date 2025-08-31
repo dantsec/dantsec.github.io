@@ -1,9 +1,13 @@
 # About
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
 
-::github{repo="saicaca/fuwari"}
+Hello, there! 👋
 
-> ### Sources of images used in this site
-> - [Unsplash](https://unsplash.com/)
-> - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty)
+I’m a **Software Developer**, **Hacking Enthusiast** and a **CS graduate** passionate about technology, problem-solving, and continuous learning.
+
+With experience in building applications, exploring system internals, and understanding how things work under the hood, I enjoy diving into both **development** and **security**.
+
+You can contact me by email ([dantsec@proton.me](mailto:dantsec@proton.me)).
+
+---
+
+*Jesus said: I am the resurrection. Anyone who believes in me, even though that person dies, will live, and whoever lives and believes in me will never die. Do you believe this? (Jo 11,25-26)*
