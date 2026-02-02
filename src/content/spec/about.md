@@ -2,7 +2,7 @@
 
 Hello, there! 👋
 
-I’m a **Software Developer**, **Hacking Enthusiast** and a **CS graduate** passionate about technology, problem-solving, and continuous learning.
+I’m a **Software Developer**, **Hacking Enthusiast** and a **CS graduating** passionate about technology, problem-solving, and continuous learning.
 
 With experience in building applications, exploring system internals, and understanding how things work under the hood, I enjoy diving into both **development** and **security**.
 
