@@ -4,8 +4,8 @@ description: Full guide of document writing.
 published: 2025-08-31
 updated: 2025-08-31
 image: 'https://i.imgur.com/LkYtfWF.png' # u can also set a path (gonna start in src/content/)
-tags: [Blogging, Guide]
-category: Guides
+tags: [Blogging]
+category: Blogging
 draft: true # it won't be shown!
 ---
 
